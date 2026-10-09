@@ -6,11 +6,7 @@ import Navbar from "@/components/shared/nevbar";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import Footer from "@/components/shared/footer";
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">

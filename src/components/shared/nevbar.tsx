@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import {
-  GraduationCap,
-  LogIn,
-  Menu,
-  Moon,
-  Sun,
-} from "lucide-react";
+import { GraduationCap, LogIn, Menu, Moon, Sun } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -67,7 +61,7 @@ export default function Navbar() {
             "text-slate-600 hover:bg-sky-50 hover:text-sky-800",
             "dark:text-slate-300 dark:hover:bg-slate-800",
             "dark:hover:text-sky-200",
-          ]
+          ],
     );
   }
 
@@ -97,7 +91,7 @@ export default function Navbar() {
           aria-label="Aarohon হোমপেজ"
           className={cn(
             "flex w-fit items-center gap-2.5 rounded-xl",
-            focusStyle
+            focusStyle,
           )}
         >
           <span
@@ -110,9 +104,7 @@ export default function Navbar() {
             <GraduationCap className="size-6" aria-hidden="true" />
           </span>
 
-          <span className="text-xl font-bold tracking-tight">
-            Aarohon
-          </span>
+          <span className="text-xl font-bold tracking-tight">Aarohon</span>
         </Link>
 
         {/* Desktop menu */}
@@ -127,7 +119,7 @@ export default function Navbar() {
               aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
                 "whitespace-nowrap rounded-full px-3.5 py-2.5 text-sm",
-                linkStyle(item.href)
+                linkStyle(item.href),
               )}
             >
               {item.label}
@@ -152,7 +144,7 @@ export default function Navbar() {
               "dark:border-slate-700 dark:bg-slate-900/60",
               "dark:text-sky-200 dark:hover:bg-slate-800",
               "dark:hover:text-sky-100",
-              focusStyle
+              focusStyle,
             )}
           >
             <Sun
@@ -181,7 +173,7 @@ export default function Navbar() {
               buttonVariants({ size: "default" }),
               loginStyle,
               focusStyle,
-              "hidden gap-2 px-5 lg:inline-flex"
+              "hidden gap-2 px-5 lg:inline-flex",
             )}
           >
             <LogIn className="size-4" aria-hidden="true" />
@@ -203,7 +195,7 @@ export default function Navbar() {
                   "dark:border-slate-700 dark:bg-slate-900/60",
                   "dark:text-slate-200 dark:hover:bg-slate-800",
                   "dark:hover:text-white",
-                  focusStyle
+                  focusStyle,
                 )}
               >
                 <Menu className="size-5" aria-hidden="true" />
@@ -233,10 +225,7 @@ export default function Navbar() {
                       rounded-xl bg-sky-700 text-white
                     "
                   >
-                    <GraduationCap
-                      className="size-5"
-                      aria-hidden="true"
-                    />
+                    <GraduationCap className="size-5" aria-hidden="true" />
                   </span>
 
                   <span className="text-xl font-bold">Aarohon</span>
@@ -255,12 +244,10 @@ export default function Navbar() {
                   <SheetClose key={item.href} asChild>
                     <Link
                       href={item.href}
-                      aria-current={
-                        isActive(item.href) ? "page" : undefined
-                      }
+                      aria-current={isActive(item.href) ? "page" : undefined}
                       className={cn(
                         "block rounded-xl px-4 py-3.5 text-sm",
-                        linkStyle(item.href)
+                        linkStyle(item.href),
                       )}
                     >
                       {item.label}
@@ -277,7 +264,7 @@ export default function Navbar() {
                       buttonVariants({ size: "lg" }),
                       loginStyle,
                       focusStyle,
-                      "w-full gap-2"
+                      "w-full gap-2",
                     )}
                   >
                     <LogIn className="size-4" aria-hidden="true" />
@@ -292,8 +279,6 @@ export default function Navbar() {
     </header>
   );
 }
-
-
 
 // "use client";
 
