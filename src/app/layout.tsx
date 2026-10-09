@@ -4,6 +4,7 @@ import "./globals.css";
 
 import Navbar from "@/components/shared/nevbar";
 import { ThemeProvider } from "@/components/shared/theme-provider";
+import Footer from "@/components/shared/footer";
 
 export default function RootLayout({
   children,
@@ -21,6 +22,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

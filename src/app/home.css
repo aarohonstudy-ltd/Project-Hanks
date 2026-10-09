@@ -1,4 +1,93 @@
 /* Scoped styling; keep your existing shadcn globals.css and ThemeProvider. */
+/* Local color pairs isolate the homepage from unrelated preset contrast issues.
+   ThemeProvider must use attribute="class" on the html element. */
+.academy-home {
+  font-family: inherit;
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #1e293b;
+  --accent: #e2e8f0;
+  --accent-foreground: #0f172a;
+  --primary: #0369a1;
+  --primary-foreground: #ffffff;
+  --border: #cbd5e1;
+  --input: #cbd5e1;
+  --ring: #0369a1;
+  --academy-link: #0369a1;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.dark .academy-home {
+  color-scheme: dark;
+  --background: #0b1120;
+  --foreground: #f1f5f9;
+  --card: #111c2e;
+  --card-foreground: #f1f5f9;
+  --muted: #1e293b;
+  --muted-foreground: #cbd5e1;
+  --secondary: #253449;
+  --secondary-foreground: #f1f5f9;
+  --accent: #293b52;
+  --accent-foreground: #ffffff;
+  --primary: #0369a1;
+  --primary-foreground: #ffffff;
+  --border: #3e5068;
+  --input: #3e5068;
+  --ring: #7dd3fc;
+  --academy-link: #7dd3fc;
+}
+.academy-home .academy-accent { color: var(--academy-link); }
+.academy-home .academy-primary {
+  background-color: #0369a1;
+  color: #ffffff;
+}
+.academy-home .academy-primary:hover {
+  background-color: #075985;
+  color: #ffffff;
+}
+.academy-home :where(a, button):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+}
+.academy-home .academy-night { color: #f8fafc; background-color: #020617; }
+.academy-home .academy-night .academy-eyebrow { color: #7dd3fc; }
+.academy-home .academy-cover { color: #ffffff; }
+.academy-home [id] { scroll-margin-top: 6rem; }
+.academy-hero { background: radial-gradient(ellipse at 80% 15%, #bae6fd80, transparent 60%), linear-gradient(125deg, #f0fdfa, #f0f9ff 55%, #eef2ff); }
+.dark .academy-hero { background: radial-gradient(ellipse at 80% 15%, #0369a13b, transparent 60%), linear-gradient(125deg, #071b21, #0b1120 55%, #10152d); }
+.academy-grid { background-image: linear-gradient(#38bdf820 1px, transparent 1px), linear-gradient(90deg, #38bdf820 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to bottom, #000, transparent); }
+.academy-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; color: #0369a1; }
+.dark .academy-eyebrow { color: #38bdf8; }
+.academy-cover { position: relative; overflow: hidden; }
+.academy-cover::before { content: ''; position: absolute; width: 240px; height: 240px; border: 1px solid #ffffff25; border-radius: 50%; top: -90px; right: -80px; box-shadow: 0 0 0 25px #ffffff08, 0 0 0 55px #ffffff06; pointer-events: none; }
+.academy-cover.blue { background: linear-gradient(125deg, #0c4a6e, #0369a1 55%, #1e40af); }
+.academy-cover.green { background: linear-gradient(125deg, #064e3b, #115e59 60%, #0f766e); }
+.academy-cover.purple { background: linear-gradient(125deg, #312e81, #6d28d9 65%, #7e22ce); }
+.academy-cover.orange { background: linear-gradient(125deg, #7c2d12, #9a3412 65%, #b45309); }
+.academy-action { transition: transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease; }
+.academy-action svg { transition: transform 200ms ease; }
+.academy-card { transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease; }
+.academy-book { transform: rotate(-7deg); box-shadow: -5px 1px 0 #ffffff60, -8px 2px 0 #64748b30, 12px 16px 22px #0f172a20; border-left: 6px solid #00000025; transition: transform 300ms ease; }
+.academy-cta { background: radial-gradient(at 0% 100%, #fed7aa70, transparent 55%), radial-gradient(at 100% 0%, #a5f3fc80, transparent 65%), #f8fafc; }
+.dark .academy-cta { background: radial-gradient(at 0% 100%, #9a341225, transparent 55%), radial-gradient(at 100% 0%, #155e7540, transparent 65%), #0f172a; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .academy-action:hover { transform: translateY(-3px); box-shadow: 0 8px 20px #0284c725; }
+  .academy-action:hover svg { transform: translateX(3px); }
+  .academy-card:hover { transform: translateY(-6px); box-shadow: 0 18px 35px #0f172a0d; border-color: #38bdf870; }
+  .academy-card:hover .academy-book { transform: rotate(0deg) translateY(-5px); }
+}
+.academy-action:active { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .academy-home *, .academy-home *::before, .academy-home *::after { transition: none !important; animation: none !important; }
+}
+
+/* Scoped styling; keep your existing shadcn globals.css and ThemeProvider.
 .academy-home { font-family: inherit; }
 .academy-home [id] { scroll-margin-top: 6rem; }
 .academy-hero { background: radial-gradient(ellipse at 80% 15%, #bae6fd80, transparent 60%), linear-gradient(125deg, #f0fdfa, #f0f9ff 55%, #eef2ff); }
@@ -27,4 +116,4 @@
 .academy-action:active { transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) {
   .academy-home *, .academy-home *::before, .academy-home *::after { transition: none !important; animation: none !important; }
-}
+} */
