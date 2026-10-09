@@ -1,14 +1,10 @@
 import type { ReactNode } from "react";
-
-import "./globals.css";
-
-import Navbar from "@/components/shared/nevbar";
 import { ThemeProvider } from "@/components/shared/theme-provider";
-import Footer from "@/components/shared/footer";
+import "./globals.css";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="bn" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <ThemeProvider
           attribute="class"
@@ -16,9 +12,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
           {children}
-          <Footer />
         </ThemeProvider>
       </body>
     </html>
