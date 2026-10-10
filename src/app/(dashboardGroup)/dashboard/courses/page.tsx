@@ -1,7 +1,4 @@
-import StudentDashboard from "../../_components/student/dashboard";
-import { getStudentDashboard } from "@/lib/student/service";
-export default async function Page() {
-  return (
-    <StudentDashboard section="courses" data={await getStudentDashboard()} />
-  );
+import Section from "@/components/student/sections/courses";
+export default function Page() {
+  return <Section />;
 }
