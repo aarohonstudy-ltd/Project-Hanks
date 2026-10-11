@@ -25,6 +25,8 @@ export type Exam = {
   title: string;
   subject: string;
   kind: "live" | "free" | "upcoming";
+  isFree?: boolean;
+  closed?: boolean;
   date: string;
   questions: string[];
 };
@@ -34,6 +36,7 @@ export type Attempt = {
   title: string;
   answers: Record<string, number>;
   questionIds: string[];
+  marks?: number;
   score: number;
   total: number;
   date: string;
@@ -47,8 +50,17 @@ export type Course = {
   lessons: string[];
   enrolled: boolean;
   color: string;
+  price?: number;
+  pending?: boolean;
+  lessonIds?: string[];
 };
 export type StudentData = {
+  bookmarks?: string[];
+  reminders?: string[];
+  completedLessonIds?: string[];
+  referralCode?: string;
+  referralCount?: number;
+  leaderboard?: { name: string; score: number }[];
   profile: { name: string; email: string; goal: string; id: string };
   questions: Question[];
   exams: Exam[];

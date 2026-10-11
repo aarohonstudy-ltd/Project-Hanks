@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check, UserRound } from "lucide-react";
 export default function ProfileSection() {
-  const { data, saved, ready, setNotice, update } = useDashboard();
+  const { saved, ready, run } = useDashboard();
 
   return (
     <form
@@ -13,16 +13,10 @@ export default function ProfileSection() {
       onSubmit={(e) => {
         e.preventDefault();
         const form = new FormData(e.currentTarget);
-        update({
-          ...saved,
-          profile: {
-            ...saved.profile,
-            name: String(form.get("name")).trim() || data.profile.name,
-            email: String(form.get("email")).trim(),
-            goal: String(form.get("goal")).trim(),
-          },
+        void run("profile", {
+          name: String(form.get("name")).trim(),
+          goal: String(form.get("goal")).trim(),
         });
-        setNotice("ডেমো প্রোফাইল সংরক্ষিত হয়েছে।");
       }}
       key={ready ? "loaded" : "loading"}
     >
@@ -32,7 +26,7 @@ export default function ProfileSection() {
         </span>
         <div>
           <h2>আপনার পরিচিতি</h2>
-          <p>{saved.profile.id} · ডেমো অ্যাকাউন্ট</p>
+          <p>{saved.profile.id}</p>
         </div>
       </div>
       <Label htmlFor="student-name">নাম</Label>
@@ -47,6 +41,7 @@ export default function ProfileSection() {
       <Input
         id="student-email"
         name="email"
+        readOnly
         type="email"
         defaultValue={saved.profile.email}
         required
@@ -58,9 +53,7 @@ export default function ProfileSection() {
         maxLength={120}
         defaultValue={saved.profile.goal}
       />
-      <p>
-        তথ্য শুধু এই ব্রাউজারে থাকবে। এটি প্রকৃত লগইন বা Supabase অ্যাকাউন্ট নয়।
-      </p>
+      <p>আপনার নাম ও লক্ষ্য অ্যাকাউন্টে সংরক্ষণ হবে।</p>
       <Button disabled={!ready} type="submit">
         পরিবর্তন সংরক্ষণ করুন <Check />
       </Button>

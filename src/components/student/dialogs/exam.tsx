@@ -12,7 +12,7 @@ import {
 import { Check } from "lucide-react";
 
 export default function ExamDialog() {
-  const { data, ready, exam, setExam, answers, setAnswers, submit } =
+  const { session, ready, notice, exam, setExam, answers, setAnswers, submit } =
     useDashboard();
   return (
     <Dialog
@@ -25,18 +25,25 @@ export default function ExamDialog() {
         <DialogHeader>
           <DialogTitle>{exam?.title}</DialogTitle>
           <DialogDescription>
-            নমুনা পরীক্ষা · প্রতিটি প্রশ্নে ১ নম্বর · উত্তর দিয়ে জমা দিন। বন্ধ
-            করলে অসম্পূর্ণ উত্তর সংরক্ষিত হবে না।
+            উত্তর দিয়ে সময়ের মধ্যে জমা দিন। বন্ধ বা রিফ্রেশ করলে অসম্পূর্ণ উত্তর
+            হারাবে; পরীক্ষার সময় চলতে থাকবে।
+            {session?.deadline && (
+              <>
+                {" "}
+                শেষ সময়: {new Date(session.deadline).toLocaleString("bn-BD")}
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
+        <p role="status">{notice}</p>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             submit();
           }}
         >
-          {exam?.questions.map((id, index) => {
-            const q = data.questions.find((x) => x.id === id)!;
+          {session?.items.map((q, index) => {
+            const id = q.id;
             return (
               <fieldset className="sd-exam-question" key={id}>
                 <legend>
@@ -50,7 +57,6 @@ export default function ExamDialog() {
                       value={i}
                       checked={answers[id] === i}
                       onChange={() => setAnswers({ ...answers, [id]: i })}
-                      required
                     />
                     {option}
                   </label>

@@ -7,8 +7,7 @@ export default function CoursesSection() {
   return (
     <>
       <div className="sd-info">
-        নমুনা লেসন ও ডেমো এনরোলমেন্ট। আপনার অগ্রগতি এই ব্রাউজারেই সংরক্ষিত
-        থাকবে।
+        প্রকাশিত কোর্স ও পাঠ। আপনার অগ্রগতি অ্যাকাউন্টে সংরক্ষিত থাকবে।
       </div>
       <div className="sd-course-grid">
         {data.courses.map((c) => (

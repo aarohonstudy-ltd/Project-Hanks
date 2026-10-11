@@ -6,7 +6,7 @@ import type { Exam } from "@/lib/student/types";
 import { ArrowRight, ClipboardCheck, Clock3, Zap } from "lucide-react";
 
 export default function ExamCard({ e }: { e: Exam }) {
-  const { saved, ready, setNotice, update, start } = useDashboard();
+  const { saved, ready, run, start } = useDashboard();
 
   return (
     <article className="sd-panel sd-exam-card" key={e.id}>
@@ -18,8 +18,10 @@ export default function ExamCard({ e }: { e: Exam }) {
           {e.kind === "upcoming"
             ? "আসন্ন"
             : e.kind === "live"
-              ? "ডেমো লাইভ"
-              : "ফ্রি"}
+              ? "লাইভ"
+              : e.isFree === false
+                ? "কোর্স পরীক্ষা"
+                : "ফ্রি"}
         </span>
       </div>
       <h3>{e.title}</h3>
@@ -34,26 +36,18 @@ export default function ExamCard({ e }: { e: Exam }) {
         <Button
           variant="outline"
           disabled={!ready}
-          onClick={() => {
-            const exists = saved.reminders.includes(e.id);
-            update({
-              ...saved,
-              reminders: exists
-                ? saved.reminders.filter((x) => x !== e.id)
-                : [...saved.reminders, e.id],
-            });
-            setNotice(
-              exists
-                ? "রিমাইন্ডার সরানো হয়েছে।"
-                : "ডেমো রিমাইন্ডার সংরক্ষিত। প্রকৃত নোটিফিকেশন পরে যুক্ত হবে।",
-            );
-          }}
+          onClick={() =>
+            run("reminder", {
+              id: e.id,
+              enabled: !saved.reminders.includes(e.id),
+            })
+          }
         >
           {saved.reminders.includes(e.id) ? "রিমাইন্ডার সরান" : "মনে করিয়ে দিন"}
         </Button>
       ) : (
-        <Button disabled={!ready} onClick={() => start(e)}>
-          পরীক্ষা শুরু করুন <ArrowRight />
+        <Button disabled={!ready || e.closed} onClick={() => start(e)}>
+          {e.closed ? "পরীক্ষা শেষ" : "পরীক্ষা শুরু করুন"} <ArrowRight />
         </Button>
       )}
     </article>

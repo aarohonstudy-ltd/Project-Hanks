@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-location-assign-relative-destination -- Full reload clears authenticated client state. */
 "use client";
+import { browserClient } from "@/lib/supabase/client";
 import { useDashboard } from "@/components/student/dashboard-context";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +16,8 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import DashboardSidebar from "./sidebar";
 export default function DashboardHeader() {
-  const { mobileOpen, setMobileOpen, setNotifications, title } = useDashboard();
+  const { mobileOpen, setMobileOpen, setNotifications, title, run, setNotice } =
+    useDashboard();
   const { setTheme } = useTheme();
   return (
     <header className="sd-header">
@@ -44,7 +47,16 @@ export default function DashboardHeader() {
         </div>
       </div>
       <div className="sd-header-actions">
-        <span className="sd-demo-badge">DEMO</span>
+        <Button
+          variant="ghost"
+          onClick={async () => {
+            const { error } = await browserClient().auth.signOut();
+            if (error) setNotice(error.message);
+            else location.assign("/login");
+          }}
+        >
+          লগআউট
+        </Button>
         <Button
           variant="ghost"
           size="icon"
@@ -64,7 +76,10 @@ export default function DashboardHeader() {
           variant="ghost"
           size="icon"
           aria-label="নোটিফিকেশন"
-          onClick={() => setNotifications(true)}
+          onClick={() => {
+            setNotifications(true);
+            void run("read_notifications");
+          }}
         >
           <Bell />
         </Button>

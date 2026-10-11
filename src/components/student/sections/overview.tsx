@@ -53,7 +53,7 @@ export default function OverviewSection() {
             icon: ClipboardCheck,
             label: "সম্পন্ন পরীক্ষা",
             value: bn(attempts.length),
-            detail: "নমুনা ফলাফলসহ",
+            detail: "প্রকাশিত ফলাফল",
             tone: "violet",
           },
           {
@@ -88,7 +88,7 @@ export default function OverviewSection() {
           </span>
           <div>
             <h3>লাইভ এক্সাম</h3>
-            <p>ডেমো পরীক্ষায় প্রস্তুতি যাচাই করুন</p>
+            <p>পরীক্ষায় প্রস্তুতি যাচাই করুন</p>
           </div>
           <ArrowRight />
         </Link>

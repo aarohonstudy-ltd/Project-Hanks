@@ -17,7 +17,7 @@ export default function NotificationsDialog() {
         <DialogHeader>
           <DialogTitle>নোটিফিকেশন</DialogTitle>
           <DialogDescription>
-            নমুনা আপডেট ও আপনার সংরক্ষিত রিমাইন্ডার
+            আপনার আপডেট ও সংরক্ষিত রিমাইন্ডার
           </DialogDescription>
         </DialogHeader>
         {data.notifications.map((n) => (

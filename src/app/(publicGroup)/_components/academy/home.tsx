@@ -29,7 +29,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import type { HomeData, Course } from "@/lib/academy/types";
-import { hasDemoRegistration } from "@/lib/academy/demo-session";
+
 import Registration from "./registration";
 const bn = (n: number) => n.toLocaleString("bn-BD");
 export default function Home({ data }: { data: HomeData }) {
@@ -37,8 +37,7 @@ export default function Home({ data }: { data: HomeData }) {
   const [registration, setRegistration] = useState(false);
   const [course, setCourse] = useState<Course | null>(null);
   function exam() {
-    if (hasDemoRegistration()) router.push("/free-exam");
-    else setRegistration(true);
+    router.push("/dashboard/free");
   }
   function prepare() {
     document.getElementById("videos")?.scrollIntoView({

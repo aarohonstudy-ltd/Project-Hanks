@@ -23,7 +23,7 @@ export default function AnalyticsSection() {
       </div>
       <section className="sd-panel sd-analytics">
         <h2>বিষয়ভিত্তিক প্রস্তুতি</h2>
-        <p>নমুনা ও আপনার সম্পন্ন পরীক্ষার উত্তরের ভিত্তিতে</p>
+        <p>আপনার সম্পন্ন পরীক্ষার উত্তরের ভিত্তিতে</p>
         {[...new Set(data.questions.map((q) => q.subject))].map((s) => {
           const responses = attempts.flatMap((a) =>
             a.questionIds

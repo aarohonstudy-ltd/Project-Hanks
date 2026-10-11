@@ -61,7 +61,7 @@ export default function QuestionListSection({
                 subject,
                 kind: "free",
                 date: "",
-                questions: filteredQuestions.map((q) => q.id),
+                questions: filteredQuestions.slice(0, 100).map((q) => q.id),
               })
             }
           >
@@ -71,8 +71,8 @@ export default function QuestionListSection({
       </div>
       {mode === "mistakes" && (
         <p className="sd-info">
-          নমুনা ও আপনার সম্পন্ন পরীক্ষার ভুল অথবা উত্তর না দেওয়া প্রশ্নগুলো
-          এখানে দেখানো হচ্ছে।
+          আপনার সম্পন্ন পরীক্ষার ভুল অথবা উত্তর না দেওয়া প্রশ্নগুলো এখানে দেখানো
+          হচ্ছে।
         </p>
       )}
       <div className="sd-question-list">

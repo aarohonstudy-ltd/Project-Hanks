@@ -1,0 +1,43 @@
+{
+  "engine": "Local PGlite; mocked Supabase auth/roles",
+  "checks": 34,
+  "passed": [
+    "Admin migration runs and reruns",
+    "Student cannot read admin data",
+    "Student cannot mutate admin data",
+    "Core wrapper cannot be bypassed",
+    "Anonymous admin read denied",
+    "Anonymous admin write denied",
+    "Create/search course and subject mapping",
+    "Offer price constraint",
+    "Create lesson",
+    "Unsafe video URL rejected",
+    "Question and answer options create/edit",
+    "Published exam locks question edits",
+    "Paid exam requires enrollment",
+    "Reviewed request cannot be processed twice",
+    "Approved enrollment enables server-graded exam",
+    "Student can read created lesson",
+    "Attempted exam cannot change",
+    "Completed exam can archive",
+    "Read overview",
+    "Read courses",
+    "Read subjects",
+    "Read topics",
+    "Read lessons",
+    "Read questions",
+    "Read exams",
+    "Read requests",
+    "Read students",
+    "Read results",
+    "Read audit",
+    "Suspended student blocked",
+    "Admin cannot suspend self",
+    "Mutations create audit logs",
+    "Search parameters cannot inject SQL",
+    "Suspended admin loses access"
+  ],
+  "limitations": [
+    "No hosted Supabase or OAuth end-to-end test"
+  ]
+}

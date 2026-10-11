@@ -1,4 +1,6 @@
 import Section from "@/components/student/sections/leaderboard";
-export default function Page() {
-  return <Section />;
+import { loadLeaderboard } from "@/lib/student/leaderboard-actions";
+export default async function Page() {
+  const result = await loadLeaderboard();
+  return <Section initial={result.data} initialError={result.error} />;
 }

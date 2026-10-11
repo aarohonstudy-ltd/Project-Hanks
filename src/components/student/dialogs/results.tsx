@@ -34,10 +34,20 @@ export default function ResultsDialog() {
               <strong>
                 {bn(review.score)} / {bn(review.total)}
               </strong>
-              <span>সঠিক উত্তর</span>
+              <span>
+                সঠিক উত্তর
+                {review.marks !== undefined &&
+                  ` · প্রাপ্ত নম্বর: ${review.marks}`}
+              </span>
             </div>
             {review.questionIds.map((id) => {
-              const q = data.questions.find((x) => x.id === id)!;
+              const q = data.questions.find((x) => x.id === id);
+              if (!q)
+                return (
+                  <p key={id}>
+                    এই প্রশ্নের ব্যাখ্যা এখনো প্রকাশিত হয়নি বা আর উপলব্ধ নেই।
+                  </p>
+                );
               const ok = review.answers[id] === q.answer;
               return (
                 <div className="sd-review-question" key={id}>

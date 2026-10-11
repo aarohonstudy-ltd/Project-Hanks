@@ -1,0 +1,31 @@
+{
+  "checks": 21,
+  "passed": [
+    "Authenticated profile",
+    "Profile save",
+    "Bookmark persists",
+    "Free enrollment",
+    "Authorized lesson content",
+    "Lesson progress persists",
+    "Referral code stored",
+    "Exam session omits answer key",
+    "Server grades and ignores claimed score",
+    "Duplicate submission cannot change score",
+    "Practice grading",
+    "Other student cannot read results",
+    "Other student cannot submit attempt",
+    "Live answers hidden from question bank",
+    "Live question practice blocked",
+    "Paid enrollment requires approval",
+    "Result embargo",
+    "Late submission expires",
+    "Suspended account blocked",
+    "Anonymous RPC access blocked",
+    "Migration rerun preserves data"
+  ],
+  "engine": "Local PGlite; mocked Supabase Auth schema/roles",
+  "limitations": [
+    "Hosted Supabase not modified",
+    "Google OAuth and email delivery not end-to-end tested"
+  ]
+}

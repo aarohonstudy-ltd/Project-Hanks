@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sheet";
 
 const menuItems = [
+  { label: "স্টুডেন্ট ড্যাশবোর্ড", href: "/dashboard" },
   { label: "হোম", href: "/" },
   { label: "কোর্সসমূহ", href: "/#courses" },
   { label: "ভিডিও ক্লাস", href: "/#videos" },

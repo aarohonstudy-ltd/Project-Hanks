@@ -1,103 +1,81 @@
 "use client";
-import { useDashboard } from "@/components/student/dashboard-context";
-import { bn } from "@/components/student/navigation";
+import { useDashboard } from "../dashboard-context";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
-import { Check } from "lucide-react";
-
 export default function LessonDialog() {
   const {
-    saved,
-    ready,
-    setNotice,
+    data,
     course,
     setCourse,
     lesson,
-    setLesson,
-    update,
+    lessonData,
+    openLesson,
+    ready,
+    run,
   } = useDashboard();
+  const video = lessonData?.videoUrl;
+  let safeVideo: string | undefined;
+  try {
+    if (video && new URL(video).protocol === "https:") safeVideo = video;
+  } catch {}
   return (
     <Dialog
       open={!!course}
-      onOpenChange={(open) => {
-        if (!open) setCourse(null);
+      onOpenChange={(o) => {
+        if (!o) setCourse(null);
       }}
     >
       <DialogContent className="sd-dialog">
         <DialogHeader>
           <DialogTitle>{course?.title}</DialogTitle>
-          <DialogDescription>
-            নমুনা পাঠ · ভিডিও ও পূর্ণ কনটেন্ট পরে যুক্ত হবে
-          </DialogDescription>
+          <DialogDescription>প্রকাশিত কোর্সের পাঠ</DialogDescription>
         </DialogHeader>
         {course && (
           <>
             <div className="sd-lesson-tabs">
               {course.lessons.map((name, i) => (
                 <button
-                  key={name}
+                  disabled={!ready}
                   className={lesson === i ? "active" : ""}
-                  onClick={() => setLesson(i)}
+                  key={course.lessonIds?.[i] ?? i}
+                  onClick={() => openLesson(course, i)}
                 >
-                  {i < (saved.completed[course.id] ?? course.completed)
+                  {data.completedLessonIds?.includes(
+                    course.lessonIds?.[i] ?? "",
+                  )
                     ? "✓ "
                     : ""}
-                  {bn(i + 1)}. {name}
+                  {name}
                 </button>
               ))}
             </div>
             <article className="sd-lesson">
-              <span className="sd-chip">পাঠ {bn(lesson + 1)}</span>
-              <h2>{course.lessons[lesson]}</h2>
-              <p>
-                এই পাঠটি আপনার প্রস্তুতির একটি ছোট অনুশীলন। বিষয়টি পড়ার সময় মূল
-                সংজ্ঞা ও গুরুত্বপূর্ণ তথ্য নিজের ভাষায় নোট করুন।
+              <h2>{lessonData?.title}</h2>
+              <p className="whitespace-pre-wrap">
+                {lessonData?.content || "এই পাঠে এখনো লিখিত কনটেন্ট নেই।"}
               </p>
-              <ol>
-                <li>আজকের বিষয়ের জন্য ২০ মিনিট সময় নির্ধারণ করুন।</li>
-                <li>মূল ধারণাগুলো পড়ুন এবং তিনটি গুরুত্বপূর্ণ বিষয় লিখুন।</li>
-                <li>
-                  প্রশ্ন ব্যাংক থেকে সংশ্লিষ্ট বিষয়ের প্রশ্ন অনুশীলন করুন।
-                </li>
-                <li>ভুল উত্তরের ব্যাখ্যা পড়ে আবার চেষ্টা করুন।</li>
-              </ol>
-              <p>
-                সম্পূর্ণ কোর্স কনটেন্ট ও ভিডিও পরবর্তী backend সংযোগের সময় যুক্ত
-                করা হবে।
-              </p>
+              {safeVideo && (
+                <a
+                  href={safeVideo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  ভিডিও দেখুন
+                </a>
+              )}
               <Button
-                disabled={
-                  !ready ||
-                  lesson > (saved.completed[course.id] ?? course.completed)
-                }
-                onClick={() => {
-                  update({
-                    ...saved,
-                    completed: {
-                      ...saved.completed,
-                      [course.id]: Math.max(
-                        saved.completed[course.id] ?? course.completed,
-                        lesson + 1,
-                      ),
-                    },
-                  });
-                  if (lesson < course.lessons.length - 1) setLesson(lesson + 1);
-                  else setCourse(null);
-                  setNotice("লেসনের অগ্রগতি সংরক্ষণ হয়েছে।");
-                }}
+                disabled={!ready || !lessonData}
+                onClick={() => run("complete_lesson", { id: lessonData?.id })}
               >
-                <Check />
                 পাঠ সম্পন্ন করুন
               </Button>
-              {lesson > (saved.completed[course.id] ?? course.completed) && (
-                <p>আগের পাঠগুলো আগে সম্পন্ন করুন।</p>
-              )}
             </article>
           </>
         )}

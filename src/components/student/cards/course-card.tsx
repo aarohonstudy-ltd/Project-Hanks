@@ -6,9 +6,7 @@ import type { Course } from "@/lib/student/types";
 import { ArrowRight, GraduationCap } from "lucide-react";
 
 export default function CourseCard({ c }: { c: Course }) {
-  const { saved, ready, setNotice, setCourse, setLesson, update } =
-    useDashboard();
-
+  const { saved, ready, openCourse } = useDashboard();
   const count = saved.completed[c.id] ?? c.completed;
   const isEnrolled = c.enrolled || saved.enrolled.includes(c.id);
   return (
@@ -22,27 +20,34 @@ export default function CourseCard({ c }: { c: Course }) {
         <h3>{c.title}</h3>
         <p>{c.description}</p>
         <div className="sd-progress-label">
-          <span>{bn(c.lessons.length)}টি নমুনা লেসন</span>
-          <strong>{bn(Math.round((count / c.lessons.length) * 100))}%</strong>
+          <span>{bn(c.lessons.length)}টি লেসন</span>
+          <strong>
+            {bn(
+              c.lessons.length
+                ? Math.round((count / c.lessons.length) * 100)
+                : 0,
+            )}
+            %
+          </strong>
         </div>
         <progress
-          max={c.lessons.length}
+          max={Math.max(1, c.lessons.length)}
           value={count}
           aria-label={`${c.title} অগ্রগতি`}
         />
         <Button
           variant={isEnrolled ? "outline" : "default"}
           disabled={!ready}
-          onClick={() => {
-            if (!isEnrolled) {
-              update({ ...saved, enrolled: [...saved.enrolled, c.id] });
-              setNotice("ডেমো কোর্সে এনরোল করা হয়েছে।");
-            }
-            setLesson(Math.min(count, c.lessons.length - 1));
-            setCourse(c);
-          }}
+          onClick={() => openCourse(c)}
         >
-          {isEnrolled ? "পড়া চালিয়ে যান" : "ডেমো এনরোল করুন"} <ArrowRight />
+          {isEnrolled
+            ? "পড়া চালিয়ে যান"
+            : c.pending
+              ? "অনুরোধ পাঠানো হয়েছে"
+              : c.price
+                ? `এনরোলমেন্টের অনুরোধ · ৳${c.price}`
+                : "ফ্রি এনরোল করুন"}{" "}
+          <ArrowRight />
         </Button>
       </div>
     </article>

@@ -34,7 +34,7 @@ export default function DashboardPageFrame({
       {children}
       <footer className="sd-footer">
         <span>© 2026 আরোহণ · শেখার পথে আপনার সঙ্গী</span>
-        <span>ডেমো স্টুডেন্ট পোর্টাল</span>
+        <span>স্টুডেন্ট পোর্টাল</span>
       </footer>
     </main>
   );
