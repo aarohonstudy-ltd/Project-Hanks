@@ -1,0 +1,12 @@
+{
+  "checks": 6,
+  "passed": [
+    "Admin notification form and course audience render",
+    "Student cannot open notification sender",
+    "Practice page still renders",
+    "Service worker served with no-cache policy",
+    "Installable manifest served",
+    "Push icon available"
+  ],
+  "scope": "Local Next HTTP with PGlite-backed Supabase mock; admin authorization, practice page, manifest, service worker and icon routes; not real browser permission/delivery"
+}

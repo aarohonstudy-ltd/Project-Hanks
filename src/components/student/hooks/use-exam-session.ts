@@ -46,6 +46,7 @@ export function useExamSession(session: Session, onDone: () => void) {
       session.revisions ?? {},
       cached.answers ?? {},
       new Set(session.items.map((q) => q.id)),
+      !!session.isLive,
     );
     let events = (Array.isArray(cached.events) ? cached.events : [])
       .filter(
@@ -155,6 +156,17 @@ export function useExamSession(session: Session, onDone: () => void) {
         local = performance.now();
         serverWarnings = result.warnings;
         ack = result.revisions;
+        if (session.isLive && result.answers) {
+          for (const [id, index] of Object.entries(
+            result.answers as Record<string, number>,
+          ))
+            drafts[id] = { index, revision: ack[id] ?? 1 };
+          setAnswers(
+            Object.fromEntries(
+              Object.entries(drafts).map(([id, value]) => [id, value.index]),
+            ),
+          );
+        }
         events = events.filter((e) => !sentEvents.has(e.id));
         setWarnings(estimated());
         setError("");
@@ -241,6 +253,7 @@ export function useExamSession(session: Session, onDone: () => void) {
     operations.current = {
       choose: (id, index) => {
         if (
+          (session.isLive && Object.hasOwn(drafts, id)) ||
           complete ||
           blocked ||
           wantsSubmit ||

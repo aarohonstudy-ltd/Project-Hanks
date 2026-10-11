@@ -12,23 +12,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import PracticeQuestion from "./practice-question";
 import { Check, ShieldCheck } from "lucide-react";
 export default function ExamDialog() {
-  const {
-    session,
-    ready,
-    notice,
-    exam,
-    setExam,
-    answers,
-    setAnswers,
-    submit,
-    begin,
-    finishExam,
-  } = useDashboard();
+  const { session, ready, notice, exam, setExam, submit, begin, finishExam } =
+    useDashboard();
   const [agreed, setAgreed] = useState(false),
     [starting, setStarting] = useState(false),
     [error, setError] = useState("");
+  const [practicePending, setPracticePending] = useState(0);
   const locked = !!session && !session.practice;
   async function start() {
     if (!exam || !agreed) return;
@@ -78,7 +70,7 @@ export default function ExamDialog() {
           <DialogTitle>{session?.title ?? exam?.title}</DialogTitle>
           <DialogDescription>
             {session?.practice
-              ? "অনুশীলনের উত্তর দিয়ে জমা দিন।"
+              ? "উত্তর দিলেই সঠিক উত্তর ও ব্যাখ্যা দেখুন। Fullscreen প্রয়োজন নেই।"
               : "সময় server অনুযায়ী চলবে। সংরক্ষিত উত্তরসহ একই পরীক্ষায় ফিরে আসতে পারবেন।"}
           </DialogDescription>
         </DialogHeader>
@@ -89,6 +81,7 @@ export default function ExamDialog() {
               <p className="font-semibold">লাইভ পরীক্ষার নিয়ম</p>
               <ul className="mt-3 list-inside list-disc space-y-2 leading-7">
                 <li>Fullscreen চালু করে পরীক্ষা শুরু হবে।</li>
+                <li>একবার উত্তর নির্বাচন করলে আর পরিবর্তন করা যাবে না।</li>
                 <li>
                   অন্য tab/app/window-এ গেলে বা Fullscreen ছাড়লে সতর্কবার্তা
                   পাবেন।
@@ -130,24 +123,23 @@ export default function ExamDialog() {
           >
             <p role="status">{notice}</p>
             {session.items.map((q, n) => (
-              <fieldset key={q.id} className="sd-exam-question">
-                <legend>
-                  {bn(n + 1)}. {q.text}
-                </legend>
-                {q.options.map((o, i) => (
-                  <label key={i}>
-                    <input
-                      type="radio"
-                      name={q.id}
-                      checked={answers[q.id] === i}
-                      onChange={() => setAnswers({ ...answers, [q.id]: i })}
-                    />
-                    {o}
-                  </label>
-                ))}
-              </fieldset>
+              <PracticeQuestion
+                key={`${session.attemptId}:${q.id}`}
+                question={q}
+                number={n + 1}
+                session={session}
+                onBusy={(busy) =>
+                  setPracticePending((count) =>
+                    Math.max(0, count + (busy ? 1 : -1)),
+                  )
+                }
+              />
             ))}
-            <Button className="sd-submit" type="submit" disabled={!ready}>
+            <Button
+              className="sd-submit"
+              type="submit"
+              disabled={!ready || practicePending > 0}
+            >
               উত্তর জমা দিন <Check />
             </Button>
           </form>
@@ -225,11 +217,19 @@ function ActiveExam({
                   <legend>
                     {bn(n + 1)}. {q.text}
                   </legend>
+                  {session.isLive && state.answers[q.id] !== undefined && (
+                    <p className="text-xs text-muted-foreground">
+                      উত্তর লক হয়েছে — পরিবর্তন করা যাবে না।
+                    </p>
+                  )}
                   {q.options.map((o, i) => (
                     <label key={i}>
                       <input
                         type="radio"
                         name={q.id}
+                        disabled={
+                          !!session.isLive && state.answers[q.id] !== undefined
+                        }
                         checked={state.answers[q.id] === i}
                         onChange={() => state.choose(q.id, i)}
                       />

@@ -10,6 +10,7 @@ export type ExamSync = {
   deadline: string;
   serverNow: string;
   revisions: Record<string, number>;
+  answers?: Record<string, number>;
 };
 // One physical departure can produce blur, visibility and fullscreen events.
 export class FocusEpisode {
@@ -28,6 +29,7 @@ export function mergeDrafts(
   revisions: Record<string, number>,
   cached: Record<string, DraftAnswer>,
   allowed: Set<string>,
+  lockSaved = false,
 ) {
   const result: Record<string, DraftAnswer> = {};
   for (const [id, index] of Object.entries(answers))
@@ -37,6 +39,7 @@ export function mergeDrafts(
       value &&
       typeof value === "object" &&
       allowed.has(id) &&
+      !(lockSaved && Object.hasOwn(answers, id)) &&
       Number.isInteger(value.index) &&
       value.index >= 0 &&
       Number.isSafeInteger(value.revision) &&

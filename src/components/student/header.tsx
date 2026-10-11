@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-location-assign-relative-destination -- Full reload clears authenticated client state. */
 "use client";
+import { disableBrowserPush } from "@/lib/notifications/browser";
 import { browserClient } from "@/lib/supabase/client";
 import { useDashboard } from "@/components/student/dashboard-context";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,7 @@ export default function DashboardHeader() {
         <Button
           variant="ghost"
           onClick={async () => {
+            await disableBrowserPush().catch(() => {});
             const { error } = await browserClient().auth.signOut();
             if (error) setNotice(error.message);
             else location.assign("/login");

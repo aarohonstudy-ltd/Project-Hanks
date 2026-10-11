@@ -10,6 +10,7 @@ export const sections = [
   ["students", "শিক্ষার্থী"],
   ["results", "ফলাফল"],
   ["audit", "অ্যাক্টিভিটি লগ"],
+  ["notifications", "নোটিফিকেশন"],
 ] as const;
 export type AdminSection = (typeof sections)[number][0];
 export type Row = { id: string; [key: string]: unknown };

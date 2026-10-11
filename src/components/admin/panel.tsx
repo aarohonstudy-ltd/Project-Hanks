@@ -13,6 +13,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { disableBrowserPush } from "@/lib/notifications/browser";
 import { browserClient } from "@/lib/supabase/client";
 import {
   sections,
@@ -31,6 +32,7 @@ import Students from "./sections/students";
 import Results from "./sections/results";
 import Audit from "./sections/audit";
 import Overview from "./sections/overview";
+import Notifications from "./sections/notifications";
 import "./admin.css";
 export type SectionProps = { data: AdminData; options: Options };
 const screens = {
@@ -45,6 +47,7 @@ const screens = {
   results: Results,
   audit: Audit,
   overview: Overview,
+  notifications: Notifications,
 };
 export default function AdminPanel({
   section,
@@ -152,6 +155,7 @@ export default function AdminPanel({
               size="icon"
               aria-label="লগআউট"
               onClick={async () => {
+                await disableBrowserPush().catch(() => {});
                 const { error } = await browserClient().auth.signOut();
                 if (error) setError(error.message);
                 else {
@@ -176,7 +180,7 @@ export default function AdminPanel({
             </span>
           </div>
           {error && <p role="alert">{error}</p>}
-          {section !== "overview" && (
+          {section !== "overview" && section !== "notifications" && (
             <form className="ad-search" action={`/admin/${section}`}>
               <input
                 name="q"

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/service";
 import { sections, type AdminData, type Options } from "@/lib/admin/types";
 import AdminPanel from "@/components/admin/panel";
+export const maxDuration = 60;
 export const metadata: Metadata = {
   title: "Admin | Aarohon",
   robots: { index: false, follow: false },
@@ -23,11 +24,13 @@ export default async function AdminPage({
   const search = (query.q ?? "").slice(0, 200);
   const page = Math.max(1, Number.parseInt(query.page ?? "1", 10) || 1);
   const [list, options] = await Promise.all([
-    client.rpc("aarohon_admin_data", {
-      view_name: section,
-      search_text: search,
-      page_number: page,
-    }),
+    section === "notifications"
+      ? client.rpc("aarohon_push", { action_name: "list", payload: { page } })
+      : client.rpc("aarohon_admin_data", {
+          view_name: section,
+          search_text: search,
+          page_number: page,
+        }),
     client.rpc("aarohon_admin_options"),
   ]);
   if (list.error || options.error)

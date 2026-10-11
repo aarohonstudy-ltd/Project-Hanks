@@ -74,5 +74,10 @@ export type StudentData = {
   exams: Exam[];
   courses: Course[];
   attempts: Attempt[];
-  notifications: { title: string; body: string }[];
+  notifications: {
+    id?: string;
+    title: string;
+    body: string;
+    url?: string | null;
+  }[];
 };
