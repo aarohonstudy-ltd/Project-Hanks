@@ -19,7 +19,7 @@ export default async function AdminPage({
   const section = parts?.[0] ?? "overview";
   const found = sections.find(([s]) => s === section);
   if (!found || (parts && parts.length > 1)) notFound();
-  const { client, name } = await requireAdmin();
+  const { client } = await requireAdmin();
   const query = await searchParams;
   const search = (query.q ?? "").slice(0, 200);
   const page = Math.max(1, Number.parseInt(query.page ?? "1", 10) || 1);
@@ -48,7 +48,6 @@ export default async function AdminPage({
     <AdminPanel
       key={section + search + page}
       section={found[0]}
-      name={name}
       data={list.data as AdminData}
       options={options.data as Options}
       search={search}

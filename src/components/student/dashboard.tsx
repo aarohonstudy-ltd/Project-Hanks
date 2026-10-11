@@ -3,7 +3,6 @@ import type { StudentData } from "@/lib/student/types";
 import type { ReactNode } from "react";
 import { DashboardProvider } from "./dashboard-context";
 import ExamDialog from "./dialogs/exam";
-import NotificationsDialog from "./dialogs/notifications";
 import ResultsDialog from "./dialogs/results";
 import DashboardHeader from "./header";
 import DashboardPageFrame from "./page-frame";
@@ -28,7 +27,6 @@ export default function StudentDashboard({
           <DashboardHeader />
           <DashboardPageFrame>{children}</DashboardPageFrame>
         </div>
-        <NotificationsDialog />
         <ExamDialog />
         <ResultsDialog />
       </div>

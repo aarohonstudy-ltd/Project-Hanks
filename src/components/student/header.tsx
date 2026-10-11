@@ -12,20 +12,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Bell, ChevronRight, Menu, Moon, Sun, UserRound } from "lucide-react";
+import { ChevronRight, Menu, Moon, Sun, UserRound } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import DashboardSidebar from "./sidebar";
+import NotificationsDropdown from "./dialogs/notifications";
 export default function DashboardHeader() {
-  const {
-    data,
-    mobileOpen,
-    setMobileOpen,
-    setNotifications,
-    title,
-    run,
-    setNotice,
-  } = useDashboard();
+  const { data, mobileOpen, setMobileOpen, title, setNotice } = useDashboard();
   const { setTheme } = useTheme();
   return (
     <header className="sd-header">
@@ -86,17 +79,7 @@ export default function DashboardHeader() {
           <Sun className="hidden dark:block" />
           <Moon className="dark:hidden" />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="নোটিফিকেশন"
-          onClick={() => {
-            setNotifications(true);
-            void run("read_notifications");
-          }}
-        >
-          <Bell />
-        </Button>
+        <NotificationsDropdown />
         <Link
           href="/dashboard/profile"
           className="sd-avatar"
