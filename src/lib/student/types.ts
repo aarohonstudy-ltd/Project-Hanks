@@ -9,6 +9,7 @@ export type Section =
   | "practice"
   | "questions"
   | "courses"
+  | "catalog"
   | "referral"
   | "profile"
   | "leaderboard";

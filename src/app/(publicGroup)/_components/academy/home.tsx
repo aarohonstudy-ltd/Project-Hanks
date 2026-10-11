@@ -1,4 +1,5 @@
 "use client";
+import CourseVideo from "@/components/course-video";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CourseCover from "@/components/course-cover";
@@ -268,22 +269,13 @@ export default function Home({ data }: { data: HomeData }) {
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {data.videos.map((video) => (
               <Card key={video.id} className="overflow-hidden rounded-2xl p-0">
-                <a
-                  href={video.src}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative block aspect-video"
-                  aria-label={`${video.title} — ভিডিও দেখুন`}
-                >
-                  <CourseCover src={video.poster} title={video.title} />
-                  <span className="absolute inset-0 grid place-items-center bg-black/20">
-                    <Play className="size-14 rounded-full bg-background p-3" />
-                  </span>
-                </a>
+                <div className="p-3">
+                  <CourseVideo url={video.src} title={video.title} />
+                </div>
                 <CardContent className="p-5">
                   <h3 className="font-semibold">{video.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    ফ্রি প্রিভিউ · ভিডিওটি নতুন ট্যাবে খুলবে।
+                    ফ্রি প্রিভিউ · এখানেই ভিডিওটি দেখুন।
                   </p>
                 </CardContent>
               </Card>
@@ -367,7 +359,7 @@ export default function Home({ data }: { data: HomeData }) {
             অনুরোধ অ্যাডমিন অনুমোদন দেবেন।
           </p>
           <Button asChild className="academy-primary rounded-full">
-            <Link href={`/dashboard/courses?course=${course?.id ?? ""}`}>
+            <Link href={`/dashboard/catalog?course=${course?.id ?? ""}`}>
               এনরোলমেন্টে যান <ArrowUpRight className="size-4" />
             </Link>
           </Button>

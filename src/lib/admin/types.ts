@@ -43,7 +43,8 @@ export type Field = {
     | "multi"
     | "datetime-local"
     | "url"
-    | "image";
+    | "image"
+    | "pdf";
   required?: boolean;
   choices?: Choice[];
   min?: number;

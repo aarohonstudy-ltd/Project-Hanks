@@ -13,6 +13,7 @@ import { saveAdmin } from "@/lib/admin/actions";
 import type { Field, Row, ExamItem } from "@/lib/admin/types";
 import QuestionPicker from "./question-picker";
 import CourseImage from "./course-image";
+import LessonPdf from "./lesson-pdf";
 export const statuses = [
   { id: "draft", title: "Draft — খসড়া" },
   { id: "published", title: "Published — প্রকাশিত" },
@@ -128,13 +129,19 @@ export default function Editor({
               return (
                 <label
                   key={field.key}
-                  className={`ad-field ${["textarea", "multi", "image"].includes(field.type ?? "") ? "wide" : ""}`}
+                  className={`ad-field ${["textarea", "multi", "image", "pdf"].includes(field.type ?? "") ? "wide" : ""}`}
                 >
                   <span>
                     {field.label}
                     {field.required ? " *" : ""}
                   </span>
-                  {field.type === "image" ? (
+                  {field.type === "pdf" ? (
+                    <LessonPdf
+                      name={field.key}
+                      initial={String(value ?? "")}
+                      onBusy={setUploading}
+                    />
+                  ) : field.type === "image" ? (
                     <CourseImage
                       name={field.key}
                       initial={String(value ?? "")}

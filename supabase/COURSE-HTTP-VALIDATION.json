@@ -1,0 +1,17 @@
+{
+  "checks": 11,
+  "passed": [
+    "My Courses renders enrolled cards only",
+    "Catalog route renders enrollment listing",
+    "Classroom SSR renders embedded YouTube, text, module and PDF link",
+    "Lesson navigation selects requested lesson",
+    "Unenrolled visitor cannot render private lesson",
+    "Empty enrolled course shows useful empty state",
+    "Unauthenticated PDF request rejected",
+    "Unenrolled PDF request rejected",
+    "Text-only lesson returns missing PDF",
+    "Authorized PDF redirects to signed download URL without caching",
+    "Admin lesson list still loads after migration"
+  ],
+  "scope": "Local Next HTTP with PGlite-backed Supabase mock; signed storage response mocked; no real YouTube playback or hosted Storage upload"
+}

@@ -28,7 +28,26 @@ export default function Lessons({ data, options }: SectionProps) {
           step: "1",
           required: true,
         },
-        { key: "video_url", label: "ভিডিও URL", type: "url" },
+        {
+          key: "section_title",
+          label: "অধ্যায় / মডিউলের নাম",
+          hint: "একই অধ্যায়ের লেসনে একই নাম দিন।",
+        },
+        {
+          key: "duration_minutes",
+          label: "ভিডিওর দৈর্ঘ্য (মিনিট, ঐচ্ছিক)",
+          type: "number",
+          min: 1,
+          max: 1440,
+          step: "1",
+        },
+        {
+          key: "video_url",
+          label: "YouTube বা ভিডিও URL",
+          type: "url",
+          hint: "YouTube watch / share link দিন। Public অথবা Unlisted এবং embedding চালু থাকতে হবে।",
+        },
+        { key: "pdf_path", label: "PDF নোট আপলোড", type: "pdf" },
         { key: "content", label: "পাঠের লেখা", type: "textarea" },
         statusField,
         {

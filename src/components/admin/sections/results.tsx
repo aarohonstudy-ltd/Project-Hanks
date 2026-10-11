@@ -19,6 +19,17 @@ export default function Results({ data }: SectionProps) {
           { key: "correct_count", label: "সঠিক" },
           { key: "wrong_count", label: "ভুল" },
           { key: "skipped_count", label: "বাদ" },
+          { key: "focus_violations", label: "Tab/App ছেড়েছে" },
+          {
+            key: "submission_reason",
+            label: "জমার কারণ",
+            render: (r) =>
+              ({
+                manual: "নিজে জমা",
+                deadline: "সময় শেষ",
+                focus_limit: "দুইবার পরীক্ষা ছেড়েছে",
+              })[String(r.submission_reason)] ?? "—",
+          },
           {
             key: "status",
             label: "অবস্থা",

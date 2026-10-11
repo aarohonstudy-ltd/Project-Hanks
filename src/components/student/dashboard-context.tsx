@@ -6,23 +6,21 @@ import type {
   Section,
   StudentData,
 } from "@/lib/student/types";
-import {
-  studentAction,
-  type Session,
-  type ActionResult,
-} from "@/lib/student/actions";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { studentAction, type Session } from "@/lib/student/actions";
+import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import {
   createContext,
   useContext,
   useState,
   useRef,
+  useEffect,
   type ReactNode,
 } from "react";
 import { navigation } from "./navigation";
 function useDashboardState(initial: StudentData) {
   const [data, setData] = useState(initial);
   const segment = useSelectedLayoutSegment();
+  const router = useRouter();
   const section = (segment ?? "overview") as Section;
   const [mobileOpen, setMobileOpen] = useState(false),
     [notice, setNotice] = useState(""),
@@ -35,9 +33,6 @@ function useDashboardState(initial: StudentData) {
     [session, setSession] = useState<Session | null>(null),
     [answers, setAnswers] = useState<Record<string, number>>({}),
     [review, setReview] = useState<Attempt | null>(null),
-    [course, setCourse] = useState<Course | null>(null),
-    [lesson, setLesson] = useState(0),
-    [lessonData, setLessonData] = useState<ActionResult["lesson"]>(),
     [revealed, setRevealed] = useState<string[]>([]);
   const saved = {
     profile: data.profile,
@@ -95,17 +90,70 @@ function useDashboardState(initial: StudentData) {
   async function bookmark(id: string) {
     await run("bookmark", { id, enabled: !saved.bookmarks.includes(id) });
   }
-  async function start(e: Exam) {
+  const resumed = useRef(false);
+  useEffect(() => {
+    if (resumed.current) return;
+    resumed.current = true;
+    void studentAction("resume_exam").then((r) => {
+      if (r.data)
+        setData((previous) => ({
+          ...r.data!,
+          profile: { ...r.data!.profile, role: previous.profile.role },
+        }));
+      if (r.session) {
+        setSession(r.session);
+        setAnswers(r.session.answers ?? {});
+        setExam({
+          id: r.session.examId!,
+          title: r.session.title!,
+          kind: r.session.isLive ? "live" : "free",
+          subject: "চলমান পরীক্ষা",
+          date: "",
+          questions: r.session.items.map((q) => q.id),
+        });
+      }
+    });
+  }, []);
+  async function begin(e: Exam, consent = false) {
     const r = await run(e.id === "practice" ? "start_practice" : "start", {
       id: e.id,
       questions: e.questions,
+      consent,
     });
     if (r?.session) {
       setSession(r.session);
-      setAnswers({});
+      setAnswers(r.session.answers ?? {});
       setReview(null);
-      setExam(e);
+      setExam(
+        r.session.examId
+          ? {
+              ...e,
+              id: r.session.examId,
+              title: r.session.title ?? e.title,
+              kind: r.session.isLive ? "live" : "free",
+            }
+          : e,
+      );
     }
+    return r?.session;
+  }
+  async function start(e: Exam) {
+    if (session && !session.practice) {
+      setNotice("চলমান পরীক্ষাটি আগে জমা দিন।");
+      return;
+    }
+    if (e.kind === "live") {
+      setSession(null);
+      setExam(e);
+      setNotice("");
+    } else await begin(e);
+  }
+  async function finishExam() {
+    setExam(null);
+    setSession(null);
+    setNotice("পরীক্ষা জমা হয়েছে। প্রকাশের সময় হলে ফলাফল দেখা যাবে।");
+    await run("refresh_dashboard");
+    router.push("/dashboard");
   }
   async function submit() {
     if (!session) return;
@@ -122,21 +170,6 @@ function useDashboardState(initial: StudentData) {
       );
     }
   }
-  async function openLesson(c: Course, i: number) {
-    const id = c.lessonIds?.[i];
-    if (!id) {
-      setNotice(
-        "এখনো কোনো লেসন প্রকাশিত হয়নি। প্রশ্ন অনুশীলন করতে প্রশ্ন ব্যাংক সেকশনে যান।",
-      );
-      return;
-    }
-    const r = await run("lesson", { id });
-    if (r?.lesson) {
-      setCourse(c);
-      setLesson(i);
-      setLessonData(r.lesson);
-    }
-  }
   async function openCourse(c: Course) {
     if (!c.enrolled) {
       const r = await run("enroll", { id: c.id });
@@ -145,7 +178,7 @@ function useDashboardState(initial: StudentData) {
       if (!fresh?.enrolled) return;
       c = fresh;
     }
-    await openLesson(c, 0);
+    router.push(`/dashboard/courses/${c.id}`);
   }
   return {
     data,
@@ -171,12 +204,6 @@ function useDashboardState(initial: StudentData) {
     setAnswers,
     review,
     setReview,
-    course,
-    setCourse,
-    lesson,
-    setLesson,
-    lessonData,
-    openLesson,
     openCourse,
     revealed,
     setRevealed,
@@ -190,6 +217,8 @@ function useDashboardState(initial: StudentData) {
     wrongIds,
     title,
     start,
+    begin,
+    finishExam,
     submit,
   };
 }

@@ -22,6 +22,7 @@ export const navigation = [
   { id: "practice", label: "প্র্যাকটিস", icon: Target },
   { id: "questions", label: "প্রশ্ন ব্যাংক", icon: Layers3 },
   { id: "courses", label: "আমার কোর্স", icon: BookOpen },
+  { id: "catalog", label: "সকল কোর্স", icon: Layers3 },
   { id: "referral", label: "রেফারেল", icon: Gift },
 ] as const;
 export const href = (id: string) =>

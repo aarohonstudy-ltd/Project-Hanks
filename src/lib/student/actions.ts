@@ -2,6 +2,14 @@
 import { serverClient } from "@/lib/supabase/server";
 import type { StudentData, Question } from "./types";
 export type Session = {
+  examId?: string;
+  title?: string;
+  isLive?: boolean;
+  writeToken?: string;
+  warnings?: number;
+  eventIds?: string[];
+  answers?: Record<string, number>;
+  revisions?: Record<string, number>;
   attemptId: string;
   practice: boolean;
   deadline: string | null;
@@ -35,6 +43,8 @@ export async function studentAction(
     "read_notifications",
     "referral_code",
     "start",
+    "resume_exam",
+    "refresh_dashboard",
     "start_practice",
     "submit",
   ];
