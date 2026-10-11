@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import CourseCover from "@/components/course-cover";
+import Link from "next/link";
 import {
   ArrowUpRight,
   BookOpen,
@@ -30,17 +31,15 @@ import {
 } from "@/components/ui/dialog";
 import type { HomeData, Course } from "@/lib/academy/types";
 
-import Registration from "./registration";
 const bn = (n: number) => n.toLocaleString("bn-BD");
 export default function Home({ data }: { data: HomeData }) {
   const router = useRouter();
-  const [registration, setRegistration] = useState(false);
   const [course, setCourse] = useState<Course | null>(null);
   function exam() {
     router.push("/dashboard/free");
   }
   function prepare() {
-    document.getElementById("videos")?.scrollIntoView({
+    document.getElementById("courses")?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "auto"
         : "smooth",
@@ -136,13 +135,7 @@ export default function Home({ data }: { data: HomeData }) {
               className="academy-card flex h-full min-w-0 flex-col gap-0 overflow-hidden rounded-2xl p-0 shadow-none"
             >
               <div className="relative aspect-[16/10] w-full">
-                <Image
-                  src={item.cover}
-                  alt={`${item.category} কোর্সের কভার`}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                  className="object-cover"
-                />
+                <CourseCover src={item.cover} title={item.title} />
               </div>
               <CardContent className="flex flex-1 flex-col p-3 sm:p-5">
                 <Badge
@@ -155,7 +148,7 @@ export default function Home({ data }: { data: HomeData }) {
                   {item.title}
                 </h3>
                 <p className="my-3 text-xs leading-6 text-muted-foreground">
-                  {bn(item.lessons)} লেসন · {bn(item.months)} মাস
+                  {bn(item.lessons)}টি লেসন
                 </p>
                 <div className="mt-auto border-t pt-3">
                   <p className="mb-3 text-lg font-bold">
@@ -173,7 +166,22 @@ export default function Home({ data }: { data: HomeData }) {
             </Card>
           ))}
         </div>
-        <p className="mt-4 text-xs text-muted-foreground">ডেমো কোর্স ও মূল্য</p>
+        {data.error ? (
+          <div role="alert" className="mt-5 rounded-xl border p-5">
+            <p>{data.error}</p>
+            <Button
+              variant="outline"
+              className="mt-3"
+              onClick={() => router.refresh()}
+            >
+              আবার চেষ্টা করুন
+            </Button>
+          </div>
+        ) : data.courses.length === 0 ? (
+          <p className="mt-5 rounded-xl border p-6 text-muted-foreground">
+            নতুন কোর্স শিগগিরই প্রকাশিত হবে।
+          </p>
+        ) : null}
       </section>
       <section className="border-y bg-muted/35 py-12">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -200,16 +208,15 @@ export default function Home({ data }: { data: HomeData }) {
                 className="rounded-2xl border bg-card p-7 text-center text-card-foreground"
               >
                 <item.icon className="academy-accent mx-auto mb-4 size-7" />
-                <p className="text-4xl font-bold">{bn(item.value)}</p>
+                <p className="text-4xl font-bold">
+                  {data.error ? "—" : bn(item.value)}
+                </p>
                 <p className="mt-3 text-sm text-muted-foreground">
                   {item.label}
                 </p>
               </div>
             ))}
           </div>
-          <p className="mt-5 text-center text-xs text-muted-foreground">
-            উপরের পরিসংখ্যানগুলো ডেমো ডেটা।
-          </p>
         </div>
       </section>
       <section id="pricing" className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
@@ -221,12 +228,12 @@ export default function Home({ data }: { data: HomeData }) {
               className="academy-card flex flex-col rounded-2xl shadow-none"
             >
               <CardContent className="flex flex-1 flex-col p-5">
-                <h3 className="font-semibold">{item.category}</h3>
+                <h3 className="font-semibold">{item.title}</h3>
                 <p className="my-5 text-3xl font-bold">
                   {item.price ? `৳${bn(item.price)}` : "ফ্রি"}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {bn(item.months)} মাস · নমুনা প্ল্যান
+                  {bn(item.lessons)}টি প্রকাশিত লেসন
                 </p>
                 <ul className="my-6 space-y-3">
                   {item.features.map((feature) => (
@@ -238,9 +245,9 @@ export default function Home({ data }: { data: HomeData }) {
                 </ul>
                 <Button
                   className="academy-primary academy-action mt-auto rounded-full"
-                  onClick={() => (item.price === 0 ? exam() : setCourse(item))}
+                  onClick={() => setCourse(item)}
                 >
-                  {item.price === 0 ? "পরীক্ষা দিন" : "প্ল্যান দেখুন"}
+                  কোর্স দেখুন
                 </Button>
               </CardContent>
             </Card>
@@ -253,31 +260,30 @@ export default function Home({ data }: { data: HomeData }) {
             tag="WATCH. LEARN. PRACTICE."
             title="ভিডিওতে শুরু হোক প্রস্তুতি"
           />
+          {!data.videos.length && (
+            <p className="mt-5 text-muted-foreground">
+              ফ্রি ভিডিও প্রিভিউ শিগগিরই যুক্ত হবে।
+            </p>
+          )}
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {data.videos.map((video) => (
               <Card key={video.id} className="overflow-hidden rounded-2xl p-0">
-                <video
-                  controls
-                  playsInline
-                  preload="none"
-                  poster={video.poster}
-                  className="aspect-video w-full bg-slate-950"
-                  aria-label={video.title}
+                <a
+                  href={video.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative block aspect-video"
+                  aria-label={`${video.title} — ভিডিও দেখুন`}
                 >
-                  <source src={video.src} type="video/mp4" />
-                  <track
-                    kind="captions"
-                    src="/academy/demo-lesson.vtt"
-                    srcLang="en"
-                    label="English"
-                    default
-                  />
-                  আপনার ব্রাউজার ভিডিও সাপোর্ট করে না।
-                </video>
+                  <CourseCover src={video.poster} title={video.title} />
+                  <span className="absolute inset-0 grid place-items-center bg-black/20">
+                    <Play className="size-14 rounded-full bg-background p-3" />
+                  </span>
+                </a>
                 <CardContent className="p-5">
                   <h3 className="font-semibold">{video.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    ডেমো ভিডিও: ২০০-এর ১৫% = ২০০ × ১৫ ÷ ১০০ = ৩০।
+                    ফ্রি প্রিভিউ · ভিডিওটি নতুন ট্যাবে খুলবে।
                   </p>
                 </CardContent>
               </Card>
@@ -307,32 +313,31 @@ export default function Home({ data }: { data: HomeData }) {
           ))}
         </Accordion>
       </section>
-      <section id="reviews" className="academy-night py-20">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <Heading tag="LEARNERS’ STORIES" title="শিক্ষার্থীদের অভিজ্ঞতা" />
-          <p className="mt-4 text-sm text-slate-300">
-            নমুনা রিভিউ—এগুলো বাস্তব শিক্ষার্থীর সাফল্যের দাবি নয়।
-          </p>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {data.reviews.map((review) => (
-              <figure
-                key={review.id}
-                className="rounded-2xl border border-white/15 bg-white/5 p-6"
-              >
-                <BookOpen className="mb-6 size-6 text-sky-300" />
-                <blockquote className="leading-8 text-slate-200">
-                  “{review.text}”
-                </blockquote>
-                <figcaption className="mt-7 border-t border-white/15 pt-4">
-                  <p className="font-semibold">{review.name}</p>
-                  <p className="mt-1 text-sm text-sky-300">{review.course}</p>
-                </figcaption>
-              </figure>
-            ))}
+      {data.reviews.length > 0 && (
+        <section id="reviews" className="academy-night py-20">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <Heading tag="LEARNERS’ STORIES" title="শিক্ষার্থীদের অভিজ্ঞতা" />
+
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              {data.reviews.map((review) => (
+                <figure
+                  key={review.id}
+                  className="rounded-2xl border border-white/15 bg-white/5 p-6"
+                >
+                  <BookOpen className="mb-6 size-6 text-sky-300" />
+                  <blockquote className="leading-8 text-slate-200">
+                    “{review.text}”
+                  </blockquote>
+                  <figcaption className="mt-7 border-t border-white/15 pt-4">
+                    <p className="font-semibold">{review.name}</p>
+                    <p className="mt-1 text-sm text-sky-300">{review.course}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-      <Registration open={registration} onOpenChange={setRegistration} />
+        </section>
+      )}
       <Dialog
         open={!!course}
         onOpenChange={(open) => {
@@ -342,7 +347,9 @@ export default function Home({ data }: { data: HomeData }) {
         <DialogContent lang="bn" className="academy-home rounded-2xl">
           <DialogHeader>
             <DialogTitle>{course?.title}</DialogTitle>
-            <DialogDescription>কোর্সের নমুনা বিবরণ</DialogDescription>
+            <DialogDescription className="whitespace-pre-line">
+              {course?.description || "কোর্সের বিষয় ও বিস্তারিত"}
+            </DialogDescription>
           </DialogHeader>
           <p className="text-2xl font-bold">
             {course?.price ? `৳${bn(course.price)}` : "ফ্রি"}
@@ -356,17 +363,13 @@ export default function Home({ data }: { data: HomeData }) {
             ))}
           </ul>
           <p className="text-sm text-muted-foreground">
-            পেইড ভর্তি ও পেমেন্ট এখনো চালু হয়নি। আপাতত ফ্রি পরীক্ষায় অংশ নিতে
-            পারেন।
+            কোর্সে যোগ দিতে লগইন করে ড্যাশবোর্ড থেকে এনরোল করুন। পেইড কোর্সের
+            অনুরোধ অ্যাডমিন অনুমোদন দেবেন।
           </p>
-          <Button
-            className="academy-primary rounded-full"
-            onClick={() => {
-              setCourse(null);
-              exam();
-            }}
-          >
-            ফ্রি পরীক্ষা দিন
+          <Button asChild className="academy-primary rounded-full">
+            <Link href={`/dashboard/courses?course=${course?.id ?? ""}`}>
+              এনরোলমেন্টে যান <ArrowUpRight className="size-4" />
+            </Link>
           </Button>
         </DialogContent>
       </Dialog>

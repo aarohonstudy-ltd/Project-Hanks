@@ -33,7 +33,7 @@ export default function AuthForm({ register = false }: { register?: boolean }) {
                 })
               : await client.auth.signInWithPassword({ email, password });
             if (result.error) throw result.error;
-            if (result.data.session) location.assign("/dashboard");
+            if (result.data.session) location.assign("/auth/landing");
             else setMessage("ইমেইলে পাঠানো লিংক দিয়ে অ্যাকাউন্ট নিশ্চিত করুন।");
           } catch (err) {
             setMessage(

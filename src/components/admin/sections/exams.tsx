@@ -16,6 +16,7 @@ export default function Exams({ data, options }: SectionProps) {
           status: "draft",
           exam_type: "model_test",
           duration_minutes: 30,
+          pass_mark: 0,
           is_free: true,
         }}
         hint="সব সময় বাংলাদেশ সময় (UTC+6)। Live পরীক্ষায় শুরু ও শেষ সময় আবশ্যক। Attempt শুরু হলে পরীক্ষা লক হয়।"
@@ -44,6 +45,15 @@ export default function Exams({ data, options }: SectionProps) {
             min: 1,
             step: "1",
             required: true,
+          },
+          {
+            key: "pass_mark",
+            label: "পাস নম্বর",
+            type: "number",
+            min: 0,
+            step: "0.01",
+            required: true,
+            hint: "0 রাখলে পাস/ফেল দেখাবে না। মোট নম্বরের বেশি দেওয়া যাবে না।",
           },
           { key: "is_free", label: "সবার জন্য ফ্রি", type: "checkbox" },
           statusField,

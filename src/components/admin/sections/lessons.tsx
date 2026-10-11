@@ -35,7 +35,7 @@ export default function Lessons({ data, options }: SectionProps) {
           key: "is_preview",
           label: "Preview lesson",
           type: "checkbox",
-          hint: "Preview অনুমতি সংরক্ষিত হয়; public preview player এই প্যানেলের অংশ নয়।",
+          hint: "কোর্স ও লেসন Published থাকলে এই ভিডিওর লিংক হোমপেজে সবার জন্য দেখা যাবে।",
         },
       ]}
       columns={[

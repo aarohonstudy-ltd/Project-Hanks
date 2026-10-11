@@ -3,6 +3,7 @@ import { useDashboard } from "@/components/student/dashboard-context";
 import { bn } from "@/components/student/navigation";
 import { Button } from "@/components/ui/button";
 import type { Course } from "@/lib/student/types";
+import CourseCover from "@/components/course-cover";
 import { ArrowRight, GraduationCap } from "lucide-react";
 
 export default function CourseCard({ c }: { c: Course }) {
@@ -11,11 +12,17 @@ export default function CourseCard({ c }: { c: Course }) {
   const isEnrolled = c.enrolled || saved.enrolled.includes(c.id);
   return (
     <article className="sd-panel sd-course-card" key={c.id}>
-      <div className={`sd-course-art ${c.color}`}>
-        <span>{c.category}</span>
-        <GraduationCap size={58} strokeWidth={1.1} />
-        <small>আরোহণ / LEARN EVERY DAY</small>
-      </div>
+      {c.thumbnail_url ? (
+        <div className="aspect-[16/10] overflow-hidden">
+          <CourseCover src={c.thumbnail_url} title={c.title} />
+        </div>
+      ) : (
+        <div className={`sd-course-art ${c.color}`}>
+          <span>{c.category}</span>
+          <GraduationCap size={58} strokeWidth={1.1} />
+          <small>আরোহণ / LEARN EVERY DAY</small>
+        </div>
+      )}
       <div className="sd-course-body">
         <h3>{c.title}</h3>
         <p>{c.description}</p>

@@ -57,7 +57,11 @@ function useDashboardState(initial: StudentData) {
         setNotice(r.error);
         return;
       }
-      if (r.data) setData(r.data);
+      if (r.data)
+        setData({
+          ...r.data,
+          profile: { ...r.data.profile, role: data.profile.role },
+        });
       if (r.message) setNotice(r.message);
       return r;
     } finally {
@@ -121,7 +125,9 @@ function useDashboardState(initial: StudentData) {
   async function openLesson(c: Course, i: number) {
     const id = c.lessonIds?.[i];
     if (!id) {
-      setNotice("এখনো কোনো পাঠ প্রকাশিত হয়নি।");
+      setNotice(
+        "এখনো কোনো লেসন প্রকাশিত হয়নি। প্রশ্ন অনুশীলন করতে প্রশ্ন ব্যাংক সেকশনে যান।",
+      );
       return;
     }
     const r = await run("lesson", { id });

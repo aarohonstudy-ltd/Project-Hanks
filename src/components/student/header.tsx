@@ -16,8 +16,15 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import DashboardSidebar from "./sidebar";
 export default function DashboardHeader() {
-  const { mobileOpen, setMobileOpen, setNotifications, title, run, setNotice } =
-    useDashboard();
+  const {
+    data,
+    mobileOpen,
+    setMobileOpen,
+    setNotifications,
+    title,
+    run,
+    setNotice,
+  } = useDashboard();
   const { setTheme } = useTheme();
   return (
     <header className="sd-header">
@@ -47,6 +54,11 @@ export default function DashboardHeader() {
         </div>
       </div>
       <div className="sd-header-actions">
+        {data.profile.role === "admin" && (
+          <Button asChild variant="outline">
+            <Link href="/admin">অ্যাডমিন</Link>
+          </Button>
+        )}
         <Button
           variant="ghost"
           onClick={async () => {

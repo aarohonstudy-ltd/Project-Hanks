@@ -12,5 +12,12 @@ export async function getStudentDashboard(): Promise<StudentData> {
     throw new Error(
       "Dashboard unavailable. Run supabase/005_dashboard_runtime.sql and check account status.",
     );
-  return data as StudentData;
+  const { data: profile } = await client
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+  const dashboard = data as StudentData;
+  dashboard.profile.role = profile?.role;
+  return dashboard;
 }

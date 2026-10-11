@@ -12,6 +12,7 @@ import {
 import { saveAdmin } from "@/lib/admin/actions";
 import type { Field, Row, ExamItem } from "@/lib/admin/types";
 import QuestionPicker from "./question-picker";
+import CourseImage from "./course-image";
 export const statuses = [
   { id: "draft", title: "Draft — খসড়া" },
   { id: "published", title: "Published — প্রকাশিত" },
@@ -52,6 +53,7 @@ export default function Editor({
   const [pending, startTransition] = useTransition(),
     [error, setError] = useState("");
   const router = useRouter();
+  const [uploading, setUploading] = useState(false);
   const values = { ...defaults, ...row };
   const [items, setItems] = useState<ExamItem[]>(
     (row?.items ?? []) as ExamItem[],
@@ -60,7 +62,7 @@ export default function Editor({
     <Dialog
       open
       onOpenChange={(o) => {
-        if (!o && !pending) onClose();
+        if (!o && !pending && !uploading) onClose();
       }}
     >
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
@@ -77,6 +79,7 @@ export default function Editor({
           className="ad-form"
           onSubmit={(e) => {
             e.preventDefault();
+            if (uploading || pending) return;
             const f = new FormData(e.currentTarget);
             const payload: Record<string, unknown> = {};
             if (row) payload.id = row.id;
@@ -125,13 +128,19 @@ export default function Editor({
               return (
                 <label
                   key={field.key}
-                  className={`ad-field ${["textarea", "multi"].includes(field.type ?? "") ? "wide" : ""}`}
+                  className={`ad-field ${["textarea", "multi", "image"].includes(field.type ?? "") ? "wide" : ""}`}
                 >
                   <span>
                     {field.label}
                     {field.required ? " *" : ""}
                   </span>
-                  {field.type === "textarea" ? (
+                  {field.type === "image" ? (
+                    <CourseImage
+                      name={field.key}
+                      initial={String(value ?? "")}
+                      onBusy={setUploading}
+                    />
+                  ) : field.type === "textarea" ? (
                     <textarea
                       name={field.key}
                       required={field.required}
@@ -187,7 +196,7 @@ export default function Editor({
             <QuestionPicker
               items={items}
               setItems={setItems}
-              disabled={pending}
+              disabled={pending || uploading}
             />
           )}
           {error && (
@@ -199,12 +208,12 @@ export default function Editor({
             <Button
               type="button"
               variant="outline"
-              disabled={pending}
+              disabled={pending || uploading}
               onClick={onClose}
             >
               বাতিল
             </Button>
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={pending || uploading}>
               {pending ? "সংরক্ষণ হচ্ছে…" : "সংরক্ষণ করুন"}
             </Button>
           </div>

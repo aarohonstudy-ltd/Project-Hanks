@@ -42,7 +42,8 @@ export type Field = {
     | "checkbox"
     | "multi"
     | "datetime-local"
-    | "url";
+    | "url"
+    | "image";
   required?: boolean;
   choices?: Choice[];
   min?: number;

@@ -20,6 +20,7 @@ export default function Courses({ data, options }: SectionProps) {
           hint: "যেমন: bcs-foundation-2026",
         },
         { key: "description", label: "বিবরণ", type: "textarea" },
+        { key: "thumbnail_url", label: "কোর্সের কভার ছবি", type: "image" },
         {
           key: "price",
           label: "দাম (৳)",

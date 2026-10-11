@@ -42,6 +42,7 @@ export type Attempt = {
   date: string;
 };
 export type Course = {
+  thumbnail_url?: string | null;
   id: string;
   title: string;
   category: string;
@@ -61,7 +62,13 @@ export type StudentData = {
   referralCode?: string;
   referralCount?: number;
   leaderboard?: { name: string; score: number }[];
-  profile: { name: string; email: string; goal: string; id: string };
+  profile: {
+    role?: string;
+    name: string;
+    email: string;
+    goal: string;
+    id: string;
+  };
   questions: Question[];
   exams: Exam[];
   courses: Course[];
