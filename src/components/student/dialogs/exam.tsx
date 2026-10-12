@@ -57,7 +57,7 @@ export default function ExamDialog() {
       }}
     >
       <DialogContent
-        className="sd-dialog"
+        className={`sd-dialog${session?.isLive && !session.practice ? " sd-live-exam-page" : ""}`}
         showCloseButton={!locked && !starting}
         onEscapeKeyDown={(e) => {
           if (locked || starting) e.preventDefault();

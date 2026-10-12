@@ -1266,3 +1266,49 @@
     transition: none !important;
   }
 }
+
+/* Live exams occupy the viewport while retaining dialog focus/accessibility. */
+.sd-dialog.sd-live-exam-page {
+  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none !important;
+  max-height: none;
+  translate: none;
+  transform: none;
+  animation: none;
+  border-radius: 0;
+  display: block;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--background);
+  padding: max(20px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  font-size: 14px;
+}
+.sd-live-exam-page > [data-slot="dialog-header"] {
+  margin-bottom: 24px;
+}
+.sd-live-exam-page .sd-exam-question {
+  padding: clamp(16px, 2vw, 28px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  min-width: 0;
+}
+.sd-live-exam-page .sd-exam-question legend {
+  padding: 0 8px;
+  font-size: clamp(16px, 1.3vw, 20px);
+  overflow-wrap: anywhere;
+}
+.sd-live-exam-page .sd-exam-question label {
+  min-height: 48px;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.sd-live-exam-page .sd-exam-question input {
+  flex-shrink: 0;
+}
