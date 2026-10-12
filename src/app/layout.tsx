@@ -17,7 +17,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           {children}
         </ThemeProvider>
-
         <Analytics />
       </body>
     </html>

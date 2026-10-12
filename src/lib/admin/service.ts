@@ -1,7 +1,9 @@
 import "server-only";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { serverClient } from "@/lib/supabase/server";
-export async function requireAdmin() {
+// Memoized only within the current server render; never shared between users.
+export const requireAdmin = cache(async function requireAdmin() {
   const client = await serverClient();
   const {
     data: { user },
@@ -15,4 +17,4 @@ export async function requireAdmin() {
   if (profile?.role !== "admin" || profile.status !== "active")
     redirect("/admin-denied");
   return { client, name: profile.full_name || user.email || "Admin" };
-}
+});

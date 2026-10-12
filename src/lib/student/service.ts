@@ -7,16 +7,16 @@ export async function getStudentDashboard(): Promise<StudentData> {
     data: { user },
   } = await client.auth.getUser();
   if (!user) redirect("/login");
-  const { data, error } = await client.rpc("aarohon_dashboard");
-  if (error)
+  const [dashboardResult, profileResult] = await Promise.all([
+    client.rpc("aarohon_dashboard"),
+    client.from("profiles").select("role").eq("id", user.id).single(),
+  ]);
+  if (dashboardResult.error || !dashboardResult.data)
     throw new Error(
-      "Dashboard unavailable. Run supabase/005_dashboard_runtime.sql and check account status.",
+      "Dashboard unavailable. Check database connectivity, migrations and account status.",
     );
-  const { data: profile } = await client
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
+  const data = dashboardResult.data;
+  const profile = profileResult.data;
   const dashboard = data as StudentData;
   dashboard.profile.role = profile?.role;
   return dashboard;
