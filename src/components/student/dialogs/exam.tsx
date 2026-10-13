@@ -57,6 +57,7 @@ export default function ExamDialog() {
       }}
     >
       <DialogContent
+        fullScreen={!!session?.isLive && !session.practice}
         className={`sd-dialog${session?.isLive && !session.practice ? " sd-live-exam-page" : ""}`}
         showCloseButton={!locked && !starting}
         onEscapeKeyDown={(e) => {
@@ -210,7 +211,7 @@ function ActiveExam({
           {state.armed && (
             <fieldset
               disabled={state.warning || state.stopped}
-              className="space-y-4 disabled:opacity-60"
+              className="min-w-0 space-y-4 disabled:opacity-60"
             >
               {session.items.map((q, n) => (
                 <fieldset key={q.id} className="sd-exam-question">
@@ -233,7 +234,9 @@ function ActiveExam({
                         checked={state.answers[q.id] === i}
                         onChange={() => state.choose(q.id, i)}
                       />
-                      {o}
+                      <span className="min-w-0 flex-1 whitespace-pre-wrap break-words">
+                        {o}
+                      </span>
                     </label>
                   ))}
                 </fieldset>
