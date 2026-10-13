@@ -1,4 +1,5 @@
 "use client";
+
 import CourseVideo from "@/components/course-video";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -32,12 +33,15 @@ import {
 import type { HomeData, Course } from "@/lib/academy/types";
 
 const bn = (n: number) => n.toLocaleString("bn-BD");
+
 export default function Home({ data }: { data: HomeData }) {
   const router = useRouter();
   const [course, setCourse] = useState<Course | null>(null);
+
   function exam() {
     router.push("/dashboard/free");
   }
+
   function prepare() {
     document.getElementById("courses")?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -45,6 +49,7 @@ export default function Home({ data }: { data: HomeData }) {
         : "smooth",
     });
   }
+
   return (
     <main lang="bn" className="academy-home overflow-x-clip">
       <section className="academy-hero relative isolate overflow-hidden border-b pt-32 pb-20 sm:pt-40">
@@ -52,6 +57,7 @@ export default function Home({ data }: { data: HomeData }) {
           aria-hidden="true"
           className="academy-grid absolute inset-0 -z-10"
         />
+
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div>
             <Badge
@@ -60,37 +66,45 @@ export default function Home({ data }: { data: HomeData }) {
             >
               আপনার আগামী, আপনার প্রস্তুতি
             </Badge>
+
             <h1 className="text-4xl leading-[1.4] font-bold tracking-tight sm:text-5xl">
-              চাকরির প্রস্তুতির সাথে{" "}
-              <span className="academy-accent">
+              <span className="block text-[clamp(1.5rem,6.5vw,3rem)] whitespace-nowrap">
+                চাকরির প্রস্তুতির সাথে
+              </span>
+              <span className="academy-accent block">
                 জ্ঞানের পরিধি বিস্তৃত হোক আকাশ জুড়ে
               </span>
             </h1>
+
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
               বিসিএস, প্রাইমারি এবং ৯ম-১০ম গ্রেডসহ সকল প্রতিযোগিতামূলক পরীক্ষার
               প্রস্তুতিতে আস্থার নাম
             </p>
+
             <div className="mt-8 flex flex-wrap gap-3">
               <Button
                 size="lg"
                 onClick={exam}
-                className="academy-primary academy-action rounded-full px-7"
+                className="academy-primary academy-action h-14 gap-2 rounded-full px-8 text-lg font-semibold sm:h-16 sm:px-10 sm:text-xl"
               >
-                পরীক্ষা দিন <ArrowUpRight className="size-4" />
+                পরীক্ষা দিন <ArrowUpRight className="size-5 sm:size-6" />
               </Button>
+
               <Button
                 size="lg"
                 variant="outline"
                 onClick={prepare}
-                className="academy-action rounded-full px-7"
+                className="academy-action h-14 gap-2 rounded-full px-8 text-lg font-semibold sm:h-16 sm:px-10 sm:text-xl"
               >
-                <Play className="size-4" /> প্রস্তুতি নিন
+                <Play className="size-5 sm:size-6" /> প্রস্তুতি নিন
               </Button>
             </div>
+
             <p className="mt-5 text-sm text-muted-foreground">
               নিজের সময়ে শিখুন • অনুশীলনে এগিয়ে যান
             </p>
           </div>
+
           {/* Learning space temporarily hidden. Restore GraduationCap import when enabling.
           <div className="rounded-[2rem] border bg-background/85 p-6 shadow-2xl shadow-sky-950/10">
             <div className="mb-5 flex items-center justify-between">
@@ -125,11 +139,14 @@ export default function Home({ data }: { data: HomeData }) {
           */}
         </div>
       </section>
+
       <section id="courses" className="mx-auto max-w-7xl px-4 py-20 sm:px-8">
         <Heading tag="FIND YOUR NEXT STEP" title="আপনার লক্ষ্যে, আপনার কোর্স" />
+
         <p className="mt-3 text-muted-foreground">
           গোছানো প্রস্তুতিতে এগিয়ে যান নিজের গতিতে।
         </p>
+
         <div className="mt-8 grid grid-cols-2 items-stretch gap-3 sm:gap-5 lg:grid-cols-4">
           {data.courses.map((item) => (
             <Card
@@ -139,6 +156,7 @@ export default function Home({ data }: { data: HomeData }) {
               <div className="relative aspect-[16/10] w-full">
                 <CourseCover src={item.cover} title={item.title} />
               </div>
+
               <CardContent className="flex flex-1 flex-col p-3 sm:p-5">
                 <Badge
                   variant="secondary"
@@ -146,16 +164,20 @@ export default function Home({ data }: { data: HomeData }) {
                 >
                   {item.category}
                 </Badge>
+
                 <h3 className="min-h-20 text-sm leading-6 font-semibold sm:text-base">
                   {item.title}
                 </h3>
+
                 <p className="my-3 text-xs leading-6 text-muted-foreground">
                   {bn(item.lessons)}টি লেসন
                 </p>
+
                 <div className="mt-auto border-t pt-3">
                   <p className="mb-3 text-lg font-bold">
                     {item.price ? `৳${bn(item.price)}` : "ফ্রি"}
                   </p>
+
                   <Button
                     variant="outline"
                     className="academy-action w-full rounded-full text-xs sm:text-sm"
@@ -168,6 +190,7 @@ export default function Home({ data }: { data: HomeData }) {
             </Card>
           ))}
         </div>
+
         {data.error ? (
           <div role="alert" className="mt-5 rounded-xl border p-5">
             <p>{data.error}</p>
@@ -185,6 +208,7 @@ export default function Home({ data }: { data: HomeData }) {
           </p>
         ) : null}
       </section>
+
       <section className="border-y bg-muted/35 py-12">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="grid gap-6 sm:grid-cols-3">
@@ -221,6 +245,7 @@ export default function Home({ data }: { data: HomeData }) {
           </div>
         </div>
       </section>
+
       {/* Course plans temporarily hidden. Restore pricing links when enabling.
       <section id="pricing" className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
         <Heading tag="A PLAN FOR YOUR GOAL" title="কোর্স প্ল্যান ও প্রাইসিং" />
@@ -258,17 +283,20 @@ export default function Home({ data }: { data: HomeData }) {
         </div>
       </section>
       */}
+
       <section id="videos" className="border-y bg-muted/30 py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <Heading
             tag="WATCH. LEARN. PRACTICE."
             title="ভিডিওতে শুরু হোক প্রস্তুতি"
           />
+
           {!data.videos.length && (
             <p className="mt-5 text-muted-foreground">
               ফ্রি ভিডিও প্রিভিউ শিগগিরই যুক্ত হবে।
             </p>
           )}
+
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {data.videos.map((video) => (
               <Card key={video.id} className="overflow-hidden rounded-2xl p-0">
@@ -286,11 +314,13 @@ export default function Home({ data }: { data: HomeData }) {
           </div>
         </div>
       </section>
+
       <section
         id="faq"
         className="mx-auto grid max-w-7xl gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[.8fr_1.2fr]"
       >
         <Heading tag="LET’S MAKE IT CLEAR" title="সাধারণ জিজ্ঞাসা" />
+
         <Accordion type="single" collapsible className="space-y-3">
           {data.faqs.map((faq) => (
             <AccordionItem
@@ -308,6 +338,7 @@ export default function Home({ data }: { data: HomeData }) {
           ))}
         </Accordion>
       </section>
+
       {data.reviews.length > 0 && (
         <section id="reviews" className="academy-night py-20">
           <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -333,6 +364,7 @@ export default function Home({ data }: { data: HomeData }) {
           </div>
         </section>
       )}
+
       <Dialog
         open={!!course}
         onOpenChange={(open) => {
@@ -346,9 +378,11 @@ export default function Home({ data }: { data: HomeData }) {
               {course?.description || "কোর্সের বিষয় ও বিস্তারিত"}
             </DialogDescription>
           </DialogHeader>
+
           <p className="text-2xl font-bold">
             {course?.price ? `৳${bn(course.price)}` : "ফ্রি"}
           </p>
+
           <ul className="space-y-3">
             {course?.features.map((feature) => (
               <li key={feature} className="flex gap-2">
@@ -357,10 +391,12 @@ export default function Home({ data }: { data: HomeData }) {
               </li>
             ))}
           </ul>
+
           <p className="text-sm text-muted-foreground">
             কোর্সে যোগ দিতে লগইন করে ড্যাশবোর্ড থেকে এনরোল করুন। পেইড কোর্সের
             অনুরোধ অ্যাডমিন অনুমোদন দেবেন।
           </p>
+
           <Button asChild className="academy-primary rounded-full">
             <Link href={`/dashboard/catalog?course=${course?.id ?? ""}`}>
               এনরোলমেন্টে যান <ArrowUpRight className="size-4" />
@@ -371,6 +407,7 @@ export default function Home({ data }: { data: HomeData }) {
     </main>
   );
 }
+
 function Heading({ tag, title }: { tag: string; title: string }) {
   return (
     <div>
