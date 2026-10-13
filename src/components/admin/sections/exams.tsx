@@ -1,10 +1,14 @@
 "use client";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import ExamPreview from "../exam-builder/exam-preview";
 import Crud from "../crud";
 import { statusField } from "../editor";
 import { Badge } from "../table";
 import type { SectionProps } from "../panel";
 import ReviewButton from "../review-button";
 export default function Exams({ data, options }: SectionProps) {
+  const [previewId, setPreviewId] = useState<string>();
   return (
     <>
       <Crud
@@ -12,6 +16,26 @@ export default function Exams({ data, options }: SectionProps) {
         action="exam_save"
         data={data}
         exam
+        extraActions={(row) => (
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setPreviewId(row.id)}
+            >
+              Preview / Demo
+            </Button>
+            {row.status !== "archived" && (
+              <ReviewButton
+                label="আর্কাইভ"
+                description="পরীক্ষাটি আর্কাইভ হবে; আগের ফলাফল থাকবে। চলমান attempt থাকলে আর্কাইভ করা যাবে না।"
+                action="exam_status"
+                payload={{ id: row.id, status: "archived" }}
+              />
+            )}
+          </>
+        )}
         defaults={{
           status: "draft",
           exam_type: "model_test",
@@ -91,30 +115,11 @@ export default function Exams({ data, options }: SectionProps) {
           },
         ]}
       />
-      {data.rows.some((r) => r.locked && r.status !== "archived") && (
-        <div className="ad-guide">
-          <h2>লক করা পরীক্ষা আর্কাইভ</h2>
-          <p className="ad-hint">
-            Active attempt শেষ হলে পুরোনো পরীক্ষা আর্কাইভ করা যায়। ফলাফল মুছে
-            যাবে না।
-          </p>
-          {data.rows
-            .filter((r) => r.locked && r.status !== "archived")
-            .map((r) => (
-              <div
-                key={r.id}
-                className="flex justify-between items-center gap-3 py-3"
-              >
-                <span>{String(r.title)}</span>
-                <ReviewButton
-                  label="আর্কাইভ"
-                  description="পরীক্ষাটি তালিকা থেকে সরবে; আগের ফলাফল থাকবে। নিশ্চিত?"
-                  action="exam_status"
-                  payload={{ id: r.id, status: "archived" }}
-                />
-              </div>
-            ))}
-        </div>
+      {previewId && (
+        <ExamPreview
+          examId={previewId}
+          onClose={() => setPreviewId(undefined)}
+        />
       )}
     </>
   );

@@ -45,7 +45,7 @@ export async function readAdmin(
 export async function saveAdmin(
   action: string,
   payload: Record<string, unknown>,
-): Promise<{ error?: string; message?: string }> {
+): Promise<{ error?: string; message?: string; id?: string }> {
   try {
     if (
       ![
@@ -62,7 +62,7 @@ export async function saveAdmin(
     )
       throw Error("Invalid action");
     const client = await authorized();
-    const { error } = await client.rpc("aarohon_admin_save", {
+    const { data, error } = await client.rpc("aarohon_admin_save", {
       action_name: action,
       payload,
     });
@@ -84,22 +84,48 @@ export async function saveAdmin(
     revalidatePath("/");
     revalidatePath("/admin", "layout");
     revalidatePath("/dashboard", "layout");
-    return { message: "সংরক্ষিত হয়েছে।" };
+    return { message: "সংরক্ষিত হয়েছে।", id: data?.id };
   } catch (e) {
     return { error: errorMessage(e) };
   }
 }
 
 export async function importQuestions(
- rows: import('./question-csv').ImportQuestion[], mapping: Record<string,string>, status: string,
-): Promise<{data?: {imported:number;skipped:number;changed:number};error?:string}> {
- try {
-  const client = await authorized();
-  if (!Array.isArray(rows) || rows.length < 1 || rows.length > 100 || Buffer.byteLength(JSON.stringify(rows)) > 500000 || Buffer.byteLength(JSON.stringify(mapping)) > 100000 || !['draft','published'].includes(status)) throw Error('Import batch ঠিক নেই।');
-  const {data,error} = await client.rpc('aarohon_import_questions',{rows_json:rows,course_map:mapping,question_status:status});
-  if(error) throw Error(error.code === 'P0001' ? error.message : error.code === 'PGRST202' ? 'আগে 008_home_images_csv.sql চালান।' : 'Import হয়নি। CSV, কোর্স mapping এবং admin access যাচাই করুন।');
-  revalidatePath('/');
-  revalidatePath('/dashboard','layout');
-  return {data};
- } catch(e) {return {error:errorMessage(e)};}
+  rows: import("./question-csv").ImportQuestion[],
+  mapping: Record<string, string>,
+  status: string,
+): Promise<{
+  data?: { imported: number; skipped: number; changed: number };
+  error?: string;
+}> {
+  try {
+    const client = await authorized();
+    if (
+      !Array.isArray(rows) ||
+      rows.length < 1 ||
+      rows.length > 100 ||
+      Buffer.byteLength(JSON.stringify(rows)) > 500000 ||
+      Buffer.byteLength(JSON.stringify(mapping)) > 100000 ||
+      !["draft", "published"].includes(status)
+    )
+      throw Error("Import batch ঠিক নেই।");
+    const { data, error } = await client.rpc("aarohon_import_questions", {
+      rows_json: rows,
+      course_map: mapping,
+      question_status: status,
+    });
+    if (error)
+      throw Error(
+        error.code === "P0001"
+          ? error.message
+          : error.code === "PGRST202"
+            ? "আগে 008_home_images_csv.sql চালান।"
+            : "Import হয়নি। CSV, কোর্স mapping এবং admin access যাচাই করুন।",
+      );
+    revalidatePath("/");
+    revalidatePath("/dashboard", "layout");
+    return { data };
+  } catch (e) {
+    return { error: errorMessage(e) };
+  }
 }

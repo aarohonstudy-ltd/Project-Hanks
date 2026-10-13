@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,6 +55,8 @@ export default function Editor({
     [error, setError] = useState("");
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
+  const [examBusy, setExamBusy] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const values = { ...defaults, ...row };
   const [items, setItems] = useState<ExamItem[]>(
     (row?.items ?? []) as ExamItem[],
@@ -63,7 +65,7 @@ export default function Editor({
     <Dialog
       open
       onOpenChange={(o) => {
-        if (!o && !pending && !uploading) onClose();
+        if (!o && !pending && !uploading && !examBusy) onClose();
       }}
     >
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
@@ -77,10 +79,11 @@ export default function Editor({
           </DialogDescription>
         </DialogHeader>
         <form
+          ref={formRef}
           className="ad-form"
           onSubmit={(e) => {
             e.preventDefault();
-            if (uploading || pending) return;
+            if (uploading || pending || examBusy) return;
             const f = new FormData(e.currentTarget);
             const payload: Record<string, unknown> = {};
             if (row) payload.id = row.id;
@@ -116,7 +119,7 @@ export default function Editor({
             });
           }}
         >
-          <fieldset disabled={pending} className="ad-fields">
+          <fieldset disabled={pending || examBusy} className="ad-fields">
             {fields.map((field) => {
               let value = values[field.key];
               if (field.type === "datetime-local") value = toDhaka(value);
@@ -203,7 +206,19 @@ export default function Editor({
             <QuestionPicker
               items={items}
               setItems={setItems}
-              disabled={pending || uploading}
+              onBusy={setExamBusy}
+              getSettings={() => {
+                const f = formRef.current
+                  ? new FormData(formRef.current)
+                  : null;
+                return {
+                  title: String(f?.get("title") || "পরীক্ষার খসড়া"),
+                  exam_type: String(f?.get("exam_type") || "model_test"),
+                  duration_minutes: Number(f?.get("duration_minutes") || 30),
+                  pass_mark: Number(f?.get("pass_mark") || 0),
+                };
+              }}
+              disabled={pending || uploading || examBusy}
             />
           )}
           {error && (
@@ -215,12 +230,12 @@ export default function Editor({
             <Button
               type="button"
               variant="outline"
-              disabled={pending || uploading}
+              disabled={pending || uploading || examBusy}
               onClick={onClose}
             >
               বাতিল
             </Button>
-            <Button type="submit" disabled={pending || uploading}>
+            <Button type="submit" disabled={pending || uploading || examBusy}>
               {pending ? "সংরক্ষণ হচ্ছে…" : "সংরক্ষণ করুন"}
             </Button>
           </div>

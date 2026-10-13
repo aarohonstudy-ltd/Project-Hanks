@@ -1,4 +1,5 @@
 "use client";
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { Plus, Pencil, LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ export default function Crud({
   hint,
   exam,
   question,
+  extraActions,
 }: {
   title: string;
   action: string;
@@ -25,6 +27,7 @@ export default function Crud({
   hint: string;
   exam?: boolean;
   question?: boolean;
+  extraActions?: (row: Row) => ReactNode;
 }) {
   const [editing, setEditing] = useState<Row | null | undefined>(undefined);
   return (
@@ -39,22 +42,25 @@ export default function Crud({
         rows={data.rows}
         columns={columns}
         actions={(row) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            disabled={Boolean(row.locked)}
-            onClick={() => setEditing(row)}
-          >
-            {row.locked ? (
-              <>
-                <LockKeyhole size={14} /> লক করা
-              </>
-            ) : (
-              <>
-                <Pencil size={14} /> সম্পাদনা
-              </>
-            )}
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={Boolean(row.locked)}
+              onClick={() => setEditing(row)}
+            >
+              {row.locked ? (
+                <>
+                  <LockKeyhole size={14} /> লক করা
+                </>
+              ) : (
+                <>
+                  <Pencil size={14} /> সম্পাদনা
+                </>
+              )}
+            </Button>
+            {extraActions?.(row)}
+          </div>
         )}
       />
       {editing !== undefined && (

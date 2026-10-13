@@ -1,4 +1,7 @@
 "use client";
+import RandomBuilder from "./exam-builder/random-builder";
+import ExamPreview from "./exam-builder/exam-preview";
+import type { ExamSettings } from "@/lib/admin/exam-builder";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { readAdmin } from "@/lib/admin/actions";
@@ -7,11 +10,18 @@ export default function QuestionPicker({
   items,
   setItems,
   disabled,
+  onBusy,
+  getSettings,
 }: {
   items: ExamItem[];
   setItems: (items: ExamItem[]) => void;
   disabled: boolean;
+  onBusy: (busy: boolean) => void;
+  getSettings: () => ExamSettings;
 }) {
+  const [preview, setPreview] = useState<ExamSettings>();
+  const [bulkMarks, setBulkMarks] = useState(1),
+    [bulkNegative, setBulkNegative] = useState(0);
   const [query, setQuery] = useState(""),
     [rows, setRows] = useState<Row[]>([]),
     [error, setError] = useState(""),
@@ -38,6 +48,81 @@ export default function QuestionPicker({
         নিচের ক্রমেই প্রশ্ন দেখাবে। Published প্রশ্ন যোগ করুন। প্রতি প্রশ্নের
         নম্বর ও ভুল উত্তরের কর্তন দিন।
       </p>
+      <RandomBuilder
+        items={items}
+        onChange={setItems}
+        disabled={disabled}
+        onBusy={onBusy}
+      />
+      <div className="ad-builder grid gap-3">
+        <strong>
+          মোট নম্বর:{" "}
+          {Math.round(items.reduce((sum, q) => sum + q.marks, 0) * 100) / 100}
+        </strong>
+        <div className="flex flex-wrap gap-3 items-end">
+          <label>
+            সবার নম্বর
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={bulkMarks}
+              onChange={(e) => setBulkMarks(Number(e.target.value))}
+            />
+          </label>
+          <label>
+            সবার কর্তন
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={bulkNegative}
+              onChange={(e) => setBulkNegative(Number(e.target.value))}
+            />
+          </label>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={
+              !items.length ||
+              bulkMarks <= 0 ||
+              bulkNegative < 0 ||
+              bulkNegative > bulkMarks
+            }
+            onClick={() =>
+              setItems(
+                items.map((q) => ({
+                  ...q,
+                  marks: bulkMarks,
+                  negative_marks: bulkNegative,
+                })),
+              )
+            }
+          >
+            সব প্রশ্নে প্রয়োগ
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={!items.length}
+            onClick={() => setPreview(getSettings())}
+          >
+            Preview / Demo / প্রশ্ন সম্পাদনা
+          </Button>
+        </div>
+      </div>
+      {preview && (
+        <ExamPreview
+          items={items}
+          settings={preview}
+          onClose={() => setPreview(undefined)}
+          onReplace={(oldId, id, title) =>
+            setItems(
+              items.map((q) => (q.id === oldId ? { ...q, id, title } : q)),
+            )
+          }
+        />
+      )}
       {items.map((item, i) => (
         <div key={item.id} className="ad-item">
           <p>
