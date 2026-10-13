@@ -8,7 +8,6 @@ import {
   ArrowUpRight,
   BookOpen,
   CheckCircle2,
-  GraduationCap,
   Play,
   Users,
   ClipboardCheck,
@@ -53,7 +52,7 @@ export default function Home({ data }: { data: HomeData }) {
           aria-hidden="true"
           className="academy-grid absolute inset-0 -z-10"
         />
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.2fr_1fr]">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div>
             <Badge
               variant="outline"
@@ -67,7 +66,7 @@ export default function Home({ data }: { data: HomeData }) {
                 জ্ঞানের পরিধি বিস্তৃত হোক আকাশ জুড়ে
               </span>
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
+            <p className="mt-6 text-lg leading-8 text-muted-foreground">
               বিসিএস, প্রাইমারি এবং ৯ম-১০ম গ্রেডসহ সকল প্রতিযোগিতামূলক পরীক্ষার
               প্রস্তুতিতে আস্থার নাম
             </p>
@@ -92,6 +91,7 @@ export default function Home({ data }: { data: HomeData }) {
               নিজের সময়ে শিখুন • অনুশীলনে এগিয়ে যান
             </p>
           </div>
+          {/* Learning space temporarily hidden. Restore GraduationCap import when enabling.
           <div className="rounded-[2rem] border bg-background/85 p-6 shadow-2xl shadow-sky-950/10">
             <div className="mb-5 flex items-center justify-between">
               <span className="font-semibold">আপনার লার্নিং স্পেস</span>
@@ -122,6 +122,7 @@ export default function Home({ data }: { data: HomeData }) {
               ))}
             </div>
           </div>
+          */}
         </div>
       </section>
       <section id="courses" className="mx-auto max-w-7xl px-4 py-20 sm:px-8">
@@ -220,6 +221,7 @@ export default function Home({ data }: { data: HomeData }) {
           </div>
         </div>
       </section>
+      {/* Course plans temporarily hidden. Restore pricing links when enabling.
       <section id="pricing" className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
         <Heading tag="A PLAN FOR YOUR GOAL" title="কোর্স প্ল্যান ও প্রাইসিং" />
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -255,6 +257,7 @@ export default function Home({ data }: { data: HomeData }) {
           ))}
         </div>
       </section>
+      */}
       <section id="videos" className="border-y bg-muted/30 py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <Heading

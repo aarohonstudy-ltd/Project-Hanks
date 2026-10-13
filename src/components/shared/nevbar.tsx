@@ -22,7 +22,8 @@ const menuItems = [
   { label: "হোম", href: "/" },
   { label: "কোর্সসমূহ", href: "/#courses" },
   { label: "ভিডিও ক্লাস", href: "/#videos" },
-  { label: "কোর্স প্ল্যান", href: "/#pricing" },
+  // Temporarily hidden with the homepage pricing section.
+  // { label: "কোর্স প্ল্যান", href: "/#pricing" },
   { label: "সাধারণ জিজ্ঞাসা", href: "/#faq" },
 ];
 

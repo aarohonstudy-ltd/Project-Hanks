@@ -4,8 +4,8 @@ import { siteConfig } from "@/lib/academy/site-config";
 import "@/app/home.css";
 export default function Footer() {
   return (
-    <footer lang="bn" className="academy-home border-t">
-      <div className="academy-cta">
+    <footer lang="bn" className="academy-home academy-cta border-t">
+      <div>
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-5 py-10 sm:flex-row sm:items-center sm:px-8">
           <div>
             <h2 className="text-2xl font-bold">
@@ -54,7 +54,8 @@ export default function Footer() {
                 ["কোর্সসমূহ", "/#courses"],
                 ["ভিডিও লেসন", "/#videos"],
                 ["ফ্রি পরীক্ষা", "/free-exam"],
-                ["কোর্স প্ল্যান", "/#pricing"],
+                // Temporarily hidden with the homepage pricing section.
+                // ["কোর্স প্ল্যান", "/#pricing"],
               ].map(([label, href]) => (
                 <li key={href}>
                   <Link
