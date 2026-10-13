@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { Avatar as AvatarPrimitive } from "radix-ui";
-import { LayoutDashboard, LogIn, LogOut, UserRound } from "lucide-react";
+import { Home, LayoutDashboard, LogIn, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { browserClient } from "@/lib/supabase/client";
 import { disableBrowserPush } from "@/lib/notifications/browser";
@@ -18,7 +18,11 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-export default function NavbarAccount() {
+export default function NavbarAccount({
+  dashboard = false,
+}: {
+  dashboard?: boolean;
+}) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<{
     id: string;
@@ -132,9 +136,9 @@ export default function NavbarAccount() {
           <DropdownMenuLabel className="truncate">{name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">
-              <LayoutDashboard />
-              ড্যাশবোর্ড
+            <Link href={dashboard ? "/" : "/dashboard"}>
+              {dashboard ? <Home /> : <LayoutDashboard />}
+              {dashboard ? "মূল ওয়েবসাইট" : "ড্যাশবোর্ড"}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>

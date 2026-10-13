@@ -27,9 +27,9 @@ export default function DashboardSidebar() {
       </Link>
       <div className="sd-nav-label">শেখার ঠিকানা</div>
       <nav aria-label="শিক্ষার্থী মেনু">
-        {navigation.map((n, i) => (
+        {navigation.map((n) => (
           <div key={n.id}>
-            {i === 7 && (
+            {n.id === "practice" && (
               <div className="sd-nav-label sd-nav-divider">অনুশীলন ও কোর্স</div>
             )}
             <Link

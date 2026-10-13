@@ -1,7 +1,5 @@
-/* eslint-disable @next/next/no-location-assign-relative-destination -- Full reload clears authenticated client state. */
 "use client";
-import { disableBrowserPush } from "@/lib/notifications/browser";
-import { browserClient } from "@/lib/supabase/client";
+import NavbarAccount from "@/components/shared/navbar-account";
 import { useDashboard } from "@/components/student/dashboard-context";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,13 +10,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ChevronRight, Menu, Moon, Sun, UserRound } from "lucide-react";
+import { ChevronRight, Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import DashboardSidebar from "./sidebar";
 import NotificationsDropdown from "./dialogs/notifications";
 export default function DashboardHeader() {
-  const { data, mobileOpen, setMobileOpen, title, setNotice } = useDashboard();
+  const { data, mobileOpen, setMobileOpen, title } = useDashboard();
   const { setTheme } = useTheme();
   return (
     <header className="sd-header">
@@ -55,17 +53,6 @@ export default function DashboardHeader() {
         )}
         <Button
           variant="ghost"
-          onClick={async () => {
-            await disableBrowserPush().catch(() => {});
-            const { error } = await browserClient().auth.signOut();
-            if (error) setNotice(error.message);
-            else location.assign("/login");
-          }}
-        >
-          লগআউট
-        </Button>
-        <Button
-          variant="ghost"
           size="icon"
           aria-label="থিম পরিবর্তন করুন"
           onClick={() =>
@@ -80,13 +67,7 @@ export default function DashboardHeader() {
           <Moon className="dark:hidden" />
         </Button>
         <NotificationsDropdown />
-        <Link
-          href="/dashboard/profile"
-          className="sd-avatar"
-          aria-label="আমার প্রোফাইল"
-        >
-          <UserRound size={19} />
-        </Link>
+        <NavbarAccount dashboard />
       </div>
     </header>
   );
