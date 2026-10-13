@@ -1,4 +1,5 @@
 "use client";
+import SessionGuard from "@/components/auth/session-guard";
 import type { StudentData } from "@/lib/student/types";
 import type { ReactNode } from "react";
 import { DashboardProvider } from "./dashboard-context";
@@ -16,6 +17,7 @@ export default function StudentDashboard({
 }) {
   return (
     <DashboardProvider data={data}>
+      <SessionGuard initial={data.session} />
       <div className="sd-app" lang="bn">
         <a className="sd-skip" href="#student-main">
           মূল কনটেন্টে যান

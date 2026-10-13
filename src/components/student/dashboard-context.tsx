@@ -14,6 +14,7 @@ import {
   useState,
   useRef,
   useEffect,
+  useMemo,
   type ReactNode,
 } from "react";
 import { navigation } from "./navigation";
@@ -64,21 +65,17 @@ function useDashboardState(initial: StudentData) {
       lock.current = false;
     }
   }
-  const attempts = data.attempts,
-    total = attempts.reduce((s, a) => s + a.total, 0),
-    correct = attempts.reduce((s, a) => s + a.score, 0),
-    accuracy = total ? Math.round((correct / total) * 100) : 0,
-    enrolled = data.courses.filter((c) => c.enrolled);
-  const wrongIds = Array.from(
-    new Set(
-      attempts.flatMap((a) =>
-        a.questionIds.filter((id) => {
-          const q = data.questions.find((q) => q.id === id);
-          return q && a.answers[id] !== q.answer;
-        }),
-      ),
-    ),
-  );
+  const attempts = data.attempts;
+  const { total, correct, accuracy } = useMemo(() => {
+    const total = attempts.reduce((sum, a) => sum + a.total, 0);
+    const correct = attempts.reduce((sum, a) => sum + a.score, 0);
+    return {
+      total,
+      correct,
+      accuracy: total ? Math.round((correct / total) * 100) : 0,
+    };
+  }, [attempts]);
+  const enrolled = data.courses.filter((c) => c.enrolled);
   const title =
     navigation.find((n) => n.id === section)?.label ??
     (
@@ -214,7 +211,6 @@ function useDashboardState(initial: StudentData) {
     correct,
     accuracy,
     enrolled,
-    wrongIds,
     title,
     start,
     begin,

@@ -42,12 +42,11 @@ export async function POST(request: NextRequest) {
     if (error)
       return reply(
         {
-          error:
-            error.code === "P0001"
-              ? error.message
-              : "উত্তর save হয়নি। আবার চেষ্টা হচ্ছে।",
+          error: ["P0001", "PT401"].includes(error.code)
+            ? error.message
+            : "উত্তর save হয়নি। আবার চেষ্টা হচ্ছে।",
         },
-        400,
+        error.code === "PT401" ? 401 : 400,
       );
     return reply(data);
   } catch {

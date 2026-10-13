@@ -61,10 +61,9 @@ export async function studentAction(
     });
     if (error)
       return {
-        error:
-          error.code === "P0001"
-            ? error.message
-            : "তথ্য সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।",
+        error: ["P0001", "PT401"].includes(error.code)
+          ? error.message
+          : "তথ্য সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।",
       };
     return data as ActionResult;
   } catch {

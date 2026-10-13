@@ -2,22 +2,20 @@ import { serverClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { StudentData } from "./types";
 export async function getStudentDashboard(): Promise<StudentData> {
+  const started = performance.now();
   const client = await serverClient();
-  const {
-    data: { user },
-  } = await client.auth.getUser();
-  if (!user) redirect("/login");
-  const [dashboardResult, profileResult] = await Promise.all([
-    client.rpc("aarohon_dashboard"),
-    client.from("profiles").select("role").eq("id", user.id).single(),
-  ]);
+  // PostgREST validates the JWT; this secured RPC checks the actual Auth session,
+  // its age and active profile in the database (014). No duplicate Auth/profile trip.
+  const dashboardResult = await client.rpc("aarohon_dashboard");
+  const totalMs = Math.round(performance.now() - started);
+  if (totalMs > 1500) console.warn("[aarohon:dashboard]", { totalMs });
+  if (dashboardResult.error?.code === "PT401")
+    redirect("/login?reason=session-expired");
+  if (dashboardResult.status === 401 || dashboardResult.error?.code === "42501")
+    redirect("/login");
   if (dashboardResult.error || !dashboardResult.data)
     throw new Error(
       "Dashboard unavailable. Check database connectivity, migrations and account status.",
     );
-  const data = dashboardResult.data;
-  const profile = profileResult.data;
-  const dashboard = data as StudentData;
-  dashboard.profile.role = profile?.role;
-  return dashboard;
+  return dashboardResult.data as StudentData;
 }

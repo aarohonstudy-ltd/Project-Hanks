@@ -57,6 +57,7 @@ export type Course = {
   lessonIds?: string[];
 };
 export type StudentData = {
+  session?: { valid: boolean; expiresAt: string | null; serverNow: string };
   bookmarks?: string[];
   reminders?: string[];
   completedLessonIds?: string[];

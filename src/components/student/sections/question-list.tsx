@@ -1,33 +1,30 @@
 "use client";
+import { useState } from "react";
 import QuestionCard from "@/components/student/cards/question-card";
 import { useDashboard } from "@/components/student/dashboard-context";
+import { useQuestionPage } from "../hooks/use-question-page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bookmark, Play, Search } from "lucide-react";
-import Link from "next/link";
+import { Play, Search } from "lucide-react";
 export default function QuestionListSection({
   mode,
 }: {
   mode: "questions" | "bookmarks" | "mistakes" | "practice";
 }) {
-  const {
-    data,
-    saved,
-    ready,
+  const { saved, ready, start } = useDashboard();
+  const [query, setQuery] = useState("");
+  const [subject, setSubject] = useState("");
+  const [page, setPage] = useState(1);
+  const result = useQuestionPage(
+    mode,
     query,
-    setQuery,
     subject,
-    setSubject,
-    wrongIds,
-    start,
-  } = useDashboard();
-  const filteredQuestions = data.questions.filter(
-    (q) =>
-      (subject === "সব বিষয়" || q.subject === subject) &&
-      q.text.toLowerCase().includes(query.toLowerCase()) &&
-      (mode !== "bookmarks" || saved.bookmarks.includes(q.id)) &&
-      (mode !== "mistakes" || wrongIds.includes(q.id)),
+    page,
+    [],
+    mode === "bookmarks" ? saved.bookmarks.join(",") : "",
   );
+  const rows = result.data?.rows ?? [];
+  const subjects = result.data?.subjects ?? result.previous?.subjects ?? [];
   return (
     <>
       <div className="sd-filter">
@@ -37,59 +34,88 @@ export default function QuestionListSection({
             aria-label="প্রশ্ন খুঁজুন"
             placeholder="প্রশ্ন খুঁজুন…"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
           />
         </div>
         <select
           aria-label="বিষয় নির্বাচন"
           value={subject}
-          onChange={(e) => setSubject(e.target.value)}
+          onChange={(e) => {
+            setSubject(e.target.value);
+            setPage(1);
+          }}
         >
-          {["সব বিষয়", ...new Set(data.questions.map((q) => q.subject))].map(
-            (s) => (
-              <option key={s}>{s}</option>
-            ),
-          )}
+          <option value="">সব বিষয়</option>
+          {subjects.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
         </select>
         {mode === "practice" && (
           <Button
-            disabled={!ready || !filteredQuestions.length}
+            disabled={!ready || !rows.length || result.loading}
             onClick={() =>
               start({
                 id: "practice",
-                title: `${subject} • প্র্যাকটিস`,
+                title: `${subject || "সব বিষয়"} • প্র্যাকটিস`,
                 subject,
                 kind: "free",
                 date: "",
-                questions: filteredQuestions.slice(0, 100).map((q) => q.id),
+                questions: rows.map((q) => q.id),
               })
             }
           >
-            প্র্যাকটিস শুরু করুন <Play />
+            এই পৃষ্ঠার প্রশ্ন দিয়ে প্র্যাকটিস <Play />
           </Button>
         )}
       </div>
       {mode === "mistakes" && (
         <p className="sd-info">
-          আপনার সম্পন্ন পরীক্ষার ভুল অথবা উত্তর না দেওয়া প্রশ্নগুলো এখানে দেখানো
+          সম্পন্ন পরীক্ষার ভুল অথবা উত্তর না দেওয়া প্রশ্নগুলো এখানে দেখানো
           হচ্ছে।
         </p>
       )}
+      {result.loading && <p role="status">প্রশ্ন লোড হচ্ছে…</p>}
+      {result.error && (
+        <p role="alert">
+          {result.error}{" "}
+          <Button variant="outline" onClick={result.retry}>
+            আবার চেষ্টা
+          </Button>
+        </p>
+      )}
       <div className="sd-question-list">
-        {filteredQuestions.map((q) => (
+        {rows.map((q) => (
           <QuestionCard key={q.id} q={q} />
         ))}
       </div>
-      {!filteredQuestions.length && (
-        <div className="sd-empty">
-          <Bookmark />
-          <h2>কোনো প্রশ্ন পাওয়া যায়নি</h2>
-          <p>
-            সার্চ বা বিষয় পরিবর্তন করুন, অথবা প্রশ্ন ব্যাংক থেকে প্রশ্ন সংরক্ষণ
-            করুন।
-          </p>
-          <Link href="/dashboard/questions">প্রশ্ন ব্যাংকে যান →</Link>
+      {result.data && (
+        <div className="sd-filter" style={{ marginTop: 20 }}>
+          <Button
+            variant="outline"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+          >
+            আগের পৃষ্ঠা
+          </Button>
+          <span>
+            পৃষ্ঠা {page} · মোট {result.data.total}টি প্রশ্ন
+          </span>
+          <Button
+            variant="outline"
+            disabled={page * 20 >= result.data.total}
+            onClick={() => setPage(page + 1)}
+          >
+            পরের পৃষ্ঠা
+          </Button>
         </div>
+      )}
+      {result.data && !rows.length && (
+        <p className="sd-empty">
+          কোনো প্রশ্ন পাওয়া যায়নি। সার্চ বা বিষয় পরিবর্তন করুন।
+        </p>
       )}
     </>
   );

@@ -1,10 +1,34 @@
 "use client";
+import { useEffect, useState } from "react";
+import {
+  loadSubjectStats,
+  type SubjectStat,
+} from "@/lib/student/question-actions";
 import { useDashboard } from "@/components/student/dashboard-context";
 import { bn } from "@/components/student/navigation";
 import { ChevronRight } from "lucide-react";
 export default function AnalyticsSection() {
-  const { data, setReview, attempts, total, correct, accuracy } =
-    useDashboard();
+  const { setReview, attempts, total, correct, accuracy } = useDashboard();
+
+  const [stats, setStats] = useState<SubjectStat[]>();
+  const [error, setError] = useState("");
+  const [retry, setRetry] = useState(0);
+  useEffect(() => {
+    let active = true;
+    void loadSubjectStats()
+      .then((r) => {
+        if (active) {
+          setStats(r.data);
+          setError(r.error ?? "");
+        }
+      })
+      .catch(() => {
+        if (active) setError("সংযোগের সমস্যা। আবার চেষ্টা করুন।");
+      });
+    return () => {
+      active = false;
+    };
+  }, [retry, attempts]);
 
   return (
     <>
@@ -24,29 +48,21 @@ export default function AnalyticsSection() {
       <section className="sd-panel sd-analytics">
         <h2>বিষয়ভিত্তিক প্রস্তুতি</h2>
         <p>আপনার সম্পন্ন পরীক্ষার উত্তরের ভিত্তিতে</p>
-        {[...new Set(data.questions.map((q) => q.subject))].map((s) => {
-          const responses = attempts.flatMap((a) =>
-            a.questionIds
-              .filter(
-                (id) => data.questions.find((q) => q.id === id)?.subject === s,
-              )
-              .map(
-                (id) =>
-                  a.answers[id] ===
-                  data.questions.find((q) => q.id === id)?.answer,
-              ),
-          );
-          const rate = responses.length
-            ? Math.round(
-                (responses.filter(Boolean).length / responses.length) * 100,
-              )
-            : 0;
+        {!stats && !error && <p role="status">পরিসংখ্যান লোড হচ্ছে…</p>}
+        {error && (
+          <p role="alert">
+            {error}{" "}
+            <button onClick={() => setRetry((v) => v + 1)}>আবার চেষ্টা</button>
+          </p>
+        )}
+        {stats?.map(({ subject: s, total: count, correct: right }) => {
+          const rate = count ? Math.round((right / count) * 100) : 0;
           return (
             <div className="sd-bar-row" key={s}>
               <div>
                 <span>{s}</span>
                 <strong>
-                  {bn(rate)}% <small>({bn(responses.length)}টি প্রশ্ন)</small>
+                  {bn(rate)}% <small>({bn(count)}টি প্রশ্ন)</small>
                 </strong>
               </div>
               <progress value={rate} max={100} aria-label={s} />

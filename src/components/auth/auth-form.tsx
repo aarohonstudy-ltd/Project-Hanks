@@ -1,11 +1,26 @@
 /* eslint-disable @next/next/no-location-assign-relative-destination -- Full reload clears authenticated client state. */
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { browserClient } from "@/lib/supabase/client";
-export default function AuthForm({ register = false }: { register?: boolean }) {
-  const [busy, setBusy] = useState(false),
-    [message, setMessage] = useState("");
+export default function AuthForm({
+  register = false,
+  expired = false,
+}: {
+  register?: boolean;
+  expired?: boolean;
+}) {
+  const [busy, setBusy] = useState(expired),
+    [message, setMessage] = useState(
+      expired ? "সেশনের মেয়াদ শেষ হয়েছে। আবার লগইন করুন।" : "",
+    );
+  useEffect(() => {
+    if (expired)
+      void browserClient()
+        .auth.signOut({ scope: "local" })
+        .catch(() => undefined)
+        .finally(() => setBusy(false));
+  }, [expired]);
   return (
     <main className="mx-auto max-w-md px-6 py-20">
       <h1 className="text-3xl font-bold mb-6">
