@@ -16,6 +16,8 @@ import {
 export default function ExamCard({ e }: { e: Exam }) {
   const { data, saved, ready, run, start } = useDashboard();
 
+  const completed =
+    !!e.completed || data.attempts.some((attempt) => attempt.examId === e.id);
   const access = examAccess(e, data.courses);
   const reasonId = `exam-access-${e.id}`;
   return (
@@ -42,7 +44,7 @@ export default function ExamCard({ e }: { e: Exam }) {
         <Clock3 size={14} />
         {e.date}
       </div>
-      {access.locked && (
+      {!completed && access.locked && (
         <div className="sd-exam-access" id={reasonId}>
           <span className="sd-chip">
             <LockKeyhole size={14} />{" "}
@@ -71,7 +73,11 @@ export default function ExamCard({ e }: { e: Exam }) {
           </Button>
         </div>
       )}
-      {e.kind === "upcoming" ? (
+      {completed ? (
+        <Button disabled>
+          পরীক্ষা দেওয়া হয়েছে <ClipboardCheck />
+        </Button>
+      ) : e.kind === "upcoming" ? (
         <>
           {access.locked && (
             <Button disabled aria-describedby={reasonId}>

@@ -113,6 +113,15 @@ function useDashboardState(initial: StudentData) {
     });
   }, []);
   async function begin(e: Exam, consent = false) {
+    if (
+      e.id !== "practice" &&
+      (e.completed ||
+        data.exams.find((item) => item.id === e.id)?.completed ||
+        data.attempts.some((attempt) => attempt.examId === e.id))
+    ) {
+      setNotice("এই পরীক্ষা দেওয়া হয়েছে।");
+      return;
+    }
     const access = examAccess(e, data.courses);
     if (e.id !== "practice" && access.locked) {
       setNotice(access.reason);
@@ -141,6 +150,15 @@ function useDashboardState(initial: StudentData) {
     return r?.session;
   }
   async function start(e: Exam) {
+    if (
+      e.id !== "practice" &&
+      (e.completed ||
+        data.exams.find((item) => item.id === e.id)?.completed ||
+        data.attempts.some((attempt) => attempt.examId === e.id))
+    ) {
+      setNotice("এই পরীক্ষা দেওয়া হয়েছে।");
+      return;
+    }
     const access = examAccess(e, data.courses);
     if (e.id !== "practice" && access.locked) {
       setNotice(access.reason);
@@ -157,6 +175,15 @@ function useDashboardState(initial: StudentData) {
     } else await begin(e);
   }
   async function finishExam() {
+    if (session?.examId && !session.practice) {
+      const completedId = session.examId;
+      setData((previous) => ({
+        ...previous,
+        exams: previous.exams.map((item) =>
+          item.id === completedId ? { ...item, completed: true } : item,
+        ),
+      }));
+    }
     setExam(null);
     setSession(null);
     setNotice("পরীক্ষা জমা হয়েছে। প্রকাশের সময় হলে ফলাফল দেখা যাবে।");
