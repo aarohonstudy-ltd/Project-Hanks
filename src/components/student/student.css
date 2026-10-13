@@ -1312,3 +1312,8 @@
 .sd-live-exam-page .sd-exam-question input {
   flex-shrink: 0;
 }
+
+.sd-exam-access { display: grid; gap: 10px; margin-block: 14px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--muted); }
+.sd-exam-access p { margin: 0; line-height: 1.7; }
+.sd-exam-access a { display: inline-flex; align-items: center; gap: 6px; color: var(--primary); font-weight: 600; }
+.sd-exam-access .sd-chip { display: inline-flex; align-items: center; gap: 6px; justify-self: start; }

@@ -1,4 +1,5 @@
 "use client";
+import { examAccess } from "@/lib/student/exam-access";
 import type {
   Attempt,
   Course,
@@ -112,6 +113,11 @@ function useDashboardState(initial: StudentData) {
     });
   }, []);
   async function begin(e: Exam, consent = false) {
+    const access = examAccess(e, data.courses);
+    if (e.id !== "practice" && access.locked) {
+      setNotice(access.reason);
+      return;
+    }
     const r = await run(e.id === "practice" ? "start_practice" : "start", {
       id: e.id,
       questions: e.questions,
@@ -135,6 +141,11 @@ function useDashboardState(initial: StudentData) {
     return r?.session;
   }
   async function start(e: Exam) {
+    const access = examAccess(e, data.courses);
+    if (e.id !== "practice" && access.locked) {
+      setNotice(access.reason);
+      return;
+    }
     if (session && !session.practice) {
       setNotice("চলমান পরীক্ষাটি আগে জমা দিন।");
       return;

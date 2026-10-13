@@ -27,6 +27,7 @@ export type Exam = {
   subject: string;
   kind: "live" | "free" | "upcoming";
   isFree?: boolean;
+  courseId?: string | null;
   closed?: boolean;
   date: string;
   questions: string[];
