@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     agentFeedback: true,
+    // Keep visited pages in the browser so moving between dashboard/admin
+    // sections is instant (Next 15+ default is 0s). router.refresh() and
+    // revalidatePath after a save still fetch fresh data.
+    staleTimes: {
+      dynamic: 60,
+    },
   },
   cacheComponents: false,
   async headers() {

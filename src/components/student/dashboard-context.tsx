@@ -19,7 +19,10 @@ import {
   type ReactNode,
 } from "react";
 import { navigation } from "./navigation";
+import { setCacheScope } from "@/lib/client-cache";
 function useDashboardState(initial: StudentData) {
+  // Cached reads belong to one user; a different account starts empty.
+  setCacheScope(initial.profile.id);
   const [data, setData] = useState(initial);
   const segment = useSelectedLayoutSegment();
   const router = useRouter();

@@ -5,7 +5,7 @@
   min-height: 100vh;
   background: var(--sd-bg);
   color: var(--foreground);
-  font-family: Arial, "Noto Sans Bengali", sans-serif;
+  font-family: inherit;
   font-size: 14px;
   line-height: 1.65;
 }
@@ -218,7 +218,7 @@
   font-weight: 500;
 }
 .sd-demo-badge {
-  font: 700 9px Arial;
+  font: 700 9px var(--font-anek), sans-serif;
   letter-spacing: 1px;
   padding: 5px 8px;
   background: var(--sd-soft);
@@ -245,7 +245,7 @@
   margin-bottom: 24px;
 }
 .sd-eyebrow {
-  font: 700 9px Arial;
+  font: 700 9px var(--font-anek), sans-serif;
   letter-spacing: 2px;
   color: var(--sd-accent);
   margin-bottom: 8px;
@@ -345,7 +345,7 @@
   border-radius: 8px;
   background: #ffffffed;
   color: #08708b;
-  font: 700 8px Arial;
+  font: 700 8px var(--font-anek), sans-serif;
   letter-spacing: 1px;
   transform: rotate(-6deg);
 }
@@ -505,7 +505,7 @@
   overflow: hidden;
 }
 .sd-course-art > span {
-  font: 700 10px Arial;
+  font: 700 10px var(--font-anek), sans-serif;
   letter-spacing: 1px;
   display: block;
   position: relative;
@@ -522,7 +522,7 @@
   position: absolute;
   bottom: 20px;
   left: 20px;
-  font: 8px Arial;
+  font: 8px var(--font-anek), sans-serif;
   letter-spacing: 1px;
 }
 .sd-course-body {

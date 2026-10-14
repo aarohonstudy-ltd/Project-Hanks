@@ -5,20 +5,25 @@ import {
   type SubjectStat,
 } from "@/lib/student/question-actions";
 import { useDashboard } from "@/components/student/dashboard-context";
+import { readCache, writeCache } from "@/lib/client-cache";
 import { bn } from "@/components/student/navigation";
 import { ChevronRight } from "lucide-react";
 export default function AnalyticsSection() {
   const { setReview, attempts, total, correct, accuracy } = useDashboard();
 
-  const [stats, setStats] = useState<SubjectStat[]>();
+  // Revisits show the last stats at once while fresh ones load.
+  const [stats, setStats] = useState<SubjectStat[] | undefined>(() =>
+    readCache<SubjectStat[]>("subject-stats"),
+  );
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
   useEffect(() => {
     let active = true;
     void loadSubjectStats()
       .then((r) => {
+        if (r.data) writeCache("subject-stats", r.data);
         if (active) {
-          setStats(r.data);
+          setStats((previous) => r.data ?? previous);
           setError(r.error ?? "");
         }
       })

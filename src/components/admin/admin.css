@@ -34,7 +34,7 @@
 }
 .ad-brand small {
   display: block;
-  font: 9px/1.8 sans-serif;
+  font: 9px/1.8 var(--font-anek), sans-serif;
   letter-spacing: 2px;
   color: var(--muted-foreground);
 }
@@ -190,7 +190,7 @@
   min-width: 150px;
 }
 .ad-badge {
-  font: 11px sans-serif;
+  font: 11px var(--font-anek), sans-serif;
   background: var(--muted);
   padding: 5px 9px;
   border-radius: 5px;
