@@ -173,3 +173,33 @@ export async function setAdminStatus(
     return { error: errorMessage(e) };
   }
 }
+
+// Permanent delete of an archived row; the database refuses if student history exists (022).
+export async function deleteAdminRow(
+  entity: StatusEntity,
+  id: string,
+): Promise<{ error?: string }> {
+  try {
+    if (!(entity in statusEntities)) throw Error("Invalid entity");
+    const client = await authorized();
+    const { error } = await client.rpc("aarohon_admin_delete", {
+      entity,
+      ident: id,
+    });
+    if (error)
+      throw Error(
+        accessError(error.code) ??
+          (error.code === "P0001"
+            ? error.message
+            : error.code === "PGRST202"
+              ? "আগে 022_admin_delete.sql চালান।"
+              : "মুছে ফেলা যায়নি। আবার চেষ্টা করুন।"),
+      );
+    revalidatePublic();
+    revalidatePath("/admin", "layout");
+    revalidatePath("/dashboard", "layout");
+    return {};
+  } catch (e) {
+    return { error: errorMessage(e) };
+  }
+}

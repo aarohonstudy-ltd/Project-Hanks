@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import type { Field, Row, AdminData } from "@/lib/admin/types";
 import DataTable from "./table";
 import Editor from "./editor";
-import StatusButton from "./status-button";
+import StatusButton, { isArchived } from "./status-button";
+import DeleteButton from "./delete-button";
 import type { StatusEntity } from "@/lib/admin/actions";
 export default function Crud({
   title,
@@ -93,6 +94,9 @@ export default function Crud({
             )}
             {extraActions?.(row)}
             {entity && <StatusButton entity={entity} row={row} />}
+            {entity && isArchived(entity, row) && (
+              <DeleteButton entity={entity} row={row} />
+            )}
           </div>
         )}
       />
