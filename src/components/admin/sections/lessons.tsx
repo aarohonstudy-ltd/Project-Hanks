@@ -8,6 +8,7 @@ export default function Lessons({ data, options }: SectionProps) {
     <Crud
       title="লেসন"
       action="lesson_save"
+      entity="lesson"
       data={data}
       defaults={{ position: 1, status: "draft", is_preview: false }}
       hint="প্রতিটি কোর্সে lesson position আলাদা রাখুন। ভিডিওর HTTPS link দেওয়া যাবে।"

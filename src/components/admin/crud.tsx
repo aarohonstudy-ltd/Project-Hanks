@@ -1,11 +1,13 @@
 "use client";
 import type { ReactNode } from "react";
 import { useState } from "react";
-import { Plus, Pencil, LockKeyhole } from "lucide-react";
+import { Plus, Pencil, LockKeyhole, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Field, Row, AdminData } from "@/lib/admin/types";
 import DataTable from "./table";
 import Editor from "./editor";
+import StatusButton from "./status-button";
+import type { StatusEntity } from "@/lib/admin/actions";
 export default function Crud({
   title,
   action,
@@ -17,6 +19,8 @@ export default function Crud({
   exam,
   question,
   extraActions,
+  entity,
+  lockedReason,
 }: {
   title: string;
   action: string;
@@ -28,38 +32,67 @@ export default function Crud({
   exam?: boolean;
   question?: boolean;
   extraActions?: (row: Row) => ReactNode;
+  // Adds an archive/restore button to every row.
+  entity?: StatusEntity;
+  // Shown on locked rows, which can be copied into a new row instead.
+  lockedReason?: string;
 }) {
   const [editing, setEditing] = useState<Row | null | undefined>(undefined);
+  const [copying, setCopying] = useState(false);
   return (
     <>
       <div className="ad-toolbar">
         <p>{hint}</p>
-        <Button onClick={() => setEditing(null)}>
+        <Button
+          onClick={() => {
+            setCopying(false);
+            setEditing(null);
+          }}
+        >
           <Plus size={16} /> নতুন {title}
         </Button>
       </div>
+      {lockedReason && data.rows.some((row) => row.locked) && (
+        <p className="ad-lock-note">
+          <LockKeyhole size={14} /> {lockedReason}
+        </p>
+      )}
       <DataTable
         rows={data.rows}
         columns={columns}
         actions={(row) => (
           <div className="flex flex-wrap gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={Boolean(row.locked)}
-              onClick={() => setEditing(row)}
-            >
-              {row.locked ? (
-                <>
+            {row.locked ? (
+              <>
+                <span className="ad-locked" title={lockedReason}>
                   <LockKeyhole size={14} /> লক করা
-                </>
-              ) : (
-                <>
-                  <Pencil size={14} /> সম্পাদনা
-                </>
-              )}
-            </Button>
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  title="একই তথ্য দিয়ে নতুন একটি তৈরি করুন"
+                  onClick={() => {
+                    setCopying(true);
+                    setEditing(row);
+                  }}
+                >
+                  <Copy size={14} /> কপি করে নতুন
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setCopying(false);
+                  setEditing(row);
+                }}
+              >
+                <Pencil size={14} /> সম্পাদনা
+              </Button>
+            )}
             {extraActions?.(row)}
+            {entity && <StatusButton entity={entity} row={row} />}
           </div>
         )}
       />
@@ -73,6 +106,7 @@ export default function Crud({
           onClose={() => setEditing(undefined)}
           exam={exam}
           question={question}
+          copy={copying}
         />
       )}
     </>

@@ -8,6 +8,7 @@ export default function Courses({ data, options }: SectionProps) {
     <Crud
       title="কোর্স"
       action="course_save"
+      entity="course"
       data={data}
       defaults={{ price: 0, status: "draft" }}
       hint="ফ্রি কোর্সের দাম 0 রাখুন। বিষয় যুক্ত করলে enrolled শিক্ষার্থী সেই বিষয়ের question bank পাবে।"

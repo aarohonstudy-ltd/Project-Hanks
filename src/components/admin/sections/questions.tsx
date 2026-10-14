@@ -11,6 +11,8 @@ export default function Questions({ data, options }: SectionProps) {
       <Crud
         title="প্রশ্ন"
         action="question_save"
+        entity="question"
+        lockedReason="প্র্যাকটিসে বা প্রকাশিত/অংশগ্রহণকৃত পরীক্ষায় ব্যবহৃত প্রশ্ন বদলালে আগের ফলাফল ভুল হয়ে যাবে, তাই এগুলো লক থাকে। সংশোধনের জন্য “কপি করে নতুন” ব্যবহার করুন; পুরনোটি আর্কাইভ করতে পারবেন।"
         data={data}
         question
         defaults={{ status: "draft", difficulty: "medium" }}

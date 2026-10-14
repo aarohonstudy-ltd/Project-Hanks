@@ -41,6 +41,7 @@ export default function Editor({
   onClose,
   exam = false,
   question = false,
+  copy = false,
 }: {
   title: string;
   action: string;
@@ -50,6 +51,8 @@ export default function Editor({
   onClose: () => void;
   exam?: boolean;
   question?: boolean;
+  // Prefill from `row` but save as a new row (used for locked rows).
+  copy?: boolean;
 }) {
   const [pending, startTransition] = useTransition(),
     [error, setError] = useState("");
@@ -57,7 +60,11 @@ export default function Editor({
   const [uploading, setUploading] = useState(false);
   const [examBusy, setExamBusy] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const values = { ...defaults, ...row };
+  const values: Record<string, unknown> = {
+    ...defaults,
+    ...row,
+    ...(copy && { status: "draft", title: `${row?.title ?? ""} (কপি)` }),
+  };
   const [items, setItems] = useState<ExamItem[]>(
     (row?.items ?? []) as ExamItem[],
   );
@@ -71,7 +78,7 @@ export default function Editor({
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>
-            {row ? "সম্পাদনা" : "নতুন"} · {title}
+            {copy ? "কপি করে নতুন" : row ? "সম্পাদনা" : "নতুন"} · {title}
           </DialogTitle>
           <DialogDescription>
             তথ্য পূরণ করে সংরক্ষণ করুন। প্রকাশিত তথ্য শিক্ষার্থীদের কাছে উপলব্ধ
@@ -86,7 +93,7 @@ export default function Editor({
             if (uploading || pending || examBusy) return;
             const f = new FormData(e.currentTarget);
             const payload: Record<string, unknown> = {};
-            if (row) payload.id = row.id;
+            if (row && !copy) payload.id = row.id;
             for (const field of fields) {
               if (field.type === "checkbox")
                 payload[field.key] = f.get(field.key) === "on";

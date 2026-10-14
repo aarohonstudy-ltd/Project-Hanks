@@ -6,7 +6,6 @@ import Crud from "../crud";
 import { statusField } from "../editor";
 import { Badge } from "../table";
 import type { SectionProps } from "../panel";
-import ReviewButton from "../review-button";
 export default function Exams({ data, options }: SectionProps) {
   const [previewId, setPreviewId] = useState<string>();
   return (
@@ -14,6 +13,8 @@ export default function Exams({ data, options }: SectionProps) {
       <Crud
         title="পরীক্ষা"
         action="exam_save"
+        entity="exam"
+        lockedReason="কোনো শিক্ষার্থী অংশ নেওয়ার পর পরীক্ষা বদলালে তাদের ফলাফল ভুল হয়ে যাবে, তাই এটি লক থাকে। নতুন সংস্করণের জন্য “কপি করে নতুন” ব্যবহার করুন; পুরনোটি আর্কাইভ করতে পারবেন।"
         data={data}
         exam
         extraActions={(row) => (
@@ -26,14 +27,6 @@ export default function Exams({ data, options }: SectionProps) {
             >
               Preview / Demo
             </Button>
-            {row.status !== "archived" && (
-              <ReviewButton
-                label="আর্কাইভ"
-                description="পরীক্ষাটি আর্কাইভ হবে; আগের ফলাফল থাকবে। চলমান attempt থাকলে আর্কাইভ করা যাবে না।"
-                action="exam_status"
-                payload={{ id: row.id, status: "archived" }}
-              />
-            )}
           </>
         )}
         defaults={{

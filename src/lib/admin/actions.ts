@@ -131,3 +131,45 @@ export async function importQuestions(
     return { error: errorMessage(e) };
   }
 }
+
+const statusEntities = {
+  course: ["draft", "published", "archived"],
+  lesson: ["draft", "published", "archived"],
+  question: ["draft", "published", "archived"],
+  exam: ["draft", "published", "archived"],
+  subject: ["active", "archived"],
+  topic: ["active", "archived"],
+} as const;
+export type StatusEntity = keyof typeof statusEntities;
+// Archive/restore only changes visibility, so it works on locked rows too (021).
+export async function setAdminStatus(
+  entity: StatusEntity,
+  id: string,
+  status: string,
+): Promise<{ error?: string }> {
+  try {
+    const allowed: readonly string[] | undefined = statusEntities[entity];
+    if (!allowed?.includes(status)) throw Error("Invalid status");
+    const client = await authorized();
+    const { error } = await client.rpc("aarohon_admin_status", {
+      entity,
+      ident: id,
+      new_status: status,
+    });
+    if (error)
+      throw Error(
+        accessError(error.code) ??
+          (error.code === "P0001"
+            ? error.message
+            : error.code === "PGRST202"
+              ? "আগে 021_archive_status.sql চালান।"
+              : "অবস্থা পরিবর্তন হয়নি। আবার চেষ্টা করুন।"),
+      );
+    revalidatePublic();
+    revalidatePath("/admin", "layout");
+    revalidatePath("/dashboard", "layout");
+    return {};
+  } catch (e) {
+    return { error: errorMessage(e) };
+  }
+}
