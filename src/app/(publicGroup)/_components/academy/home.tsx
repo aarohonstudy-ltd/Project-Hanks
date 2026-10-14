@@ -66,7 +66,7 @@ export default function Home({ data }: { data: HomeData }) {
               <Button
                 size="lg"
                 onClick={exam}
-                className="academy-primary academy-action h-14 gap-2 rounded-full px-8 text-lg font-semibold sm:h-16 sm:px-10 sm:text-xl"
+                className="academy-exam academy-action h-14 gap-2 rounded-full px-8 text-lg font-semibold sm:h-16 sm:px-10 sm:text-xl"
               >
                 পরীক্ষা দিন <ArrowUpRight className="size-5 sm:size-6" />
               </Button>

@@ -219,3 +219,43 @@
 @media (prefers-reduced-motion: reduce) {
   .academy-home *, .academy-home *::before, .academy-home *::after { transition: none !important; animation: none !important; }
 } */
+/* Hero "take an exam" button: live-exam red, matching the dashboard. */
+.academy-home .academy-exam {
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+  background: linear-gradient(120deg, #e11d48, #f43f5e);
+  box-shadow: 0 10px 24px -12px #e11d48;
+}
+.academy-home .academy-exam:hover {
+  color: #ffffff;
+  background: linear-gradient(120deg, #be123c, #e11d48);
+}
+.academy-home .academy-exam::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, #ffffff40, transparent);
+  pointer-events: none;
+  animation: academy-shine 4.5s ease-in-out infinite;
+}
+@keyframes academy-shine {
+  0%,
+  70% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(320%) skewX(-20deg);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .academy-home .academy-exam.academy-action:hover {
+    box-shadow: 0 14px 28px -12px #e11d48;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .academy-home .academy-exam::after {
+    animation: none;
+  }
+}
