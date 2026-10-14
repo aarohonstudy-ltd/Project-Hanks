@@ -36,7 +36,7 @@ export default function DashboardSidebar() {
               href={href(n.id)}
               onNavigate={() => setMobileOpen(false)}
               aria-current={section === n.id ? "page" : undefined}
-              className={`sd-nav-link ${section === n.id ? "is-active" : ""}`}
+              className={`sd-nav-link ${section === n.id ? "is-active" : ""} ${n.id === "live" ? "is-live" : ""}`}
             >
               <n.icon size={18} />
               <span>{n.label}</span>

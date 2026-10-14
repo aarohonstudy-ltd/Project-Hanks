@@ -6,7 +6,11 @@ export default function ExamsSection({
 }: {
   kind: "live" | "free" | "upcoming";
 }) {
-  const { data } = useDashboard();
+  const { data, isEnded } = useDashboard();
+  // Live exams disappear as soon as their time is over.
+  const exams = data.exams.filter(
+    (e) => e.kind === kind && !(kind === "live" && isEnded(e)),
+  );
 
   return (
     <>
@@ -15,12 +19,16 @@ export default function ExamsSection({
         নিয়ম অনুযায়ী সার্ভারে হিসাব হবে।
       </div>
       <div className="sd-card-grid">
-        {data.exams
-          .filter((e) => e.kind === kind)
-          .map((e) => (
-            <ExamCard key={e.id} e={e} />
-          ))}
+        {exams.map((e) => (
+          <ExamCard key={e.id} e={e} />
+        ))}
       </div>
+      {kind === "live" && exams.length === 0 && (
+        <p className="sd-empty">
+          এই মুহূর্তে কোনো লাইভ পরীক্ষা চলছে না। নতুন পরীক্ষা শুরু হলে এখানে
+          দেখা যাবে।
+        </p>
+      )}
     </>
   );
 }

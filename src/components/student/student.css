@@ -1592,3 +1592,65 @@
     animation: none;
   }
 }
+/* Sidebar: a gentle rose tint marks the live exam entry. */
+.sd-nav-link.is-live:not(.is-active) {
+  color: #d63c50;
+  background: color-mix(in srgb, #e5384a 6%, transparent);
+}
+.sd-nav-link.is-live:not(.is-active):hover {
+  background: color-mix(in srgb, #e5384a 11%, transparent);
+}
+.dark .sd-nav-link.is-live:not(.is-active) {
+  color: #fb7185;
+}
+/* Live exam cards: rose accent, LIVE tag and countdown. */
+.sd-exam-card.is-live {
+  border-color: color-mix(in srgb, #e5384a 30%, var(--border));
+  border-top: 3px solid #e5384a;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #e5384a 7%, var(--card)),
+    var(--card) 45%
+  );
+}
+.sd-exam-card .sd-live-tag {
+  color: #fff;
+  background: #e5384a;
+  margin-bottom: 0;
+}
+.sd-countdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin: 10px 0 14px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #c2273a;
+  background: color-mix(in srgb, #e5384a 10%, transparent);
+}
+.sd-countdown b {
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.sd-countdown.is-urgent {
+  color: #fff;
+  background: #e5384a;
+  animation: sd-live-blink 1.4s ease-in-out infinite;
+}
+.dark .sd-countdown:not(.is-urgent) {
+  color: #fda4af;
+}
+.sd-exam-card [data-slot="button"].sd-live-start {
+  color: #fff;
+  background: #e5384a;
+}
+.sd-exam-card [data-slot="button"].sd-live-start:hover {
+  background: #cf2c3e;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sd-countdown.is-urgent {
+    animation: none;
+  }
+}

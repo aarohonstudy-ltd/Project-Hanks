@@ -11,6 +11,7 @@ import { studentAction, type Session } from "@/lib/student/actions";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import {
   createContext,
+  useCallback,
   useContext,
   useState,
   useRef,
@@ -90,8 +91,34 @@ function useDashboardState(initial: StudentData) {
     };
   }, [attempts]);
   const enrolled = data.courses.filter((c) => c.enrolled);
-  // Live exams a student can join right now (ended ones are excluded).
-  const liveOpen = data.exams.filter((e) => e.kind === "live" && !e.closed);
+  // Server-aligned clock (0 until mounted). It ticks only when a live exam
+  // ends, so ended exams disappear without a reload or a per-second re-render.
+  const clockOffset = useRef(0);
+  const [now, setNow] = useState(0);
+  const serverNow = useCallback(() => Date.now() + clockOffset.current, []);
+  const isEnded = useCallback(
+    (e: Exam) =>
+      !!e.closed || (!!e.endsAt && now > 0 && Date.parse(e.endsAt) <= now),
+    [now],
+  );
+  // Live exams a student can join right now.
+  const liveOpen = data.exams.filter((e) => e.kind === "live" && !isEnded(e));
+  const nextLiveEnd = Math.min(
+    ...liveOpen.map((e) => (e.endsAt ? Date.parse(e.endsAt) : Infinity)),
+  );
+  useEffect(() => {
+    const serverTime = initial.session?.serverNow;
+    clockOffset.current = serverTime ? Date.parse(serverTime) - Date.now() : 0;
+    const timer = setTimeout(() => setNow(serverNow()), 0);
+    return () => clearTimeout(timer);
+  }, [initial.session?.serverNow, serverNow]);
+  useEffect(() => {
+    if (!now || !Number.isFinite(nextLiveEnd)) return;
+    // setTimeout caps near 24.8 days; a later end just re-arms on the next tick.
+    const wait = Math.min(Math.max(nextLiveEnd - now + 250, 0), 2 ** 31 - 1);
+    const timer = setTimeout(() => setNow(serverNow()), wait);
+    return () => clearTimeout(timer);
+  }, [now, nextLiveEnd, serverNow]);
   const title =
     navigation.find((n) => n.id === section)?.label ??
     (
@@ -269,6 +296,8 @@ function useDashboardState(initial: StudentData) {
     accuracy,
     enrolled,
     liveOpen,
+    isEnded,
+    serverNow,
     title,
     start,
     begin,

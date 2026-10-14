@@ -29,6 +29,8 @@ export type Exam = {
   isFree?: boolean;
   courseId?: string | null;
   closed?: boolean;
+  // ISO end time (023); absent on older databases.
+  endsAt?: string | null;
   completed?: boolean;
   date: string;
   questions: string[];

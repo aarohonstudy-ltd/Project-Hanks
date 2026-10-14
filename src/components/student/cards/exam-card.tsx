@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { examAccess } from "@/lib/student/exam-access";
 import { useDashboard } from "@/components/student/dashboard-context";
 import { bn } from "@/components/student/navigation";
@@ -13,24 +14,65 @@ import {
   LockKeyhole,
 } from "lucide-react";
 
+const bnDigits = (s: string) => s.replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[+d]);
+// Time left until a live exam ends, ticking every second on the server clock.
+function Countdown({ endsAt }: { endsAt: string }) {
+  const { serverNow } = useDashboard();
+  const [left, setLeft] = useState<number>();
+  useEffect(() => {
+    const tick = () => setLeft(Math.max(0, Date.parse(endsAt) - serverNow()));
+    const first = setTimeout(tick, 0);
+    const timer = setInterval(tick, 1000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(timer);
+    };
+  }, [endsAt, serverNow]);
+  if (left === undefined) return null;
+  const total = Math.floor(left / 1000);
+  const days = Math.floor(total / 86400);
+  const clock = [
+    Math.floor((total % 86400) / 3600),
+    Math.floor((total % 3600) / 60),
+    total % 60,
+  ]
+    .map((n) => String(n).padStart(2, "0"))
+    .join(":");
+  return (
+    <span className={`sd-countdown ${total < 600 ? "is-urgent" : ""}`}>
+      <Clock3 size={14} /> শেষ হতে বাকি{" "}
+      <b>
+        {days > 0 ? `${bn(days)} দিন ` : ""}
+        {bnDigits(clock)}
+      </b>
+    </span>
+  );
+}
+
 export default function ExamCard({ e }: { e: Exam }) {
-  const { data, saved, ready, run, start } = useDashboard();
+  const { data, saved, ready, run, start, isEnded } = useDashboard();
+  const live = e.kind === "live";
+  const ended = isEnded(e);
 
   const completed =
     !!e.completed || data.attempts.some((attempt) => attempt.examId === e.id);
   const access = examAccess(e, data.courses);
   const reasonId = `exam-access-${e.id}`;
   return (
-    <article className="sd-panel sd-exam-card" key={e.id}>
+    <article
+      className={`sd-panel sd-exam-card ${live ? "is-live" : ""}`}
+      key={e.id}
+    >
       <div className="sd-card-top">
-        <span className={`sd-icon ${e.kind === "live" ? "rose" : "cyan"}`}>
-          {e.kind === "live" ? <Zap /> : <ClipboardCheck />}
+        <span className={`sd-icon ${live ? "rose" : "cyan"}`}>
+          {live ? <Zap /> : <ClipboardCheck />}
         </span>
-        <span className="sd-chip">
+        <span className={live ? "sd-live-tag" : "sd-chip"}>
+          {live && <i aria-hidden />}
           {e.kind === "upcoming"
             ? "আসন্ন"
-            : e.kind === "live"
-              ? "লাইভ"
+            : live
+              ? "LIVE"
               : e.isFree === false
                 ? "কোর্স পরীক্ষা"
                 : "ফ্রি"}
@@ -44,6 +86,7 @@ export default function ExamCard({ e }: { e: Exam }) {
         <Clock3 size={14} />
         {e.date}
       </div>
+      {live && !ended && e.endsAt && <Countdown endsAt={e.endsAt} />}
       {!completed && access.locked && (
         <div className="sd-exam-access" id={reasonId}>
           <span className="sd-chip">
@@ -102,11 +145,12 @@ export default function ExamCard({ e }: { e: Exam }) {
         </>
       ) : (
         <Button
-          disabled={!ready || e.closed || access.locked}
+          className={live && !ended ? "sd-live-start" : undefined}
+          disabled={!ready || ended || access.locked}
           aria-describedby={access.locked ? reasonId : undefined}
           onClick={() => start(e)}
         >
-          {e.closed ? "পরীক্ষা শেষ" : "পরীক্ষা শুরু করুন"} <ArrowRight />
+          {ended ? "পরীক্ষা শেষ" : "পরীক্ষা শুরু করুন"} <ArrowRight />
         </Button>
       )}
     </article>
