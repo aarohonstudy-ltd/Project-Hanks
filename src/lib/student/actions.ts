@@ -18,6 +18,8 @@ export type Session = {
 };
 export type ActionResult = {
   data?: StudentData;
+  // Only the dashboard keys an action changed (019); older databases send `data`.
+  patch?: Partial<StudentData>;
   message?: string;
   session?: Session;
   lesson?: {

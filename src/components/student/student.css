@@ -842,6 +842,111 @@
   height: 40px;
   margin-top: 8px;
 }
+.sd-profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  max-width: 1100px;
+}
+.sd-profile-grid .sd-profile {
+  max-width: none;
+}
+.sd-profile-progress > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.sd-profile-progress > span {
+  display: block;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--sd-soft);
+  overflow: hidden;
+}
+.sd-profile-progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sd-accent);
+  transition: width 0.3s;
+}
+.sd-profile-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  min-width: 0;
+}
+.sd-profile-fields legend {
+  float: left;
+  grid-column: 1 / -1;
+  font-size: 14px;
+  font-weight: 600;
+}
+.sd-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+.sd-field-wide {
+  grid-column: 1 / -1;
+}
+.sd-select,
+.sd-textarea {
+  width: 100%;
+  border: 1px solid var(--input);
+  border-radius: 6px;
+  background: color-mix(in oklab, var(--input) 20%, transparent);
+  padding: 0 8px;
+  font-size: 14px;
+  color: inherit;
+  outline: none;
+}
+.sd-select {
+  height: 42px;
+}
+.sd-textarea {
+  padding: 8px;
+  resize: vertical;
+  min-height: 72px;
+}
+.sd-select:focus-visible,
+.sd-textarea:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ring) 30%, transparent);
+}
+.sd-select option {
+  background: var(--card);
+}
+.sd-password-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  font-size: 13px;
+  color: var(--sd-accent);
+}
+.sd-password-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+.sd-form-error,
+.sd-form-success {
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.sd-form-error {
+  background: color-mix(in oklab, var(--destructive) 12%, transparent);
+  color: var(--destructive);
+}
+.sd-form-success {
+  background: var(--sd-soft);
+  color: var(--sd-accent);
+}
 .sd-referral {
   padding: 40px;
   max-width: 750px;
@@ -1121,8 +1226,14 @@
   .sd-help {
     margin-top: 10px;
   }
+  .sd-profile-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 @media (max-width: 600px) {
+  .sd-profile-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .sd-main {
     padding: 23px 16px 0;
   }

@@ -59,6 +59,16 @@ function useDashboardState(initial: StudentData) {
           ...r.data,
           profile: { ...r.data.profile, role: data.profile.role },
         });
+      if (r.patch) {
+        const patch = r.patch;
+        setData((previous) => ({
+          ...previous,
+          ...patch,
+          profile: patch.profile
+            ? { ...patch.profile, role: previous.profile.role }
+            : previous.profile,
+        }));
+      }
       if (r.message) setNotice(r.message);
       return r;
     } finally {
@@ -201,7 +211,9 @@ function useDashboardState(initial: StudentData) {
       setExam(null);
       setSession(null);
       setReview(
-        r.data?.attempts.find((a) => a.id === session.attemptId) ?? null,
+        (r.patch?.attempts ?? r.data?.attempts)?.find(
+          (a) => a.id === session.attemptId,
+        ) ?? null,
       );
     }
   }
@@ -209,7 +221,9 @@ function useDashboardState(initial: StudentData) {
     if (!c.enrolled) {
       const r = await run("enroll", { id: c.id });
       if (!r) return;
-      const fresh = r.data?.courses.find((x) => x.id === c.id);
+      const fresh = (r.patch?.courses ?? r.data?.courses)?.find(
+        (x) => x.id === c.id,
+      );
       if (!fresh?.enrolled) return;
       c = fresh;
     }

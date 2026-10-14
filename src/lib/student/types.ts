@@ -72,6 +72,15 @@ export type StudentData = {
     email: string;
     goal: string;
     id: string;
+    // Profile details (020); absent until that migration runs.
+    phone?: string;
+    dateOfBirth?: string;
+    gender?: "" | "male" | "female" | "other";
+    institution?: string;
+    educationLevel?: string;
+    district?: string;
+    address?: string;
+    hasPassword?: boolean;
   };
   questions: Question[];
   exams: Exam[];

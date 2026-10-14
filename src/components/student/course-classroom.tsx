@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   BookOpen,
   CheckCircle2,
@@ -17,7 +16,6 @@ import { bn } from "./navigation";
 import type { CourseRoom } from "@/lib/student/course-types";
 export default function Classroom({ room }: { room: CourseRoom }) {
   const { data, run, ready } = useDashboard();
-  const router = useRouter();
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const { course, lessons, lesson } = room;
@@ -187,8 +185,9 @@ export default function Classroom({ room }: { room: CourseRoom }) {
                     const result = await run("complete_lesson", {
                       id: lesson.id,
                     });
-                    if (result?.data) router.refresh();
-                    else setError("অগ্রগতি সংরক্ষণ হয়নি। আবার চেষ্টা করুন।");
+                    // Progress comes from dashboard state, so no server refresh is needed.
+                    if (!result?.patch && !result?.data)
+                      setError("অগ্রগতি সংরক্ষণ হয়নি। আবার চেষ্টা করুন।");
                   }}
                 >
                   <CheckCircle2 />
