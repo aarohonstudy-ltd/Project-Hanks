@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import Pagination from "@/components/shared/pagination";
+import { useRef, useState } from "react";
 import QuestionCard from "@/components/student/cards/question-card";
 import { useDashboard } from "@/components/student/dashboard-context";
 import { useQuestionPage } from "../hooks/use-question-page";
@@ -15,6 +16,7 @@ export default function QuestionListSection({
   const [query, setQuery] = useState("");
   const [subject, setSubject] = useState("");
   const [page, setPage] = useState(1);
+  const topRef = useRef<HTMLDivElement>(null);
   const result = useQuestionPage(
     mode,
     query,
@@ -27,7 +29,7 @@ export default function QuestionListSection({
   const subjects = result.data?.subjects ?? result.previous?.subjects ?? [];
   return (
     <>
-      <div className="sd-filter">
+      <div className="sd-filter" ref={topRef}>
         <div className="sd-search">
           <Search size={18} />
           <Input
@@ -92,25 +94,19 @@ export default function QuestionListSection({
         ))}
       </div>
       {result.data && (
-        <div className="sd-filter" style={{ marginTop: 20 }}>
-          <Button
-            variant="outline"
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            আগের পৃষ্ঠা
-          </Button>
-          <span>
-            পৃষ্ঠা {page} · মোট {result.data.total}টি প্রশ্ন
-          </span>
-          <Button
-            variant="outline"
-            disabled={page * 20 >= result.data.total}
-            onClick={() => setPage(page + 1)}
-          >
-            পরের পৃষ্ঠা
-          </Button>
-        </div>
+        <Pagination
+          page={page}
+          total={result.data.total}
+          pageSize={20}
+          unit="টি প্রশ্ন"
+          onChange={(next) => {
+            setPage(next);
+            topRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }}
+        />
       )}
       {result.data && !rows.length && (
         <p className="sd-empty">

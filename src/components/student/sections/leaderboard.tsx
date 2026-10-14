@@ -1,4 +1,5 @@
 "use client";
+import Pagination from "@/components/shared/pagination";
 import { useState, useTransition } from "react";
 import {
   Trophy,
@@ -378,34 +379,15 @@ export default function LeaderboardSection({
                 </p>
               </div>
             )}
-            <div className="lb-pagination">
-              <span>
-                {bn(data.total)} জন · পৃষ্ঠা {bn(data.page)} /{" "}
-                {bn(Math.max(1, Math.ceil(data.total / 25)))}
-              </span>
-              <div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={pending || data.page <= 1}
-                  onClick={() =>
-                    load(data.exam!.id, appliedSearch, data.page - 1)
-                  }
-                >
-                  ← আগের
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={pending || data.page * 25 >= data.total}
-                  onClick={() =>
-                    load(data.exam!.id, appliedSearch, data.page + 1)
-                  }
-                >
-                  পরের →
-                </Button>
-              </div>
-            </div>
+            <Pagination
+              className="lb-pagination"
+              page={data.page}
+              total={data.total}
+              pageSize={25}
+              unit=" জন"
+              disabled={pending}
+              onChange={(next) => load(data.exam!.id, appliedSearch, next)}
+            />
           </section>
           <p className="lb-footnote">
             প্রতি শিক্ষার্থীর সেরা জমা দেওয়া attempt দেখানো হচ্ছে। স্কোর ও সময়

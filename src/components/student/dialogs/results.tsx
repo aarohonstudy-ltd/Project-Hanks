@@ -1,4 +1,5 @@
 "use client";
+import Pagination from "@/components/shared/pagination";
 import { useState } from "react";
 import { useQuestionPage } from "../hooks/use-question-page";
 import type { Attempt } from "@/lib/student/types";
@@ -89,25 +90,13 @@ function ReviewQuestions({ review }: { review: Attempt }) {
         );
       })}
       {result.data && (
-        <div className="sd-filter">
-          <Button
-            variant="outline"
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            আগের পৃষ্ঠা
-          </Button>
-          <span>
-            পৃষ্ঠা {page} · উপলব্ধ প্রশ্ন {result.data.total}টি
-          </span>
-          <Button
-            variant="outline"
-            disabled={page * 20 >= result.data.total}
-            onClick={() => setPage(page + 1)}
-          >
-            পরের পৃষ্ঠা
-          </Button>
-        </div>
+        <Pagination
+          page={page}
+          total={result.data.total}
+          pageSize={20}
+          unit="টি প্রশ্ন"
+          onChange={setPage}
+        />
       )}
       {result.data && result.data.total < review.questionIds.length && (
         <p>কিছু প্রশ্নের ব্যাখ্যা এখনও প্রকাশিত হয়নি বা আর উপলব্ধ নেই।</p>

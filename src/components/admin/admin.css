@@ -517,3 +517,26 @@
   flex-shrink: 0;
   margin-top: 2px;
 }
+/* Actions sit at the far right and stay visible when a wide table scrolls. */
+.ad-table th.ad-actions,
+.ad-table td.ad-actions {
+  position: sticky;
+  right: 0;
+  width: 1%;
+  text-align: right;
+  box-shadow: -1px 0 0 var(--border);
+}
+.ad-table th.ad-actions {
+  background: var(--muted);
+}
+.ad-table td.ad-actions {
+  background: var(--card);
+}
+.ad-table td.ad-actions > * {
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .ad-table td.ad-actions > div {
+    flex-wrap: nowrap;
+  }
+}

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Form from "next/form";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/components/shared/pagination";
 import {
   sections,
   type AdminData,
@@ -79,18 +80,13 @@ export default function AdminPanel({
       )}
       <Screen data={data} options={options} />
       {section !== "overview" && (
-        <footer className="ad-pagination">
-          <span>
-            মোট {data.total}টি · পৃষ্ঠা {data.page} /{" "}
-            {Math.max(1, Math.ceil(data.total / 25))}
-          </span>
-          <div className="flex gap-3">
-            {data.page > 1 && <Link href={href(data.page - 1)}>← আগের</Link>}
-            {data.page * 25 < data.total && (
-              <Link href={href(data.page + 1)}>পরের →</Link>
-            )}
-          </div>
-        </footer>
+        <Pagination
+          className="ad-pagination"
+          page={data.page}
+          total={data.total}
+          pageSize={25}
+          href={href}
+        />
       )}
     </>
   );

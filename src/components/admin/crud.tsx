@@ -62,7 +62,7 @@ export default function Crud({
         rows={data.rows}
         columns={columns}
         actions={(row) => (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             {row.locked ? (
               <>
                 <span className="ad-locked" title={lockedReason}>

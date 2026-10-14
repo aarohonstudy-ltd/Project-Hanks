@@ -1,4 +1,5 @@
 "use client";
+import Pagination from "@/components/shared/pagination";
 import RandomBuilder from "./exam-builder/random-builder";
 import ExamPreview from "./exam-builder/exam-preview";
 import type { ExamSettings } from "@/lib/admin/exam-builder";
@@ -243,27 +244,13 @@ export default function QuestionPicker({
         </div>
       ))}
       {total > 25 && (
-        <div className="flex gap-4">
-          <Button
-            type="button"
-            variant="ghost"
-            disabled={pending || page === 1}
-            onClick={() => search(page - 1)}
-          >
-            আগের
-          </Button>
-          <span>
-            {page} / {Math.ceil(total / 25)}
-          </span>
-          <Button
-            type="button"
-            variant="ghost"
-            disabled={pending || page * 25 >= total}
-            onClick={() => search(page + 1)}
-          >
-            পরের
-          </Button>
-        </div>
+        <Pagination
+          page={page}
+          total={total}
+          pageSize={25}
+          disabled={pending}
+          onChange={search}
+        />
       )}
     </fieldset>
   );

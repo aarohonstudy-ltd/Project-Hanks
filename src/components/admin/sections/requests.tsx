@@ -31,7 +31,7 @@ export default function Requests({ data }: SectionProps) {
         ]}
         actions={(r) =>
           r.status === "pending" ? (
-            <div className="flex gap-2">
+            <div className="flex justify-end gap-2">
               <ReviewButton
                 label="অনুমোদন"
                 description={`${String(r.student_name)}-কে ${String(r.course_title)} কোর্সে access দেওয়া হবে। প্রযোজ্য পেমেন্ট যাচাই করেছেন?`}

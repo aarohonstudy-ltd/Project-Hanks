@@ -42,7 +42,7 @@ export default function DataTable({
             {columns.map((c) => (
               <th key={c.key}>{c.label}</th>
             ))}
-            {actions && <th>অ্যাকশন</th>}
+            {actions && <th className="ad-actions">অ্যাকশন</th>}
           </tr>
         </thead>
         <tbody>
@@ -53,7 +53,7 @@ export default function DataTable({
                   {c.render ? c.render(row) : text(row[c.key])}
                 </td>
               ))}
-              {actions && <td>{actions(row)}</td>}
+              {actions && <td className="ad-actions">{actions(row)}</td>}
             </tr>
           ))}
         </tbody>
