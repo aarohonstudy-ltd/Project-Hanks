@@ -90,6 +90,8 @@ function useDashboardState(initial: StudentData) {
     };
   }, [attempts]);
   const enrolled = data.courses.filter((c) => c.enrolled);
+  // Live exams a student can join right now (ended ones are excluded).
+  const liveOpen = data.exams.filter((e) => e.kind === "live" && !e.closed);
   const title =
     navigation.find((n) => n.id === section)?.label ??
     (
@@ -266,6 +268,7 @@ function useDashboardState(initial: StudentData) {
     correct,
     accuracy,
     enrolled,
+    liveOpen,
     title,
     start,
     begin,

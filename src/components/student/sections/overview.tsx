@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 export default function OverviewSection() {
-  const { saved, setReview, attempts, total, accuracy, enrolled } =
+  const { saved, setReview, attempts, total, accuracy, enrolled, liveOpen } =
     useDashboard();
 
   return (
@@ -82,15 +82,24 @@ export default function OverviewSection() {
         ))}
       </section>
       <div className="sd-shortcuts">
-        <Link href="/dashboard/live" className="sd-shortcut rose">
-          <span className="sd-icon rose">
+        <Link href="/dashboard/live" className="sd-shortcut sd-live-cta">
+          <span className="sd-live-cta-icon">
             <Zap />
           </span>
           <div>
+            <span className="sd-live-tag">
+              <i aria-hidden /> LIVE
+            </span>
             <h3>লাইভ এক্সাম</h3>
-            <p>পরীক্ষায় প্রস্তুতি যাচাই করুন</p>
+            <p>
+              {liveOpen.length > 0
+                ? `${bn(liveOpen.length)}টি পরীক্ষা এখন চলছে — সময় শেষ হওয়ার আগে অংশ নিন`
+                : "নতুন লাইভ পরীক্ষার জন্য নজর রাখুন"}
+            </p>
           </div>
-          <ArrowRight />
+          <span className="sd-live-cta-go">
+            {liveOpen.length > 0 ? "এখনই অংশ নিন" : "দেখুন"} <ArrowRight />
+          </span>
         </Link>
         <Link href="/dashboard/free" className="sd-shortcut green">
           <span className="sd-icon green">

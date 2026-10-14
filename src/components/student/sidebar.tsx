@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 
 export default function DashboardSidebar() {
-  const { section, setMobileOpen, saved, enrolled } = useDashboard();
+  const { section, setMobileOpen, saved, enrolled, liveOpen } = useDashboard();
 
   return (
     <div className="sd-sidebar-inner">
@@ -41,7 +41,14 @@ export default function DashboardSidebar() {
               <n.icon size={18} />
               <span>{n.label}</span>
               {n.id === "live" ? (
-                <span className="sd-dot" />
+                liveOpen.length > 0 && (
+                  <span
+                    className="sd-live-count"
+                    aria-label={`${bn(liveOpen.length)}টি লাইভ পরীক্ষা চলছে`}
+                  >
+                    {bn(liveOpen.length)}
+                  </span>
+                )
               ) : n.id === "courses" ? (
                 <small>{bn(enrolled.length)}</small>
               ) : null}

@@ -111,13 +111,6 @@
   padding: 0 7px;
   border-radius: 5px;
 }
-.sd-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #f16b76;
-  margin-left: auto;
-}
 .sd-sidebar-bottom {
   margin-top: auto;
   padding-top: 26px;
@@ -218,7 +211,9 @@
   font-weight: 500;
 }
 .sd-demo-badge {
-  font: 700 9px var(--font-anek), sans-serif;
+  font:
+    700 9px var(--font-anek),
+    sans-serif;
   letter-spacing: 1px;
   padding: 5px 8px;
   background: var(--sd-soft);
@@ -245,7 +240,9 @@
   margin-bottom: 24px;
 }
 .sd-eyebrow {
-  font: 700 9px var(--font-anek), sans-serif;
+  font:
+    700 9px var(--font-anek),
+    sans-serif;
   letter-spacing: 2px;
   color: var(--sd-accent);
   margin-bottom: 8px;
@@ -345,7 +342,9 @@
   border-radius: 8px;
   background: #ffffffed;
   color: #08708b;
-  font: 700 8px var(--font-anek), sans-serif;
+  font:
+    700 8px var(--font-anek),
+    sans-serif;
   letter-spacing: 1px;
   transform: rotate(-6deg);
 }
@@ -505,7 +504,9 @@
   overflow: hidden;
 }
 .sd-course-art > span {
-  font: 700 10px var(--font-anek), sans-serif;
+  font:
+    700 10px var(--font-anek),
+    sans-serif;
   letter-spacing: 1px;
   display: block;
   position: relative;
@@ -522,7 +523,9 @@
   position: absolute;
   bottom: 20px;
   left: 20px;
-  font: 8px var(--font-anek), sans-serif;
+  font:
+    8px var(--font-anek),
+    sans-serif;
   letter-spacing: 1px;
 }
 .sd-course-body {
@@ -1455,4 +1458,137 @@
   align-items: center;
   gap: 6px;
   justify-self: start;
+}
+/* Sidebar: number of live exams open now, pulsing to draw attention. */
+.sd-live-count {
+  position: relative;
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 99px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: #e5384a;
+  animation: sd-live-blink 1.4s ease-in-out infinite;
+}
+.sd-live-count::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 #e5384a99;
+  animation: sd-live-ring 1.4s ease-out infinite;
+}
+@keyframes sd-live-blink {
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes sd-live-ring {
+  to {
+    box-shadow: 0 0 0 7px #e5384a00;
+  }
+}
+/* Overview: live exam call to action. */
+.sd-live-cta {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  border: 0;
+  background: linear-gradient(120deg, #e11d48, #f43f5e 55%, #fb7185);
+  box-shadow: 0 10px 24px -12px #e11d48;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.sd-live-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -12px #e11d48;
+}
+.sd-live-cta::before {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #ffffff1f;
+  pointer-events: none;
+}
+.sd-live-cta-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #ffffff2e;
+}
+.sd-live-cta-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+.sd-live-cta h3 {
+  font-size: 19px;
+}
+.sd-live-cta p {
+  opacity: 0.95;
+  font-size: 12px;
+}
+.sd-live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 4px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: #ffffff33;
+}
+.sd-live-tag i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  animation: sd-live-blink 1s ease-in-out infinite;
+}
+.sd-live-cta-go {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #e11d48;
+  background: #fff;
+}
+.sd-live-cta-go svg {
+  width: 16px;
+}
+@media (max-width: 600px) {
+  .sd-live-cta {
+    flex-wrap: wrap;
+  }
+  .sd-live-cta-go {
+    width: 100%;
+    justify-content: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sd-live-count,
+  .sd-live-count::after,
+  .sd-live-tag i {
+    animation: none;
+  }
 }
