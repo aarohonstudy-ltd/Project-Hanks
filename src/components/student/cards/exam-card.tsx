@@ -60,11 +60,13 @@ export default function ExamCard({ e }: { e: Exam }) {
   const reasonId = `exam-access-${e.id}`;
   return (
     <article
-      className={`sd-panel sd-exam-card ${live ? "is-live" : ""}`}
+      className={`sd-panel sd-exam-card ${live ? "is-live" : e.kind === "free" ? "is-free" : ""}`}
       key={e.id}
     >
       <div className="sd-card-top">
-        <span className={`sd-icon ${live ? "rose" : "cyan"}`}>
+        <span
+          className={`sd-icon ${live ? "rose" : e.kind === "free" ? "green" : "cyan"}`}
+        >
           {live ? <Zap /> : <ClipboardCheck />}
         </span>
         <span className={live ? "sd-live-tag" : "sd-chip"}>
@@ -145,7 +147,9 @@ export default function ExamCard({ e }: { e: Exam }) {
         </>
       ) : (
         <Button
-          className={live && !ended ? "sd-live-start" : undefined}
+          className={
+            ended ? undefined : live ? "sd-live-start" : "sd-free-start"
+          }
           disabled={!ready || ended || access.locked}
           aria-describedby={access.locked ? reasonId : undefined}
           onClick={() => start(e)}

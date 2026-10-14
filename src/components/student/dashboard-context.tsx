@@ -101,6 +101,13 @@ function useDashboardState(initial: StudentData) {
       !!e.closed || (!!e.endsAt && now > 0 && Date.parse(e.endsAt) <= now),
     [now],
   );
+  // Free/model tests the student has not taken yet.
+  const freeOpen = data.exams.filter(
+    (e) =>
+      e.kind === "free" &&
+      !e.completed &&
+      !data.attempts.some((a) => a.examId === e.id),
+  );
   // Live exams a student can join right now.
   const liveOpen = data.exams.filter((e) => e.kind === "live" && !isEnded(e));
   const nextLiveEnd = Math.min(
@@ -296,6 +303,7 @@ function useDashboardState(initial: StudentData) {
     accuracy,
     enrolled,
     liveOpen,
+    freeOpen,
     isEnded,
     serverNow,
     title,
