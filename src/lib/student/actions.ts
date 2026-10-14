@@ -51,10 +51,9 @@ export async function studentAction(
   if (!allowed.includes(action)) return { error: "Invalid action" };
   try {
     const client = await serverClient();
-    const {
-      data: { user },
-    } = await client.auth.getUser();
-    if (!user) return { error: "সেশন শেষ হয়েছে। আবার লগইন করুন।" };
+    // Local JWT check; the RPC itself enforces the session in the database.
+    const { data: auth } = await client.auth.getClaims();
+    if (!auth?.claims) return { error: "সেশন শেষ হয়েছে। আবার লগইন করুন।" };
     const { data, error } = await client.rpc("aarohon_student_action", {
       action,
       payload,

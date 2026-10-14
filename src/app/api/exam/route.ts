@@ -27,10 +27,9 @@ export async function POST(request: NextRequest) {
     if (!["sync", "submit"].includes(action))
       return reply({ error: "Invalid action" }, 400);
     const client = await serverClient();
-    const {
-      data: { user },
-    } = await client.auth.getUser();
-    if (!user)
+    // Local JWT check; aarohon_exam_action enforces the session in the database.
+    const { data: auth } = await client.auth.getClaims();
+    if (!auth?.claims)
       return reply(
         { error: "সেশন শেষ হয়েছে। আবার login করে পরীক্ষা Resume করুন।" },
         401,

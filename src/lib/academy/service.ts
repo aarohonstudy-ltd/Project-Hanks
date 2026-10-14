@@ -1,5 +1,5 @@
 import "server-only";
-import { serverClient } from "@/lib/supabase/server";
+import { publicClient } from "@/lib/supabase/public";
 import type { HomeData } from "./types";
 const faqs: HomeData["faqs"] = [
   {
@@ -29,7 +29,7 @@ const faqs: HomeData["faqs"] = [
 ];
 export async function getHomeData(): Promise<HomeData> {
   try {
-    const client = await serverClient();
+    const client = publicClient();
     const { data, error } = await client.rpc("aarohon_public_home");
     if (error || !data) throw Error(error?.code || "No data");
     return { ...data, faqs, reviews: [] } as HomeData;

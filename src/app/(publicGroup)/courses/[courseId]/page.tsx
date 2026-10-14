@@ -6,6 +6,11 @@ import CourseCover from "@/components/course-cover";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import "@/app/home.css";
+// Rendered on first visit, then cached; admin saves revalidate it immediately.
+export const revalidate = 300;
+export async function generateStaticParams() {
+  return [];
+}
 
 export default async function CoursePage({
   params,

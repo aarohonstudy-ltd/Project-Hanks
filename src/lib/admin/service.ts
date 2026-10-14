@@ -5,21 +5,26 @@ import { serverClient } from "@/lib/supabase/server";
 // Memoized only within the current server render; never shared between users.
 export const requireAdmin = cache(async function requireAdmin() {
   const client = await serverClient();
-  const {
-    data: { user },
-  } = await client.auth.getUser();
-  if (!user) redirect("/login");
-  const { data: session, error: sessionError } = await client.rpc(
-    "aarohon_session_status",
-  );
+  // Local JWT check; session lifetime and role are verified by the database below.
+  const { data: auth } = await client.auth.getClaims();
+  const claims = auth?.claims;
+  if (!claims?.sub) redirect("/login");
+  const [{ data: session, error: sessionError }, { data: profile }] =
+    await Promise.all([
+      client.rpc("aarohon_session_status"),
+      client
+        .from("profiles")
+        .select("full_name,role,status")
+        .eq("id", claims.sub)
+        .single(),
+    ]);
   if (sessionError) throw new Error("Session verification unavailable");
   if (!session?.valid) redirect("/login?reason=session-expired");
-  const { data: profile } = await client
-    .from("profiles")
-    .select("full_name,role,status")
-    .eq("id", user.id)
-    .single();
   if (profile?.role !== "admin" || profile.status !== "active")
     redirect("/admin-denied");
-  return { client, session, name: profile.full_name || user.email || "Admin" };
+  return {
+    client,
+    session,
+    name: profile.full_name || claims.email || "Admin",
+  };
 });

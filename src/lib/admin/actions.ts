@@ -2,23 +2,24 @@
 import { serverClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { sections, type AdminData } from "./types";
+// Local JWT check only; every admin RPC calls require_admin, which verifies
+// the session lifetime, role and status in the database.
 async function authorized() {
   const client = await serverClient();
-  const {
-    data: { user },
-  } = await client.auth.getUser();
-  if (!user) throw Error("আবার লগইন করুন।");
-  const { data: profile } = await client
-    .from("profiles")
-    .select("role,status")
-    .eq("id", user.id)
-    .single();
-  if (profile?.role !== "admin" || profile.status !== "active")
-    throw Error("Admin access required");
+  const { data: auth } = await client.auth.getClaims();
+  if (!auth?.claims) throw Error("আবার লগইন করুন।");
   return client;
 }
 function errorMessage(e: unknown) {
   return e instanceof Error ? e.message : "আবার চেষ্টা করুন।";
+}
+function accessError(code: string) {
+  if (code === "PT401") return "সেশন শেষ হয়েছে। আবার লগইন করুন।";
+  if (code === "42501") return "Admin access required";
+}
+function revalidatePublic() {
+  revalidatePath("/");
+  revalidatePath("/courses/[courseId]", "page");
 }
 export async function readAdmin(
   section: string,
@@ -35,7 +36,8 @@ export async function readAdmin(
     });
     if (error)
       throw Error(
-        "ডেটা লোড হয়নি। 006_admin_panel.sql চালানো হয়েছে কি না দেখুন।",
+        accessError(error.code) ??
+          "ডেটা লোড হয়নি। 006_admin_panel.sql চালানো হয়েছে কি না দেখুন।",
       );
     return { data: data as AdminData };
   } catch (e) {
@@ -68,7 +70,8 @@ export async function saveAdmin(
     });
     if (error) {
       const message =
-        error.code === "P0001"
+        accessError(error.code) ??
+        (error.code === "P0001"
           ? error.message
           : error.code === "23505"
             ? "একই slug, নাম বা lesson position আগে থেকে আছে।"
@@ -76,12 +79,10 @@ export async function saveAdmin(
               ? "দাম, নম্বর, সময় বা status-এর মান ঠিক করুন।"
               : error.code === "23503"
                 ? "নির্বাচিত বিষয়, কোর্স বা প্রশ্ন আর পাওয়া যাচ্ছে না।"
-                : error.code === "42501"
-                  ? "Admin access required"
-                  : "সংরক্ষণ হয়নি। প্রয়োজনীয় সব ঘর সঠিকভাবে পূরণ করুন।";
+                : "সংরক্ষণ হয়নি। প্রয়োজনীয় সব ঘর সঠিকভাবে পূরণ করুন।");
       throw Error(message);
     }
-    revalidatePath("/");
+    revalidatePublic();
     revalidatePath("/admin", "layout");
     revalidatePath("/dashboard", "layout");
     return { message: "সংরক্ষিত হয়েছে।", id: data?.id };
@@ -116,13 +117,14 @@ export async function importQuestions(
     });
     if (error)
       throw Error(
-        error.code === "P0001"
-          ? error.message
-          : error.code === "PGRST202"
-            ? "আগে 008_home_images_csv.sql চালান।"
-            : "Import হয়নি। CSV, কোর্স mapping এবং admin access যাচাই করুন।",
+        accessError(error.code) ??
+          (error.code === "P0001"
+            ? error.message
+            : error.code === "PGRST202"
+              ? "আগে 008_home_images_csv.sql চালান।"
+              : "Import হয়নি। CSV, কোর্স mapping এবং admin access যাচাই করুন।"),
       );
-    revalidatePath("/");
+    revalidatePublic();
     revalidatePath("/dashboard", "layout");
     return { data };
   } catch (e) {
