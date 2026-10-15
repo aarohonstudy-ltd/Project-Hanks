@@ -75,7 +75,7 @@ export default function Notifications({ data, options }: SectionProps) {
           }
         }}
       >
-        <h2 className="text-xl font-semibold">নতুন notification পাঠান</h2>
+        <h2 className="text-xl font-bold">নতুন notification পাঠান</h2>
         <p className="text-sm text-muted-foreground">
           নির্বাচিত শিক্ষার্থীদের site inbox-এ যাবে। Push চালু করা device-গুলোতে
           browser notification পাঠানো হবে।
@@ -141,7 +141,7 @@ export default function Notifications({ data, options }: SectionProps) {
             key={row.id}
             className="sd-panel border rounded-xl p-5 space-y-2"
           >
-            <h3 className="font-semibold">{String(row.title)}</h3>
+            <h3 className="font-bold">{String(row.title)}</h3>
             <p className="whitespace-pre-wrap">{String(row.body)}</p>
             <p className="text-sm text-muted-foreground">
               {String(row.audience)} · Inbox: {String(row.recipients)} · Push

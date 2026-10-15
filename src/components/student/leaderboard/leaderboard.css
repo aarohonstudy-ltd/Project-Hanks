@@ -18,21 +18,21 @@
   gap: 8px;
   align-items: center;
   color: var(--sd-accent);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 1.7px;
 }
 .lb-hero h2 {
-  font-size: 27px;
+  font-size: 31px;
   line-height: 1.5;
   letter-spacing: -0.6px;
-  font-weight: 700;
+  font-weight: 800;
   margin: 10px 0 5px;
 }
 .lb-hero p,
 .lb-title-row p {
   color: var(--muted-foreground);
-  font-size: 13px;
+  font-size: 15px;
 }
 .lb-hero-icon {
   color: var(--sd-accent);
@@ -43,7 +43,7 @@
   transform: rotate(-8deg);
 }
 .lb-hero-icon span {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 1px;
 }
 .lb-filters {
@@ -67,12 +67,12 @@
 }
 .lb-section-heading h3,
 .lb-table-heading h3 {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 19px;
+  font-weight: 800;
 }
 .lb-section-heading p,
 .lb-table-heading p {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted-foreground);
 }
 .lb-filter-grid {
@@ -82,7 +82,7 @@
 }
 .lb-filter-grid label > span {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted-foreground);
   margin-bottom: 7px;
 }
@@ -93,7 +93,7 @@
   background: var(--background);
   height: 44px;
   width: 100%;
-  font-size: 12px;
+  font-size: 14px;
 }
 .lb-filter-grid select {
   padding: 0 12px;
@@ -126,8 +126,8 @@
   gap: 16px;
 }
 .lb-title-row h2 {
-  font-size: 23px;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -145,7 +145,7 @@
 .lb-tags span {
   background: var(--sd-soft);
   color: var(--sd-accent);
-  font-size: 10px;
+  font-size: 12px;
   padding: 4px 9px;
   border-radius: 5px;
 }
@@ -176,19 +176,19 @@
   margin-top: 3px;
 }
 .lb-stats span {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted-foreground);
 }
 .lb-stats strong {
   display: block;
-  font-size: 26px;
+  font-size: 30px;
   color: var(--foreground);
   font-weight: 700;
   line-height: 1.5;
   margin-top: 6px;
 }
 .lb-stats small {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted-foreground);
   font-weight: 400;
 }
@@ -234,7 +234,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 13px;
   color: #a87a12;
 }
 .place-2 .lb-medal {
@@ -252,17 +252,17 @@
   border-radius: 50%;
   background: var(--sd-soft);
   color: var(--sd-accent);
-  font-size: 20px;
+  font-size: 23px;
   font-weight: 700;
 }
 .lb-podium h3 {
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16px;
   overflow-wrap: anywhere;
 }
 .lb-podium h3 small,
 .lb-name small {
-  font-size: 9px;
+  font-size: 11px;
   background: var(--sd-soft);
   color: var(--sd-accent);
   padding: 3px 6px;
@@ -271,12 +271,12 @@
 }
 .lb-podium strong {
   display: block;
-  font-size: 25px;
+  font-size: 29px;
   color: var(--sd-accent);
   margin: 8px 0 4px;
 }
 .lb-podium strong span {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--muted-foreground);
 }
@@ -285,7 +285,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted-foreground);
 }
 .lb-mine {
@@ -298,10 +298,10 @@
   padding: 18px 22px;
 }
 .lb-mine strong {
-  font-size: 14px;
+  font-size: 16px;
 }
 .lb-mine p {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted-foreground);
   margin-top: 4px;
 }
@@ -310,7 +310,7 @@
   align-items: center;
   gap: 8px;
   margin-left: auto;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--sd-accent);
 }
 .lb-results {
@@ -341,7 +341,7 @@
 }
 .lb-table-wrap th {
   background: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted-foreground);
   padding: 13px 22px;
   font-weight: 500;
@@ -349,7 +349,7 @@
 .lb-table-wrap td {
   padding: 17px 22px;
   border-top: 1px solid var(--border);
-  font-size: 13px;
+  font-size: 15px;
 }
 .lb-table-wrap td:last-child,
 .lb-table-wrap th:last-child {
@@ -364,12 +364,12 @@
 .lb-time {
   color: var(--muted-foreground);
   font-variant-numeric: tabular-nums;
-  font-size: 12px !important;
+  font-size: 14px !important;
 }
 .lb-score {
   font-weight: 700;
   color: var(--sd-accent);
-  font-size: 16px !important;
+  font-size: 19px !important;
 }
 .lb-rank {
   display: inline-flex;
@@ -395,7 +395,7 @@
 }
 .lb-status {
   display: inline-block;
-  font-size: 10px;
+  font-size: 12px;
   padding: 3px 9px;
   border-radius: 20px;
   background: var(--muted);
@@ -424,7 +424,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted-foreground);
 }
 .lb-pagination > div {
@@ -433,7 +433,7 @@
 }
 .lb-footnote,
 .lb-muted {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted-foreground);
   line-height: 1.8;
 }
@@ -451,11 +451,11 @@
   color: var(--sd-accent);
 }
 .lb-empty h3 {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 21px;
+  font-weight: 700;
 }
 .lb-empty p {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--muted-foreground);
 }
 .lb-error {
@@ -469,7 +469,7 @@
   gap: 15px;
 }
 .lb-loading {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--sd-accent);
 }
 @media (max-width: 850px) {
@@ -492,7 +492,7 @@
     padding: 23px;
   }
   .lb-hero h2 {
-    font-size: 22px;
+    font-size: 25px;
   }
   .lb-hero-icon {
     display: none;
@@ -513,7 +513,7 @@
   .lb-stats strong {
     display: inline-block;
     margin: 0 0 0 14px;
-    font-size: 21px;
+    font-size: 24px;
   }
   .lb-podium {
     gap: 7px;
@@ -522,15 +522,15 @@
     padding: 36px 8px 16px;
   }
   .lb-podium h3 {
-    font-size: 12px;
+    font-size: 14px;
   }
   .lb-podium strong {
-    font-size: 21px;
+    font-size: 24px;
   }
   .lb-avatar {
     width: 38px;
     height: 38px;
-    font-size: 17px;
+    font-size: 20px;
   }
   .lb-medal {
     left: 9px;
@@ -540,7 +540,7 @@
     align-items: flex-start;
   }
   .lb-title-row h2 {
-    font-size: 19px;
+    font-size: 22px;
   }
   .lb-actions {
     flex-direction: column;
@@ -557,7 +557,7 @@
     padding: 15px;
   }
   .lb-eyebrow {
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: 1px;
   }
   .lb-pagination {

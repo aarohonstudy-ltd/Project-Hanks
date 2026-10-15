@@ -50,7 +50,7 @@ export default function Home({ data }: { data: HomeData }) {
             >
               আপনার আগামী, আপনার প্রস্তুতি
             </Badge>
-            <h1 className="text-4xl leading-[1.4] font-bold tracking-tight sm:text-5xl">
+            <h1 className="text-4xl leading-[1.4] font-extrabold tracking-tight sm:text-5xl">
               <span className="block text-[clamp(1.5rem,6.5vw,3rem)] whitespace-nowrap">
                 চাকরির প্রস্তুতির সাথে
               </span>
@@ -122,7 +122,7 @@ export default function Home({ data }: { data: HomeData }) {
         <p className="mt-3 text-muted-foreground">
           গোছানো প্রস্তুতিতে এগিয়ে যান নিজের গতিতে।
         </p>
-        <div className="mt-8 grid grid-cols-2 items-stretch gap-3 sm:gap-5 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
           {data.courses.map((item) => (
             <Card
               key={item.id}
@@ -134,11 +134,11 @@ export default function Home({ data }: { data: HomeData }) {
               <CardContent className="flex flex-1 flex-col p-3 sm:p-5">
                 <Badge
                   variant="secondary"
-                  className="mb-3 max-w-full text-[10px]"
+                  className="mb-3 max-w-full text-[12px]"
                 >
                   {item.category}
                 </Badge>
-                <h3 className="min-h-20 text-sm leading-6 font-semibold sm:text-base">
+                <h3 className="min-h-20 text-sm leading-6 font-bold sm:text-base">
                   {item.title}
                 </h3>
                 <p className="my-3 text-xs leading-6 text-muted-foreground">
@@ -225,7 +225,7 @@ export default function Home({ data }: { data: HomeData }) {
               className="academy-card flex flex-col rounded-2xl shadow-none"
             >
               <CardContent className="flex flex-1 flex-col p-5">
-                <h3 className="font-semibold">{item.title}</h3>
+                <h3 className="font-bold">{item.title}</h3>
                 <p className="my-5 text-3xl font-bold">
                   {item.price ? `৳${bn(item.price)}` : "ফ্রি"}
                 </p>
@@ -270,7 +270,7 @@ export default function Home({ data }: { data: HomeData }) {
                   <CourseVideo url={video.src} title={video.title} />
                 </div>
                 <CardContent className="p-5">
-                  <h3 className="font-semibold">{video.title}</h3>
+                  <h3 className="font-bold">{video.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
                     ফ্রি প্রিভিউ · এখানেই ভিডিওটি দেখুন।
                   </p>
@@ -334,7 +334,7 @@ function Heading({ tag, title }: { tag: string; title: string }) {
   return (
     <div>
       <p className="academy-eyebrow">{tag}</p>
-      <h2 className="mt-3 text-3xl leading-snug font-bold sm:text-4xl">
+      <h2 className="mt-3 text-3xl leading-snug font-extrabold sm:text-4xl">
         {title}
       </h2>
     </div>

@@ -23,7 +23,7 @@ export default function AuthForm({
   }, [expired]);
   return (
     <main className="mx-auto max-w-md px-6 py-20">
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-extrabold mb-6">
         {register ? "নতুন অ্যাকাউন্ট তৈরি করুন" : "লগইন করুন"}
       </h1>
       <form

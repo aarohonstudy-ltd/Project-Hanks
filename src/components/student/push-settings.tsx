@@ -66,7 +66,7 @@ export default function PushSettings() {
   }
   return (
     <div className="rounded-xl border p-4 space-y-3">
-      <h3 className="font-semibold">Device-এ push notification</h3>
+      <h3 className="font-bold">Device-এ push notification</h3>
       <p className="text-sm text-muted-foreground">
         নতুন পরীক্ষা ও কোর্সের আপডেট পেতে চালু করুন। অনুমতি না দিলেও নিচে
         site-এর notifications পাবেন।

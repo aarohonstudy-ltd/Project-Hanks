@@ -8,7 +8,7 @@ export default function Footer() {
       <div>
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-5 py-10 sm:flex-row sm:items-center sm:px-8">
           <div>
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-extrabold">
               আপনার পরবর্তী অধ্যায় শুরু হোক।
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -33,7 +33,7 @@ export default function Footer() {
         </Link>
         <div className="grid gap-10 py-10 md:grid-cols-3">
           <section>
-            <h3 className="font-semibold">Contact Us</h3>
+            <h3 className="font-bold">Contact Us</h3>
             <p className="mt-4 text-sm text-muted-foreground">
               {siteConfig.address}
             </p>
@@ -48,7 +48,7 @@ export default function Footer() {
             </p>
           </section>
           <nav aria-label="Product">
-            <h3 className="font-semibold">Product</h3>
+            <h3 className="font-bold">Product</h3>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               {[
                 ["কোর্সসমূহ", "/#courses"],
@@ -69,7 +69,7 @@ export default function Footer() {
             </ul>
           </nav>
           <section>
-            <h3 className="font-semibold">Terms and Conditions</h3>
+            <h3 className="font-bold">Terms and Conditions</h3>
             <details className="mt-4 rounded-xl border p-3 text-sm">
               <summary className="cursor-pointer font-medium">
                 ডেমো ব্যবহারের শর্ত
@@ -106,7 +106,7 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-            <p className="mt-2 text-[11px] text-muted-foreground">
+            <p className="mt-2 text-[13px] text-muted-foreground">
               ডেমো লিংক—নিজস্ব অ্যাকাউন্ট এখনো যুক্ত হয়নি।
             </p>
           </div>

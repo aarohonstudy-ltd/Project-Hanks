@@ -106,7 +106,7 @@ export default function QuestionImport({ courses }: { courses: Choice[] }) {
     <>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border bg-card p-5">
         <div>
-          <h3 className="font-semibold">CSV থেকে প্রশ্ন আনুন</h3>
+          <h3 className="font-bold">CSV থেকে প্রশ্ন আনুন</h3>
           <p className="mt-1 text-sm text-muted-foreground">
             প্রশ্ন, অপশন, সঠিক উত্তর ও ব্যাখ্যা একসঙ্গে import করুন।
           </p>
@@ -217,7 +217,7 @@ export default function QuestionImport({ courses }: { courses: Choice[] }) {
                 </fieldset>
                 {selected[0] && (
                   <div className="space-y-2 rounded-xl border p-4">
-                    <h4 className="text-sm font-semibold">
+                    <h4 className="text-sm font-bold">
                       প্রথম নির্বাচিত প্রশ্নের প্রিভিউ
                     </h4>
                     <p className="whitespace-pre-wrap">{selected[0].q}</p>

@@ -42,7 +42,7 @@ export default async function CoursePage({
             <Badge variant="secondary" className="mt-6">
               {course.category}
             </Badge>
-            <h1 className="mt-4 text-3xl leading-snug font-bold sm:text-4xl">
+            <h1 className="mt-4 text-3xl leading-snug font-extrabold sm:text-4xl">
               {course.title}
             </h1>
             <div className="mt-5 flex items-center gap-2 text-muted-foreground">
@@ -50,14 +50,14 @@ export default async function CoursePage({
               {bn(course.lessons)}টি প্রকাশিত লেসন
             </div>
             <section className="mt-8">
-              <h2 className="text-xl font-semibold">কোর্স সম্পর্কে</h2>
+              <h2 className="text-xl font-bold">কোর্স সম্পর্কে</h2>
               <p className="mt-4 whitespace-pre-line leading-8 text-muted-foreground">
                 {course.description || "কোর্সের বিস্তারিত শিগগিরই যুক্ত হবে।"}
               </p>
             </section>
             {course.features.length > 0 && (
               <section className="mt-8">
-                <h2 className="text-xl font-semibold">এই কোর্সে যা থাকছে</h2>
+                <h2 className="text-xl font-bold">এই কোর্সে যা থাকছে</h2>
                 <ul className="mt-5 space-y-4">
                   {course.features.map((feature, index) => (
                     <li key={index} className="flex gap-3 leading-7">
@@ -70,7 +70,7 @@ export default async function CoursePage({
             )}
           </div>
           <aside className="rounded-3xl border bg-card p-6 shadow-sm lg:sticky lg:top-28">
-            <h2 className="text-xl font-semibold">আপনার প্রস্তুতি শুরু করুন</h2>
+            <h2 className="text-xl font-bold">আপনার প্রস্তুতি শুরু করুন</h2>
             <p className="mt-5 text-4xl font-bold">
               {course.price ? `৳${bn(course.price)}` : "ফ্রি"}
             </p>

@@ -21,7 +21,7 @@ export default function CourseCover({
         <span className="line-clamp-2 text-sm font-semibold sm:text-lg">
           {title}
         </span>
-        <span className="text-[10px] tracking-[.2em] opacity-70">
+        <span className="text-[12px] tracking-[.2em] opacity-70">
           আরোহণ · LEARN EVERY DAY
         </span>
       </div>

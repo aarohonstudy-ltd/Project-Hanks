@@ -31,7 +31,7 @@ export default function NotificationsDropdown() {
         >
           <div className="flex shrink-0 items-center justify-between border-b p-4">
             <div>
-              <h2 className="font-semibold">নোটিফিকেশন</h2>
+              <h2 className="font-bold">নোটিফিকেশন</h2>
               <p className="text-xs text-muted-foreground">
                 আপনার আপডেট ও রিমাইন্ডার
               </p>
@@ -59,9 +59,7 @@ export default function NotificationsDropdown() {
               >
                 <Bell size={17} className="shrink-0 mt-1 text-primary" />
                 <div className="min-w-0 space-y-1">
-                  <h3 className="text-sm font-semibold break-words">
-                    {n.title}
-                  </h3>
+                  <h3 className="text-sm font-bold break-words">{n.title}</h3>
                   <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words">
                     {n.body}
                   </p>

@@ -19,7 +19,7 @@ export default async function Page({
   if (error || !data)
     return (
       <div className="sd-panel p-8 space-y-4">
-        <h2 className="text-xl font-semibold">কোর্সটি খোলা যাচ্ছে না</h2>
+        <h2 className="text-xl font-bold">কোর্সটি খোলা যাচ্ছে না</h2>
         <p>
           আপনার enrollment সক্রিয় আছে কি না দেখুন। পরে আবার চেষ্টা করুন অথবা
           সহায়তার জন্য অ্যাডমিনকে জানান।

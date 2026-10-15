@@ -45,7 +45,7 @@ export default function Classroom({ room }: { room: CourseRoom }) {
           <p className="text-xs tracking-widest text-primary font-semibold">
             আপনার ক্লাসরুম
           </p>
-          <h2 className="text-2xl font-bold">{course.title}</h2>
+          <h2 className="text-2xl font-extrabold">{course.title}</h2>
           <p className="text-muted-foreground whitespace-pre-wrap">
             {course.description}
           </p>
@@ -68,7 +68,7 @@ export default function Classroom({ room }: { room: CourseRoom }) {
       </header>
       <div className="grid items-start gap-6 xl:grid-cols-[300px_minmax(0,1fr)]">
         <aside className="sd-panel p-4 space-y-4 xl:sticky xl:top-6">
-          <h2 className="font-semibold">কোর্সে যা আছে</h2>
+          <h2 className="font-bold">কোর্সে যা আছে</h2>
           <input
             className="w-full rounded-lg border bg-background p-2 text-sm"
             aria-label="লেসন খুঁজুন"
@@ -82,7 +82,7 @@ export default function Classroom({ room }: { room: CourseRoom }) {
           >
             {groups.map((group) => (
               <div key={group}>
-                <h3 className="text-xs font-semibold text-muted-foreground mb-2">
+                <h3 className="text-xs font-bold text-muted-foreground mb-2">
                   {group}
                 </h3>
                 <div className="space-y-1">
@@ -142,14 +142,14 @@ export default function Classroom({ room }: { room: CourseRoom }) {
                 <p className="text-sm text-muted-foreground">
                   লেসন {bn(index + 1)} / {bn(lessons.length)}
                 </p>
-                <h2 className="mt-2 text-xl font-bold">{lesson.title}</h2>
+                <h2 className="mt-2 text-xl font-extrabold">{lesson.title}</h2>
               </div>
               {lesson.videoUrl && (
                 <CourseVideo url={lesson.videoUrl} title={lesson.title} />
               )}
               {lesson.content && (
                 <section className="space-y-3">
-                  <h3 className="font-semibold flex items-center gap-2">
+                  <h3 className="font-bold flex items-center gap-2">
                     <FileText size={18} />
                     পাঠ ও নোট
                   </h3>
@@ -215,9 +215,7 @@ export default function Classroom({ room }: { room: CourseRoom }) {
           ) : (
             <div className="py-12 text-center">
               <BookOpen className="mx-auto mb-4 text-primary" size={40} />
-              <h2 className="text-xl font-semibold">
-                আপনার কোর্স প্রস্তুত হচ্ছে
-              </h2>
+              <h2 className="text-xl font-bold">আপনার কোর্স প্রস্তুত হচ্ছে</h2>
               <p className="mt-3 text-muted-foreground">
                 প্রকাশিত লেসন এখানে দেখা যাবে। পরে আবার দেখুন।
               </p>

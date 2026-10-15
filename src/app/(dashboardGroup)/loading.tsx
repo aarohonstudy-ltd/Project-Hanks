@@ -6,7 +6,7 @@ export default function Loading() {
           aria-hidden="true"
           className="mx-auto size-8 animate-spin rounded-full border-2 border-primary border-t-transparent"
         />
-        <h1 className="text-xl font-semibold">ড্যাশবোর্ড প্রস্তুত হচ্ছে…</h1>
+        <h1 className="text-xl font-bold">ড্যাশবোর্ড প্রস্তুত হচ্ছে…</h1>
         <p className="text-sm text-muted-foreground">
           আপনার কোর্স ও পরীক্ষার তথ্য আনা হচ্ছে।
         </p>

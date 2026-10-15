@@ -23,7 +23,7 @@ export default function CoursesSection({
     <div className="space-y-6">
       <div className="sd-panel p-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-xl font-bold">
             {catalog ? "আপনার পরবর্তী কোর্স বেছে নিন" : "আপনার শেখার জায়গা"}
           </h2>
           <p className="mt-2 text-muted-foreground">
@@ -61,7 +61,7 @@ export default function CoursesSection({
         </div>
       ) : (
         <div className="sd-panel p-8 text-center">
-          <h3 className="font-semibold">
+          <h3 className="font-bold">
             {query ? "কোনো কোর্স পাওয়া যায়নি" : "এখনো কোনো কোর্স নেই"}
           </h3>
           <p className="mt-2 text-muted-foreground">

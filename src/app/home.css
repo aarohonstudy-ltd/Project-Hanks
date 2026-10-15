@@ -88,7 +88,7 @@
   mask-image: linear-gradient(to bottom, #000, transparent);
 }
 .academy-eyebrow {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.2em;
   color: #0369a1;
@@ -195,7 +195,7 @@
 .academy-hero { background: radial-gradient(ellipse at 80% 15%, #bae6fd80, transparent 60%), linear-gradient(125deg, #f0fdfa, #f0f9ff 55%, #eef2ff); }
 .dark .academy-hero { background: radial-gradient(ellipse at 80% 15%, #0369a13b, transparent 60%), linear-gradient(125deg, #071b21, #0b1120 55%, #10152d); }
 .academy-grid { background-image: linear-gradient(#38bdf820 1px, transparent 1px), linear-gradient(90deg, #38bdf820 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to bottom, #000, transparent); }
-.academy-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .2em; color: #0284c7; }
+.academy-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .2em; color: #0284c7; }
 .dark .academy-eyebrow { color: #38bdf8; }
 .academy-cover { position: relative; overflow: hidden; }
 .academy-cover::before { content: ''; position: absolute; width: 240px; height: 240px; border: 1px solid #ffffff25; border-radius: 50%; top: -90px; right: -80px; box-shadow: 0 0 0 25px #ffffff08, 0 0 0 55px #ffffff06; pointer-events: none; }
