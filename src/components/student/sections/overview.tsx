@@ -48,47 +48,6 @@ export default function OverviewSection() {
           <span className="sd-float">LEARN. PRACTICE. GROW.</span>
         </div>
       </section>
-      <section className="sd-stats" aria-label="প্রস্তুতির সারসংক্ষেপ">
-        {[
-          {
-            icon: BookOpen,
-            label: "এনরোল করা কোর্স",
-            value: bn(enrolled.length),
-            detail: "আপনার শেখার পথ",
-            tone: "cyan",
-          },
-          {
-            icon: ClipboardCheck,
-            label: "সম্পন্ন পরীক্ষা",
-            value: bn(attempts.length),
-            detail: "প্রকাশিত ফলাফল",
-            tone: "violet",
-          },
-          {
-            icon: Target,
-            label: "সঠিক উত্তরের হার",
-            value: `${bn(accuracy)}%`,
-            detail: `${bn(total)}টি উত্তরের ভিত্তিতে`,
-            tone: "green",
-          },
-          {
-            icon: Bookmark,
-            label: "সংরক্ষিত প্রশ্ন",
-            value: bn(saved.bookmarks.length),
-            detail: "আবার পড়ার জন্য",
-            tone: "amber",
-          },
-        ].map((s) => (
-          <article className="sd-panel sd-stat" key={s.label}>
-            <span className={`sd-icon ${s.tone}`}>
-              <s.icon size={20} />
-            </span>
-            <p>{s.label}</p>
-            <strong>{s.value}</strong>
-            <small>{s.detail}</small>
-          </article>
-        ))}
-      </section>
       <div className="sd-shortcuts">
         <Link href="/dashboard/live" className="sd-shortcut sd-live-cta">
           <span className="sd-live-cta-icon">
@@ -130,6 +89,47 @@ export default function OverviewSection() {
           </span>
         </Link>
       </div>
+      <section className="sd-stats" aria-label="প্রস্তুতির সারসংক্ষেপ">
+        {[
+          {
+            icon: BookOpen,
+            label: "এনরোল করা কোর্স",
+            value: bn(enrolled.length),
+            detail: "আপনার শেখার পথ",
+            tone: "cyan",
+          },
+          {
+            icon: ClipboardCheck,
+            label: "সম্পন্ন পরীক্ষা",
+            value: bn(attempts.length),
+            detail: "প্রকাশিত ফলাফল",
+            tone: "violet",
+          },
+          {
+            icon: Target,
+            label: "সঠিক উত্তরের হার",
+            value: `${bn(accuracy)}%`,
+            detail: `${bn(total)}টি উত্তরের ভিত্তিতে`,
+            tone: "green",
+          },
+          {
+            icon: Bookmark,
+            label: "সংরক্ষিত প্রশ্ন",
+            value: bn(saved.bookmarks.length),
+            detail: "আবার পড়ার জন্য",
+            tone: "amber",
+          },
+        ].map((s) => (
+          <article className="sd-panel sd-stat" key={s.label}>
+            <span className={`sd-icon ${s.tone}`}>
+              <s.icon size={20} />
+            </span>
+            <p>{s.label}</p>
+            <strong>{s.value}</strong>
+            <small>{s.detail}</small>
+          </article>
+        ))}
+      </section>
       <div className="sd-section-heading">
         <div>
           <h2>আপনার চলমান কোর্স</h2>
