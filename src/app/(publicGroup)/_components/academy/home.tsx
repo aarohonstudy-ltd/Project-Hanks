@@ -138,7 +138,7 @@ export default function Home({ data }: { data: HomeData }) {
                 >
                   {item.category}
                 </Badge>
-                <h3 className="min-h-20 text-sm leading-6 font-bold sm:text-base">
+                <h3 className="min-h-20 text-[1.5rem] leading-snug font-extrabold sm:text-2xl">
                   {item.title}
                 </h3>
                 <p className="my-3 text-xs leading-6 text-muted-foreground">
@@ -149,12 +149,11 @@ export default function Home({ data }: { data: HomeData }) {
                     {item.price ? `৳${bn(item.price)}` : "ফ্রি"}
                   </p>
                   <Button
-                    variant="outline"
-                    className="academy-action w-full rounded-full text-xs sm:text-sm"
+                    className="academy-course-btn academy-action h-12 w-full gap-2 rounded-full text-base font-bold"
                     asChild
                   >
                     <Link href={`/courses/${item.id}`}>
-                      বিস্তারিত <ArrowUpRight className="size-3" />
+                      বিস্তারিত দেখুন <ArrowUpRight className="size-5" />
                     </Link>
                   </Button>
                 </div>

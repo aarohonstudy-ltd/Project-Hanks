@@ -259,3 +259,18 @@
     animation: none;
   }
 }
+/* Course card "details" button: brand-blue gradient so each course invites a click. */
+.academy-home .academy-course-btn {
+  color: #ffffff;
+  background: linear-gradient(120deg, #0369a1, #0284c7 55%, #0ea5e9);
+  box-shadow: 0 8px 18px -10px #0369a1;
+}
+.academy-home .academy-course-btn:hover {
+  color: #ffffff;
+  background: linear-gradient(120deg, #075985, #0369a1 55%, #0284c7);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .academy-home .academy-course-btn.academy-action:hover {
+    box-shadow: 0 12px 24px -10px #0369a1;
+  }
+}
