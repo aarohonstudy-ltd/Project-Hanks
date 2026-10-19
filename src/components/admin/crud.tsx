@@ -2,6 +2,7 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { Plus, Pencil, LockKeyhole, Copy } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Field, Row, AdminData } from "@/lib/admin/types";
 import DataTable from "./table";
@@ -22,6 +23,8 @@ export default function Crud({
   extraActions,
   entity,
   lockedReason,
+  validate,
+  newHref,
 }: {
   title: string;
   action: string;
@@ -37,6 +40,9 @@ export default function Crud({
   entity?: StatusEntity;
   // Shown on locked rows, which can be copied into a new row instead.
   lockedReason?: string;
+  validate?: (payload: Record<string, unknown>) => string | undefined;
+  // Open "new" on its own page instead of the popup.
+  newHref?: string;
 }) {
   const [editing, setEditing] = useState<Row | null | undefined>(undefined);
   const [copying, setCopying] = useState(false);
@@ -44,14 +50,22 @@ export default function Crud({
     <>
       <div className="ad-toolbar">
         <p>{hint}</p>
-        <Button
-          onClick={() => {
-            setCopying(false);
-            setEditing(null);
-          }}
-        >
-          <Plus size={16} /> নতুন {title}
-        </Button>
+        {newHref ? (
+          <Button asChild>
+            <Link href={newHref}>
+              <Plus size={16} /> নতুন {title}
+            </Link>
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              setCopying(false);
+              setEditing(null);
+            }}
+          >
+            <Plus size={16} /> নতুন {title}
+          </Button>
+        )}
       </div>
       {lockedReason && data.rows.some((row) => row.locked) && (
         <p className="ad-lock-note">
@@ -111,6 +125,7 @@ export default function Crud({
           exam={exam}
           question={question}
           copy={copying}
+          validate={validate}
         />
       )}
     </>

@@ -17,6 +17,24 @@ function accessError(code: string) {
   if (code === "PT401") return "সেশন শেষ হয়েছে। আবার লগইন করুন।";
   if (code === "42501") return "Admin access required";
 }
+// Database CHECK rules by constraint name, so a rejected save says exactly why.
+const checkMessages: Record<string, string> = {
+  exams_check2:
+    "পেইড পরীক্ষার জন্য একটি কোর্স নির্বাচন করুন, অথবা “সবার জন্য ফ্রি” চালু করুন।",
+  exams_check1: "লাইভ পরীক্ষার জন্য শুরু ও শেষ — দুটো সময়ই দিন।",
+  exams_check: "শেষের সময় শুরুর সময়ের পরে হতে হবে।",
+  exams_duration_minutes_check: "পরীক্ষার সময় (মিনিট) কমপক্ষে ১ দিন।",
+  exams_pass_mark_check: "পাস নম্বর ০ বা তার বেশি দিন।",
+  exam_questions_marks_check: "প্রতিটি প্রশ্নের নম্বর ০-এর বেশি দিন।",
+  exam_questions_check:
+    "প্রশ্নের কর্তন ০ থেকে সেই প্রশ্নের নম্বরের মধ্যে রাখুন।",
+  courses_price_check: "দাম ০ বা তার বেশি দিন।",
+  courses_check: "অফার মূল্য ০ থেকে মূল দামের মধ্যে রাখুন।",
+};
+function checkMessage(message: string) {
+  const name = /check constraint "([^"]+)"/.exec(message)?.[1] ?? "";
+  return checkMessages[name] ?? "দাম, নম্বর, সময় বা status-এর মান ঠিক করুন।";
+}
 function revalidatePublic() {
   revalidatePath("/");
   revalidatePath("/courses/[courseId]", "page");
@@ -76,7 +94,7 @@ export async function saveAdmin(
           : error.code === "23505"
             ? "একই slug, নাম বা lesson position আগে থেকে আছে।"
             : error.code === "23514"
-              ? "দাম, নম্বর, সময় বা status-এর মান ঠিক করুন।"
+              ? checkMessage(error.message)
               : error.code === "23503"
                 ? "নির্বাচিত বিষয়, কোর্স বা প্রশ্ন আর পাওয়া যাচ্ছে না।"
                 : "সংরক্ষণ হয়নি। প্রয়োজনীয় সব ঘর সঠিকভাবে পূরণ করুন।");

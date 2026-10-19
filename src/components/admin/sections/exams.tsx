@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ExamPreview from "../exam-builder/exam-preview";
 import Crud from "../crud";
-import { statusField } from "../editor";
+import { examDefaults, examFields, validateExam } from "../exam-fields";
 import { Badge } from "../table";
 import type { SectionProps } from "../panel";
 export default function Exams({ data, options }: SectionProps) {
@@ -29,74 +29,11 @@ export default function Exams({ data, options }: SectionProps) {
             </Button>
           </>
         )}
-        defaults={{
-          status: "draft",
-          exam_type: "model_test",
-          duration_minutes: 30,
-          pass_mark: 0,
-          is_free: true,
-        }}
+        defaults={examDefaults}
+        validate={validateExam}
+        newHref="/admin/exams/new"
         hint="সব সময় বাংলাদেশ সময় (UTC+6)। Live পরীক্ষায় শুরু ও শেষ সময় আবশ্যক। Attempt শুরু হলে পরীক্ষা লক হয়।"
-        fields={[
-          { key: "title", label: "পরীক্ষার নাম", required: true },
-          {
-            key: "exam_type",
-            label: "ধরন",
-            type: "select",
-            required: true,
-            choices: [
-              { id: "model_test", title: "মডেল টেস্ট" },
-              { id: "live", title: "লাইভ পরীক্ষা" },
-            ],
-          },
-          {
-            key: "course_id",
-            label: "কোর্স (পেইড পরীক্ষায় আবশ্যক)",
-            type: "select",
-            choices: options.courses,
-          },
-          {
-            key: "duration_minutes",
-            label: "সময় (মিনিট)",
-            type: "number",
-            min: 1,
-            step: "1",
-            required: true,
-          },
-          {
-            key: "pass_mark",
-            label: "পাস নম্বর",
-            type: "number",
-            min: 0,
-            step: "0.01",
-            required: true,
-            hint: "0 রাখলে পাস/ফেল দেখাবে না। মোট নম্বরের বেশি দেওয়া যাবে না।",
-          },
-          { key: "is_free", label: "সবার জন্য ফ্রি", type: "checkbox" },
-          statusField,
-          {
-            key: "starts_at",
-            label: "শুরু — বাংলাদেশ সময়",
-            type: "datetime-local",
-          },
-          {
-            key: "ends_at",
-            label: "শেষ — বাংলাদেশ সময়",
-            type: "datetime-local",
-          },
-          {
-            key: "results_at",
-            label: "ফল প্রকাশ — বাংলাদেশ সময়",
-            type: "datetime-local",
-            hint: "ফাঁকা হলে পরীক্ষা শেষ হওয়ার সময় ফল প্রকাশ হবে।",
-          },
-          {
-            key: "answers_at",
-            label: "উত্তর প্রকাশ — বাংলাদেশ সময়",
-            type: "datetime-local",
-            hint: "লাইভ পরীক্ষার জন্য নতুন প্রশ্ন ব্যবহার করুন।",
-          },
-        ]}
+        fields={examFields(options)}
         columns={[
           { key: "title", label: "পরীক্ষা" },
           { key: "exam_type", label: "ধরন" },

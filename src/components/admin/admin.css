@@ -540,3 +540,27 @@
     flex-wrap: nowrap;
   }
 }
+/* Full-page forms (e.g. new exam). */
+.ad-page-form {
+  max-width: 980px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+}
+.ad-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.ad-back-link:hover {
+  color: var(--foreground);
+}
+@media (max-width: 640px) {
+  .ad-page-form {
+    padding: 16px;
+  }
+}
