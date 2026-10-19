@@ -564,3 +564,69 @@
     padding: 16px;
   }
 }
+/* Exam builder controls: visible boxes so inputs and dropdowns don't read as plain text. */
+.ad-builder input:not([type="checkbox"]),
+.ad-builder select,
+.ad-item input {
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in oklab, var(--foreground) 22%, transparent);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 15px;
+}
+.ad-builder select {
+  padding-right: 32px;
+  cursor: pointer;
+}
+.ad-builder input:not([type="checkbox"]):focus-visible,
+.ad-builder select:focus-visible,
+.ad-item input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+  border-color: var(--ring);
+}
+.ad-builder input[type="number"],
+.ad-item input[type="number"] {
+  width: 130px;
+}
+/* Label text sits above its input or dropdown. */
+.ad-builder label:has(> input:not([type="checkbox"])),
+.ad-builder label:has(> select) {
+  display: inline-grid;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.ad-builder > fieldset > input:not([type="checkbox"]),
+.ad-builder > input:not([type="checkbox"]) {
+  width: 100%;
+}
+.ad-form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: grid;
+  gap: 10px;
+  margin: 0 -24px -24px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 -8px 16px -12px #0f172a40;
+}
+[data-slot="dialog-content"] .ad-form-actions {
+  margin: 0 -16px -16px;
+  padding: 12px 16px;
+  background: var(--popover);
+}
+.ad-form-actions [data-slot="button"] {
+  min-width: 120px;
+}
+@media (max-width: 640px) {
+  .ad-form-actions {
+    margin: 0 -16px -16px;
+    padding: 12px 16px;
+  }
+}

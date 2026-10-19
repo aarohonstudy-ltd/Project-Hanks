@@ -1803,3 +1803,68 @@
     transform: none;
   }
 }
+/* Exam: submit area pinned to the bottom of the exam window. */
+.sd-exam-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  margin: 18px -26px 0;
+  padding: 14px 26px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--popover);
+  box-shadow: 0 -10px 18px -14px #0f172a59;
+}
+.sd-live-exam-page .sd-exam-footer {
+  margin: 18px -16px 0;
+  padding: 14px 16px max(18px, env(safe-area-inset-bottom));
+  background: var(--background);
+}
+/* Browsers differ on whether sticky offsets include the scroll box's padding;
+   with no bottom padding the footer sits flush at the bottom in all of them. */
+.sd-dialog:has(.sd-exam-footer) {
+  padding-bottom: 0 !important;
+}
+.sd-exam-footer .sd-submit {
+  height: 52px !important;
+  font-size: 18px;
+  font-weight: 700;
+}
+.sd-exam-confirm {
+  display: grid;
+  gap: 12px;
+}
+.sd-exam-confirm > p {
+  font-size: 17px;
+  font-weight: 600;
+}
+.sd-exam-confirm > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.sd-exam-confirm [data-slot="button"],
+.sd-exam-start[data-slot="button"] {
+  height: 52px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.sd-exam-start[data-slot="button"] {
+  width: 100%;
+}
+.sd-exam-done {
+  display: grid;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 17px;
+  background: color-mix(in srgb, #22c55e 12%, transparent);
+}
+.sd-exam-done > p:first-child {
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  .sd-exam-confirm > div {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDashboard } from "@/components/student/dashboard-context";
 import { useExamSession } from "@/components/student/hooks/use-exam-session";
 import type { Session } from "@/lib/student/actions";
@@ -17,13 +17,12 @@ import { Check, ShieldCheck } from "lucide-react";
 export default function ExamDialog() {
   const { session, ready, notice, exam, setExam, submit, begin, finishExam } =
     useDashboard();
-  const [agreed, setAgreed] = useState(false),
-    [starting, setStarting] = useState(false),
+  const [starting, setStarting] = useState(false),
     [error, setError] = useState("");
   const [practicePending, setPracticePending] = useState(0);
   const locked = !!session && !session.practice;
   async function start() {
-    if (!exam || !agreed) return;
+    if (!exam) return;
     setStarting(true);
     setError("");
     try {
@@ -51,7 +50,6 @@ export default function ExamDialog() {
       onOpenChange={(open) => {
         if (!open && !locked && !starting) {
           setExam(null);
-          setAgreed(false);
           setError("");
         }
       }}
@@ -92,22 +90,16 @@ export default function ExamDialog() {
                 <li>ফোন কল বা browser-এর বাইরে যাওয়া একইভাবে গণনা হতে পারে।</li>
               </ul>
             </div>
-            <label className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="mt-1"
-              />
-              নিয়মগুলো পড়েছি এবং সম্মত।
-            </label>
             {(error || notice) && (
               <p role="alert" className="text-destructive">
                 {error || notice}
               </p>
             )}
+            {/* Starting the exam counts as accepting the rules above. */}
             <Button
-              disabled={!agreed || !ready || starting}
+              size="lg"
+              className="sd-exam-start"
+              disabled={!ready || starting}
               onClick={() => void start()}
             >
               {starting
@@ -136,13 +128,15 @@ export default function ExamDialog() {
                 }
               />
             ))}
-            <Button
-              className="sd-submit"
-              type="submit"
-              disabled={!ready || practicePending > 0}
-            >
-              উত্তর জমা দিন <Check />
-            </Button>
+            <div className="sd-exam-footer">
+              <Button
+                className="sd-submit"
+                type="submit"
+                disabled={!ready || practicePending > 0}
+              >
+                উত্তর জমা দিন <Check />
+              </Button>
+            </div>
           </form>
         ) : (
           <ActiveExam
@@ -164,6 +158,16 @@ function ActiveExam({
 }) {
   const state = useExamSession(session, onDone),
     [confirm, setConfirm] = useState(false);
+  // After submission, return to the dashboard on its own.
+  const doneRef = useRef(state.done);
+  useEffect(() => {
+    doneRef.current = state.done;
+  });
+  useEffect(() => {
+    if (!state.finished) return;
+    const timer = setTimeout(() => doneRef.current(), 1500);
+    return () => clearTimeout(timer);
+  }, [state.finished]);
   const answered = Object.keys(state.answers).length;
   return (
     <div className="space-y-4">
@@ -177,9 +181,6 @@ function ActiveExam({
           {session.isLive ? ` · সতর্কতা ${bn(state.warnings)}/২` : ""}
         </p>
       </div>
-      <p role="status" className="text-sm">
-        {state.message}
-      </p>
       {state.error && (
         <p
           role="alert"
@@ -189,7 +190,13 @@ function ActiveExam({
         </p>
       )}
       {state.finished ? (
-        <Button onClick={state.done}>ড্যাশবোর্ডে ফিরুন</Button>
+        <div role="status" className="sd-exam-done">
+          <p>{state.message}</p>
+          <p>ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে…</p>
+          <Button size="lg" onClick={state.done}>
+            ড্যাশবোর্ডে ফিরুন
+          </Button>
+        </div>
       ) : (
         <>
           {(!state.armed || state.warning) && !state.stopped ? (
@@ -243,28 +250,36 @@ function ActiveExam({
               ))}
             </fieldset>
           )}
-          {confirm && !state.stopped ? (
-            <div className="space-y-3 rounded-xl border p-4">
-              <p>
-                {bn(session.items.length - answered)}টি প্রশ্নের উত্তর বাকি। এখন
-                জমা দেবেন?
-              </p>
-              <div className="flex gap-3">
-                <Button onClick={state.submit}>হ্যাঁ, জমা দিন</Button>
-                <Button variant="outline" onClick={() => setConfirm(false)}>
-                  ফিরে যান
-                </Button>
+          <div className="sd-exam-footer">
+            {confirm && !state.stopped ? (
+              <div className="sd-exam-confirm">
+                <p>
+                  {bn(session.items.length - answered)}টি প্রশ্নের উত্তর বাকি।
+                  এখন জমা দেবেন?
+                </p>
+                <div>
+                  <Button size="lg" onClick={state.submit}>
+                    হ্যাঁ, জমা দিন
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={() => setConfirm(false)}
+                  >
+                    ফিরে যান
+                  </Button>
+                </div>
               </div>
-            </div>
-          ) : (
-            <Button
-              className="sd-submit"
-              disabled={state.stopped || !state.armed || state.warning}
-              onClick={() => setConfirm(true)}
-            >
-              উত্তর জমা দিন <Check />
-            </Button>
-          )}
+            ) : (
+              <Button
+                className="sd-submit"
+                disabled={state.stopped || !state.armed || state.warning}
+                onClick={() => setConfirm(true)}
+              >
+                উত্তর জমা দিন <Check />
+              </Button>
+            )}
+          </div>
         </>
       )}
     </div>

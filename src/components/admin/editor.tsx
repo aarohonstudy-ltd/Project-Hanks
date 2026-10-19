@@ -261,23 +261,31 @@ export function EditorForm({
           disabled={pending || uploading || examBusy}
         />
       )}
-      {error && (
-        <p role="alert" className="ad-form-error" ref={errorRef}>
-          {error}
-        </p>
-      )}
-      <div className="flex justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          disabled={pending || uploading || examBusy}
-          onClick={onCancel}
-        >
-          বাতিল
-        </Button>
-        <Button type="submit" disabled={pending || uploading || examBusy}>
-          {pending ? "সংরক্ষণ হচ্ছে…" : "সংরক্ষণ করুন"}
-        </Button>
+      {/* Pinned to the bottom so save (and any error) is always in view. */}
+      <div className="ad-form-actions">
+        {error && (
+          <p role="alert" className="ad-form-error" ref={errorRef}>
+            {error}
+          </p>
+        )}
+        <div className="flex justify-end gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            disabled={pending || uploading || examBusy}
+            onClick={onCancel}
+          >
+            বাতিল
+          </Button>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={pending || uploading || examBusy}
+          >
+            {pending ? "সংরক্ষণ হচ্ছে…" : "সংরক্ষণ করুন"}
+          </Button>
+        </div>
       </div>
     </form>
   );
