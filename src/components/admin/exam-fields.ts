@@ -22,6 +22,13 @@ export function examFields(options: Options): Field[] {
       choices: options.courses,
     },
     {
+      key: "extra_course_ids",
+      label: "আরও কোর্সে একসাথে যোগ করুন (ঐচ্ছিক)",
+      type: "multi",
+      choices: options.courses,
+      hint: "Ctrl/Cmd চেপে একাধিক কোর্স বাছুন। প্রতিটি কোর্সের জন্য আলাদা পরীক্ষা তৈরি হবে (একই প্রশ্ন ও সময়)। শুধু নতুন পরীক্ষায় কাজ করে।",
+    },
+    {
       key: "duration_minutes",
       label: "সময় (মিনিট)",
       type: "number",
