@@ -110,6 +110,7 @@ export function EditorForm({
       errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [error]);
   const formRef = useRef<HTMLFormElement>(null);
+  const isNew = !row || copy;
   const values: Record<string, unknown> = {
     ...defaults,
     ...row,
@@ -149,6 +150,18 @@ export function EditorForm({
           delete payload.correct_number;
         }
         if (exam) payload.items = items;
+        // One exam per selected course (new exams only; the DB links one course each).
+        const extra = (payload.extra_course_ids ?? []) as string[];
+        delete payload.extra_course_ids;
+        const courseIds =
+          exam && isNew
+            ? [
+                ...new Set(
+                  [String(payload.course_id ?? ""), ...extra].filter(Boolean),
+                ),
+              ]
+            : [];
+        if (courseIds.length) payload.course_id = courseIds[0];
         const invalid = validate?.(payload);
         if (invalid) {
           setError(invalid);
@@ -156,93 +169,111 @@ export function EditorForm({
         }
         setError("");
         startTransition(async () => {
-          const result = await saveAdmin(action, payload);
-          if (result.error) setError(result.error);
-          else {
-            onDone();
-            router.refresh();
+          const targets = courseIds.length > 1 ? courseIds : [undefined];
+          let saved = 0;
+          for (const courseId of targets) {
+            const result = await saveAdmin(
+              action,
+              courseId ? { ...payload, course_id: courseId } : payload,
+            );
+            if (result.error) {
+              setError(
+                saved
+                  ? `${saved}টি পরীক্ষা সংরক্ষিত হয়েছে, কিন্তু পরেরটি হয়নি: ${result.error}`
+                  : result.error,
+              );
+              if (saved) router.refresh();
+              return;
+            }
+            saved++;
           }
+          onDone();
+          router.refresh();
         });
       }}
     >
       <fieldset disabled={pending || examBusy} className="ad-fields">
-        {fields.map((field) => {
-          let value = values[field.key];
-          if (field.type === "datetime-local") value = toDhaka(value);
-          if (question && field.key === "options_text")
-            value = ((row?.options ?? ["", "", "", ""]) as string[]).join("\n");
-          if (question && field.key === "correct_number")
-            value = Number(row?.correct_index ?? 0) + 1;
-          return (
-            <label
-              key={field.key}
-              className={`ad-field ${["textarea", "multi", "image", "pdf"].includes(field.type ?? "") ? "wide" : ""}`}
-            >
-              <span>
-                {field.label}
-                {field.required ? " *" : ""}
-              </span>
-              {field.type === "pdf" ? (
-                <LessonPdf
-                  name={field.key}
-                  initial={String(value ?? "")}
-                  onBusy={setUploading}
-                />
-              ) : field.type === "image" ? (
-                <CourseImage
-                  name={field.key}
-                  initial={String(value ?? "")}
-                  onBusy={setUploading}
-                />
-              ) : field.type === "textarea" ? (
-                <textarea
-                  name={field.key}
-                  required={field.required}
-                  defaultValue={String(value ?? "")}
-                  maxLength={field.key === "content" ? 100000 : 10000}
-                />
-              ) : field.type === "checkbox" ? (
-                <input
-                  type="checkbox"
-                  name={field.key}
-                  defaultChecked={Boolean(value)}
-                />
-              ) : field.type === "select" || field.type === "multi" ? (
-                <select
-                  name={field.key}
-                  required={field.required}
-                  multiple={field.type === "multi"}
-                  defaultValue={
-                    field.type === "multi"
-                      ? ((value ?? []) as string[])
-                      : String(value ?? "")
-                  }
-                >
-                  {field.type !== "multi" && (
-                    <option value="">নির্বাচন করুন</option>
-                  )}
-                  {field.choices?.map((o) => (
-                    <option key={o.id} value={o.id}>
-                      {o.title}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  name={field.key}
-                  type={field.type ?? "text"}
-                  defaultValue={String(value ?? "")}
-                  required={field.required}
-                  min={field.min}
-                  max={field.max}
-                  step={field.step}
-                  maxLength={field.type === "url" ? 2000 : 300}
-                />
-              )}
-              {field.hint && <small className="ad-hint">{field.hint}</small>}
-            </label>
-          );
-        })}
+        {fields
+          .filter((field) => isNew || field.key !== "extra_course_ids")
+          .map((field) => {
+            let value = values[field.key];
+            if (field.type === "datetime-local") value = toDhaka(value);
+            if (question && field.key === "options_text")
+              value = ((row?.options ?? ["", "", "", ""]) as string[]).join(
+                "\n",
+              );
+            if (question && field.key === "correct_number")
+              value = Number(row?.correct_index ?? 0) + 1;
+            return (
+              <label
+                key={field.key}
+                className={`ad-field ${["textarea", "multi", "image", "pdf"].includes(field.type ?? "") ? "wide" : ""}`}
+              >
+                <span>
+                  {field.label}
+                  {field.required ? " *" : ""}
+                </span>
+                {field.type === "pdf" ? (
+                  <LessonPdf
+                    name={field.key}
+                    initial={String(value ?? "")}
+                    onBusy={setUploading}
+                  />
+                ) : field.type === "image" ? (
+                  <CourseImage
+                    name={field.key}
+                    initial={String(value ?? "")}
+                    onBusy={setUploading}
+                  />
+                ) : field.type === "textarea" ? (
+                  <textarea
+                    name={field.key}
+                    required={field.required}
+                    defaultValue={String(value ?? "")}
+                    maxLength={field.key === "content" ? 100000 : 10000}
+                  />
+                ) : field.type === "checkbox" ? (
+                  <input
+                    type="checkbox"
+                    name={field.key}
+                    defaultChecked={Boolean(value)}
+                  />
+                ) : field.type === "select" || field.type === "multi" ? (
+                  <select
+                    name={field.key}
+                    required={field.required}
+                    multiple={field.type === "multi"}
+                    defaultValue={
+                      field.type === "multi"
+                        ? ((value ?? []) as string[])
+                        : String(value ?? "")
+                    }
+                  >
+                    {field.type !== "multi" && (
+                      <option value="">নির্বাচন করুন</option>
+                    )}
+                    {field.choices?.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.title}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    name={field.key}
+                    type={field.type ?? "text"}
+                    defaultValue={String(value ?? "")}
+                    required={field.required}
+                    min={field.min}
+                    max={field.max}
+                    step={field.step}
+                    maxLength={field.type === "url" ? 2000 : 300}
+                  />
+                )}
+                {field.hint && <small className="ad-hint">{field.hint}</small>}
+              </label>
+            );
+          })}
       </fieldset>
       {exam && (
         <QuestionPicker
