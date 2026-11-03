@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import PracticeQuestion from "./practice-question";
 import { Check, ShieldCheck } from "lucide-react";
+import MathText from "@/components/math-text";
 export default function ExamDialog() {
   const { session, ready, notice, exam, setExam, submit, begin, finishExam } =
     useDashboard();
@@ -174,7 +175,7 @@ function ActiveExam({
       <div className="sticky top-0 z-10 flex flex-wrap justify-between gap-3 rounded-xl border bg-background p-4">
         <p className="font-semibold" role="timer" aria-label="বাকি সময়">
           বাকি {bn(Math.floor(state.remaining / 60))}:
-          {String(state.remaining % 60).padStart(2, "0")}
+          {bn(state.remaining % 60).padStart(2, "০")}
         </p>
         <p>
           {bn(answered)} / {bn(session.items.length)} উত্তর
@@ -223,7 +224,7 @@ function ActiveExam({
               {session.items.map((q, n) => (
                 <fieldset key={q.id} className="sd-exam-question">
                   <legend>
-                    {bn(n + 1)}. {q.text}
+                    {bn(n + 1)}. <MathText>{q.text}</MathText>
                   </legend>
                   {session.isLive && state.answers[q.id] !== undefined && (
                     <p className="text-xs text-muted-foreground">
@@ -242,7 +243,7 @@ function ActiveExam({
                         onChange={() => state.choose(q.id, i)}
                       />
                       <span className="min-w-0 flex-1 whitespace-pre-wrap break-words">
-                        {o}
+                        <MathText>{o}</MathText>
                       </span>
                     </label>
                   ))}

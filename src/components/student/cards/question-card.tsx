@@ -4,6 +4,7 @@ import { bn } from "@/components/student/navigation";
 import { Button } from "@/components/ui/button";
 import type { Question } from "@/lib/student/types";
 import { Bookmark } from "lucide-react";
+import MathText from "@/components/math-text";
 
 export default function QuestionCard({ q }: { q: Question }) {
   const { saved, ready, revealed, setRevealed, bookmark } = useDashboard();
@@ -29,7 +30,9 @@ export default function QuestionCard({ q }: { q: Question }) {
           />
         </Button>
       </div>
-      <h3>{q.text}</h3>
+      <h3>
+        <MathText>{q.text}</MathText>
+      </h3>
       <div className="sd-options-grid">
         {q.options.map((o, i) => (
           <div
@@ -37,7 +40,7 @@ export default function QuestionCard({ q }: { q: Question }) {
             className={`sd-option ${revealed.includes(q.id) && i === q.answer ? "correct" : ""}`}
           >
             <span>{bn(i + 1)}</span>
-            {o}
+            <MathText>{o}</MathText>
           </div>
         ))}
       </div>
@@ -54,7 +57,9 @@ export default function QuestionCard({ q }: { q: Question }) {
         {revealed.includes(q.id) ? "ব্যাখ্যা লুকান" : "উত্তর ও ব্যাখ্যা দেখুন"}
       </Button>
       {revealed.includes(q.id) && (
-        <p className="sd-explanation">{q.explanation}</p>
+        <p className="sd-explanation">
+          <MathText>{q.explanation}</MathText>
+        </p>
       )}
     </article>
   );
