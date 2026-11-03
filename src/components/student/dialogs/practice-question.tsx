@@ -5,6 +5,7 @@ import type { Session } from "@/lib/student/actions";
 import type { Question } from "@/lib/student/types";
 import { useDashboard } from "../dashboard-context";
 import { bn } from "../navigation";
+import MathText from "@/components/math-text";
 export default function PracticeQuestion({
   question: q,
   number,
@@ -56,7 +57,7 @@ export default function PracticeQuestion({
   return (
     <fieldset className="sd-exam-question">
       <legend>
-        {bn(number)}. {q.text}
+        {bn(number)}. <MathText>{q.text}</MathText>
       </legend>
       {q.options.map((option, index) => (
         <label
@@ -76,7 +77,7 @@ export default function PracticeQuestion({
             disabled={busy || !!feedback}
             onChange={() => void choose(index)}
           />
-          {option}
+          <MathText>{option}</MathText>
         </label>
       ))}
       {busy && <p role="status">উত্তর যাচাই হচ্ছে…</p>}
@@ -98,9 +99,12 @@ export default function PracticeQuestion({
               ? "✓ সঠিক উত্তর!"
               : "✗ উত্তরটি ভুল"}
           </strong>
-          <p>সঠিক উত্তর: {q.options[feedback.answer]}</p>
+          <p>
+            সঠিক উত্তর: <MathText>{q.options[feedback.answer]}</MathText>
+          </p>
           <p className="whitespace-pre-wrap">
-            {feedback.explanation || "এই প্রশ্নের ব্যাখ্যা এখনো যোগ করা হয়নি।"}
+            <MathText>{feedback.explanation}</MathText>
+            {!feedback.explanation && "এই প্রশ্নের ব্যাখ্যা এখনো যোগ করা হয়নি।"}
           </p>
         </div>
       )}

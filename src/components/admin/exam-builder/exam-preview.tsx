@@ -17,6 +17,7 @@ import {
 } from "@/lib/admin/exam-builder";
 import type { ExamItem } from "@/lib/admin/types";
 import QuestionCopyEditor from "./question-copy-editor";
+import MathText from "@/components/math-text";
 export default function ExamPreview({
   examId,
   items,
@@ -122,7 +123,7 @@ export default function ExamPreview({
                     {q.negative_marks}
                   </small>
                   <h3>
-                    {i + 1}. {q.text}
+                    {i + 1}. <MathText>{q.text}</MathText>
                   </h3>
                   <ol>
                     {q.options.map((o, j) => (
@@ -130,11 +131,14 @@ export default function ExamPreview({
                         key={j}
                         className={j === q.answer ? "ad-correct" : ""}
                       >
-                        {j + 1}. {o} {j === q.answer && "✓"}
+                        {j + 1}. <MathText>{o}</MathText>{" "}
+                        {j === q.answer && "✓"}
                       </li>
                     ))}
                   </ol>
-                  <p className="whitespace-pre-wrap">{q.explanation}</p>
+                  <p className="whitespace-pre-wrap">
+                    <MathText>{q.explanation}</MathText>
+                  </p>
                   {onReplace && (
                     <Button
                       type="button"
@@ -255,7 +259,7 @@ function DemoExam({
                     setAnswers((a) => ({ ...a, [q.id]: i }));
                 }}
               >
-                {i + 1}. {option}
+                {i + 1}. <MathText>{option}</MathText>
                 {finished && q.answer === i && " ✓ সঠিক"}
               </button>
             ))}
@@ -267,9 +271,12 @@ function DemoExam({
           )}
           {finished && (
             <p className="whitespace-pre-wrap">
-              আপনার উত্তর: {q.options[answers[q.id]] ?? "উত্তর দেওয়া হয়নি"}
+              আপনার উত্তর:{" "}
+              <MathText>
+                {q.options[answers[q.id]] ?? "উত্তর দেওয়া হয়নি"}
+              </MathText>
               <br />
-              ব্যাখ্যা: {q.explanation}
+              ব্যাখ্যা: <MathText>{q.explanation}</MathText>
             </p>
           )}
         </article>

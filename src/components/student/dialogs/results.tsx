@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Bookmark, Trophy } from "lucide-react";
+import MathText from "@/components/math-text";
 
 export default function ResultsDialog() {
   const { review, setReview } = useDashboard();
@@ -72,12 +73,21 @@ function ReviewQuestions({ review }: { review: Attempt }) {
             <span className={`sd-chip ${ok ? "green" : "rose"}`}>
               {ok ? "সঠিক" : "আবার পড়ুন"}
             </span>
-            <h3>{q.text}</h3>
+            <h3>
+              <MathText>{q.text}</MathText>
+            </h3>
             <p>
-              আপনার উত্তর: {q.options[review.answers[id]] ?? "উত্তর দেওয়া হয়নি"}
+              আপনার উত্তর:{" "}
+              <MathText>
+                {q.options[review.answers[id]] ?? "উত্তর দেওয়া হয়নি"}
+              </MathText>
             </p>
-            <strong>সঠিক উত্তর: {q.options[q.answer]}</strong>
-            <p>{q.explanation}</p>
+            <strong>
+              সঠিক উত্তর: <MathText>{q.options[q.answer]}</MathText>
+            </strong>
+            <p>
+              <MathText>{q.explanation}</MathText>
+            </p>
             <Button
               variant="outline"
               disabled={!ready}
