@@ -1,0 +1,19 @@
+{
+  "checks": 13,
+  "passed": [
+    "Migration applies twice without data reset",
+    "Exam DTO includes required course identity",
+    "Unenrolled paid exam is locked",
+    "Lock message identifies required course",
+    "Server still denies unenrolled exam start",
+    "Free exam remains available without enrollment",
+    "Missing paid-course metadata fails closed",
+    "Pending approval stays locked",
+    "Active enrollment unlocks correct course exam",
+    "Server accepts enrolled exam start",
+    "Expired enrollment locks card again",
+    "Server rejects expired enrollment",
+    "Revoked enrollment locks card again"
+  ],
+  "scope": "Local mocked Auth/PGlite and UI access helper. No real browser clicks or hosted changes."
+}

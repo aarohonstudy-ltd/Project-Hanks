@@ -1,0 +1,39 @@
+{
+  "checks": 28,
+  "passed": [
+    "All 4044 attached CSV records validate",
+    "Six source courses detected",
+    "BOM, CRLF, quoted commas/newlines and escaped quotes",
+    "Malformed CSV rejected",
+    "Out-of-range correct index rejected",
+    "Every batch below action body limit",
+    "Migration applies twice without reset",
+    "Student cannot import",
+    "Student image upload denied by RLS",
+    "Anonymous public home works",
+    "Anonymous import denied",
+    "Active admin image upload allowed by RLS",
+    "All 4044 questions imported with batch RPC",
+    "Retry skips duplicate source IDs",
+    "Changed source flagged without overwrite",
+    "Exactly one answer key for every imported question",
+    "Every question, explanation and zero-based correct answer preserved",
+    "All six new courses start as draft",
+    "Server rejects forged invalid answers",
+    "Invalid batch rolls back all its rows",
+    "Homepage shows only published courses, real offer price and cover",
+    "Homepage returns no answer keys or profile records",
+    "Only explicitly public preview video links exposed",
+    "Non-HTTPS image rejected on server",
+    "Shared subjects do not leak imported questions across courses",
+    "Student dashboard includes saved cover",
+    "Suspended admin cannot import",
+    "Suspended admin cannot upload"
+  ],
+  "csvRows": 4044,
+  "batches": 41,
+  "limitations": [
+    "Supabase Auth/Storage mocked locally; no hosted upload or live database mutation",
+    "No browser visual test"
+  ]
+}

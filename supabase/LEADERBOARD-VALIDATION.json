@@ -1,0 +1,20 @@
+{
+  "checks": 11,
+  "passed": [
+    "One best attempt per student",
+    "Equal score ranks faster attempt first",
+    "Duration calculated on server",
+    "Pass threshold respected",
+    "Name search preserves global rank",
+    "No email exposed",
+    "Unreleased results excluded",
+    "Direct access to unreleased exam blocked",
+    "Unenrolled account cannot view paid leaderboard",
+    "Admin can view paid leaderboard",
+    "Anonymous access denied"
+  ],
+  "engine": "PGlite; mocked Supabase roles",
+  "limitations": [
+    "No hosted OAuth or browser visual test"
+  ]
+}

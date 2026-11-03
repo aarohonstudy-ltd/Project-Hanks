@@ -1,0 +1,41 @@
+{
+  "checks": 30,
+  "passed": [
+    "Migration applies twice without data reset",
+    "Fresh student session is valid",
+    "Dashboard omits question bank and includes verified role/deadline",
+    "Published accessible questions load on demand",
+    "No active exam resume avoids second dashboard query",
+    "Review IDs cannot retrieve arbitrary inaccessible questions",
+    "Search pagination returns 20 non-overlapping rows with full count",
+    "Final page returns remaining rows",
+    "Bookmarks load on demand",
+    "Mistake pagination includes stored wrong practice answer",
+    "Subject statistics use authoritative saved answer",
+    "Synthetic dashboard JSON is smaller after removing eager question bank",
+    "Review request cannot reveal unreleased live question",
+    "Exam start rejected when session cannot cover deadline and safety buffer",
+    "Student session expires after seven days",
+    "Expired session cannot invoke dashboard RPC",
+    "Expired session cannot retrieve questions",
+    "Expired session cannot start exam",
+    "Expired JWT cannot bypass expiry via direct profile RLS",
+    "Expired session cannot upload course images",
+    "Restored fresh session can access app",
+    "Missing session_id fails closed",
+    "Another user session ID cannot authorize current user",
+    "Admin session expires after twelve hours",
+    "Expired admin RPC denied",
+    "Fresh admin session retains admin access",
+    "Supabase native not_after expiry is also respected",
+    "Revoked Auth session cannot access app with remaining JWT",
+    "Anonymous session status RPC denied",
+    "Anonymous question RPC denied"
+  ],
+  "payloadComparison": {
+    "fixture": "46 accessible questions, one practice attempt",
+    "beforeCharacters": 11901,
+    "afterCharacters": 2963
+  },
+  "scope": "Local PGlite with mocked auth/storage. Production latency and real browser logout not measured."
+}

@@ -1,0 +1,41 @@
+{
+  "engine": "PGlite (PostgreSQL WASM); mocked Supabase auth schema and API roles",
+  "checks": 30,
+  "passed": [
+    "35 application tables",
+    "RLS enabled on all 35 tables",
+    "Signup metadata cannot grant admin",
+    "Student sees only own profile",
+    "Own profile update succeeds",
+    "Cross-user profile edit blocked",
+    "Role escalation blocked",
+    "Account status write blocked",
+    "Answer keys unavailable to browser",
+    "Question explanation unavailable to browser",
+    "Paid lesson URL unavailable to browser",
+    "Per-answer grading unavailable to browser",
+    "Score tampering blocked",
+    "Payment self-approval blocked",
+    "Self-enrollment blocked",
+    "Private WhatsApp URL blocked",
+    "Published course metadata readable anonymously",
+    "Draft course hidden",
+    "Enrollment ownership enforced",
+    "Suspended account loses private reads",
+    "Suspended profile update blocked",
+    "Result embargo enforced",
+    "Own released result readable",
+    "Other student result hidden",
+    "Answer key must belong to same question",
+    "Selected option must belong to same question",
+    "Cannot answer question outside exam",
+    "Self-referral blocked",
+    "SQL Editor admin promotion works",
+    "Repeat/non-empty setup rejected without altering data"
+  ],
+  "limitations": [
+    "No hosted Supabase connection used",
+    "OAuth/email delivery and Next.js UI not tested",
+    "Application transactions for grading, coupon limits, payment approval and enrollment checks not included"
+  ]
+}

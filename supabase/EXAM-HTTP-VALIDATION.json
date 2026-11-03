@@ -1,0 +1,21 @@
+{
+  "checks": 15,
+  "passed": [
+    "/admin redirect /login",
+    "/admin redirect /admin-denied",
+    "/auth/landing redirect /admin",
+    "SSR admin courses",
+    "SSR admin questions",
+    "Anonymous homepage renders real published course and cover, hides drafts/demo data",
+    "Home shows retry message on backend outage",
+    "Student course page renders database courses",
+    "API rejects missing Origin",
+    "API rejects cross-site",
+    "API rejects malformed Origin",
+    "API rejects missing login",
+    "API rejects oversized body",
+    "HTTP cookie-authenticated autosave saves an answer",
+    "HTTP submission finalizes saved answers"
+  ],
+  "scope": "Local Next HTTP + PGlite mocked Supabase; not a browser fullscreen test"
+}

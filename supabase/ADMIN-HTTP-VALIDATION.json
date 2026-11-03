@@ -1,0 +1,20 @@
+{
+  "checks": 14,
+  "passed": [
+    "/admin redirect /login",
+    "/admin redirect /admin-denied",
+    "/auth/landing redirect /admin",
+    "SSR admin overview",
+    "SSR admin courses",
+    "SSR admin subjects",
+    "SSR admin topics",
+    "SSR admin lessons",
+    "SSR admin questions",
+    "SSR admin exams",
+    "SSR admin requests",
+    "SSR admin students",
+    "SSR admin results",
+    "SSR admin audit"
+  ],
+  "scope": "Local Next dev + mocked Supabase HTTP backed by PGlite; no browser interaction or hosted OAuth"
+}
