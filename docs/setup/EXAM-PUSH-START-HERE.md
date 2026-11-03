@@ -7,7 +7,7 @@
 1. `supabase/012_exam_answer_feedback.sql`
 2. `supabase/013_push_notifications.sql`
 
-দুটিই additive ও repeatable। Existing users, enrollment, course, question ও results মুছবে না। আগের 001 বা seed চালাবেন না। নতুন migrations-এর পরে পুরোনো 005/008/009 চালালে পুরোনো function ফিরে আসতে পারে। পরিবর্তিত সব ফাইলের তালিকা `CHANGED-FILES.md`-এ আছে।
+দুটিই additive ও repeatable। Existing users, enrollment, course, question ও results মুছবে না। আগের 001 বা seed চালাবেন না। নতুন migrations-এর পরে পুরোনো 005/008/009 চালালে পুরোনো function ফিরে আসতে পারে। পরিবর্তিত সব ফাইলের তালিকা git history-তে (`git log`) দেখুন।
 
 ## ২. Push keys তৈরি করুন
 
