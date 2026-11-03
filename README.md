@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aarohon
 
-## Getting Started
+Bangla online exam-prep academy: a public site with courses and free model tests, a student
+dashboard (live/model exams, practice, question bank, mistakes, bookmarks, classroom,
+analytics, leaderboard, referral) and an admin panel (courses, lessons, questions, exams with
+an auto builder, students, enrollment requests, results, notifications, audit).
 
-First, run the development server:
+## Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript · Supabase (auth, Postgres, RPC) ·
+Tailwind CSS 4 · shadcn/Radix UI · Web Push.
+
+> Next.js here has breaking changes from older versions. See `AGENTS.md` and
+> `node_modules/next/dist/docs/` before changing framework-level code.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+cp .env.example .env.local   # if there is no .env.example, create .env.local with the variables below
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts: `npm run build`, `npm run start`, `npm run lint`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable (anon) key |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Web Push (see `docs/setup/EXAM-PUSH-START-HERE.md`) |
 
-## Learn More
+No service-role key is needed.
 
-To learn more about Next.js, take a look at the following resources:
+## Database
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+SQL migrations live in `supabase/` and are run by hand in the Supabase SQL Editor,
+in numeric order (`001` … `018`). Never re-run `001_setup.sql` or an older migration after
+newer ones. Start with `docs/setup/SUPABASE-START-HERE.md`; make yourself an admin with
+`004_make_admin.sql`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Docs
 
-## Deploy on Vercel
+- `docs/setup/` — step-by-step guides (in Bangla): `SUPABASE-START-HERE`, `ADMIN-START-HERE`,
+  `COURSE-START-HERE`, `HOME-CSV-START-HERE`, `LIVE-EXAM-START-HERE`, `LEADERBOARD-START-HERE`,
+  `EXAM-PUSH-START-HERE`
+- `docs/CHANGELOG.md` — feature notes and which migration each one needs
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Layout
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/app/            routes: (publicGroup) (authGroup) (dashboardGroup) (adminGroup), api/
+src/components/     admin/, student/, shared/, ui/
+src/lib/            student/, admin/, academy/, notifications/, supabase/
+src/proxy.ts        refreshes the Supabase session for /dashboard and /admin
+supabase/           SQL migrations
+```

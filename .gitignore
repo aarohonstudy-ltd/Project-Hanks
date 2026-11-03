@@ -42,3 +42,7 @@ yarn-error.log*
 next-env.d.ts
 
 
+
+# test reports (not needed in the repo)
+supabase/*-VALIDATION.json
+supabase/*-test-results.json
